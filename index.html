@@ -8412,7 +8412,7 @@ var botKnowledge = [
     resp:"État des lieux :\n→ Obligatoire à l'entrée et à la sortie\n→ Documenter précisément avec photos horodatées\n→ Grille de vétusté si annexée au bail\n→ Dépôt de garantie restitué sous 1 mois (ou 2 si dégradations)",
     fiche:'etat-des-lieux'},
   { keys:['visale','caution gratuite','garant action logement'],
-    resp:"Garantie Visale :\n→ Caution gratuite d'Action Logement\n→ À demander AVANT la signature du bail (sinon trop tard)\n→ Pour les moins de 30 ans et les salariés en mobilité\n→ Garantit jusqu'à 1 500€ de loyer/mois en Île-de-France",
+    resp:"Garantie Visale :\n→ Caution locative gratuite d'Action Logement (locataire ET bailleur)\n→ À demander AVANT la signature du bail (visa valable 3 mois)\n→ 18-30 ans (tout statut), salariés >30 ans jusqu'à 1 710€ net/mois, mobilité, saisonniers\n→ Depuis le 6 janvier 2026 : couverture limitée aux 3 premières années du bail (36 mois)\n→ NON cumulable avec une assurance loyers impayés (GLI) ou une autre caution (art. 22-1 loi 1989)",
     fiche:'visale'},
   { keys:['sinistre','dégât des eaux','incendie assurance','cambriolage assurance'],
     resp:"Déclarer un sinistre habitation :\n→ Délai : 5 jours ouvrés (2 jours pour un vol)\n→ Par téléphone ET par écrit (recommandé AR)\n→ Photographier avant tout nettoyage\n→ Ne rien jeter avant l'expertise",
@@ -15694,13 +15694,13 @@ window.addEventListener('DOMContentLoaded', function() {
       <div class="fiche-full-header">
         <div class="fiche-full-meta">
           <div class="fiche-full-tags">
-            <span class="fiche-tag seg">Particuliers</span>
+            <span class="fiche-tag seg">Particuliers & Pros</span>
             <span class="fiche-tag theme">🏠 Logement</span>
           </div>
           <div class="fiche-full-title">Demander la garantie Visale (caution gratuite Action Logement)</div>
-          <p class="fiche-full-desc">Visale est une caution locative gratuite proposée par Action Logement. Elle garantit au propriétaire le paiement des loyers et charges en cas de défaillance du locataire. Elle est ouverte aux salariés de moins de 30 ans, aux salariés mobiles et aux personnes de moins de 30 ans sans critère d'emploi.</p>
+          <p class="fiche-full-desc">Visale est une caution locative gratuite proposée par Action Logement, qui garantit au propriétaire le paiement des loyers et charges en cas d'impayé. Elle s'adresse aux locataires de 18 à 30 ans (quel que soit leur statut), aux salariés de plus de 30 ans gagnant jusqu'à 1 710€ net/mois ou en mobilité professionnelle, ainsi qu'aux saisonniers et intérimaires. Côté bailleur, elle remplace une caution ou une assurance loyers impayés (GLI) — mais ne se cumule avec aucune d'elles.</p>
         </div>
-        <div class="fiche-full-update">Mis à jour : mai 2026<br><span>● Source : visale.fr</span></div>
+        <div class="fiche-full-update">Mis à jour : juin 2026<br><span>● Source : visale.fr</span></div>
       </div>
       <div class="fiche-grid">
         <div class="fiche-block">
@@ -15737,7 +15737,7 @@ window.addEventListener('DOMContentLoaded', function() {
 <li class="fiche-step" style="background:rgba(90,122,90,.06);border-color:var(--sage-l)"><div class="fiche-step-num" style="background:var(--sage)">4</div><div><div class="fiche-step-title">Dossier bailleur</div><div class="fiche-step-desc">Le propriétaire crée son espace bailleur sur visale.fr · valide les informations du bail</div></div></li>
 <li class="fiche-step" style="background:rgba(90,122,90,.06);border-color:var(--sage-l)"><div class="fiche-step-num" style="background:var(--sage)">5</div><div><div class="fiche-step-title">Signature du contrat de cautionnement</div><div class="fiche-step-desc">Signature électronique des deux parties · Action Logement est garant</div></div></li>
 <li class="fiche-step" style="background:rgba(90,122,90,.06);border-color:var(--sage-l)"><div class="fiche-step-num" style="background:var(--sage)">6</div><div><div class="fiche-step-title">En cas d'impayé</div><div class="fiche-step-desc">Le bailleur déclare l'impayé sur visale.fr · Action Logement rembourse sous 15 jours</div></div></li>
-            <li style="margin-top:.75rem"><div class="conseil-silka"><div class="conseil-silka-label">💡 Conseil Silka</div><p class="conseil-silka-text">Visale garantit les loyers jusqu'à la fin du bail dans la limite d'un plafond (jusqu'à 1 500€/mois en Île-de-France, 1 300€ ailleurs). Elle couvre aussi les dégradations locatives dans la limite d'un mois de loyer. C'est souvent plus rassurant pour le propriétaire qu'une caution parentale.</p></div></li>
+            <li style="margin-top:.75rem"><div class="conseil-silka"><div class="conseil-silka-label">💡 Conseil Silka</div><p class="conseil-silka-text">RÉFORME DU 6 JANVIER 2026 : Visale ne garantit plus toute la durée du bail mais ses 3 premières années (36 mois), renouvelable si le locataire reste éligible. Les plafonds de loyer ont été revalorisés (les anciens 1 500€ Paris / 1 300€ ailleurs sont obsolètes — vérifiez votre cas sur visale.fr). La garantie couvre les loyers et charges impayés, sans franchise ni délai de carence, et les dégradations locatives jusqu'à 2 mois de loyer. &#8212; RÈGLE DE CUMUL (essentielle) : Visale n'est PAS cumulable avec une assurance loyers impayés (GLI), ni avec une caution personnelle, bancaire ou solidaire sur le même bail (article 22-1 de la loi du 6 juillet 1989) ; un cumul est frappé de nullité. Le bailleur doit choisir UN seul dispositif. À arbitrer : Visale est gratuite mais limitée à 3 ans ; la GLI est payante (2,5 à 5 % du loyer annuel) mais sans limite de durée et couvre souvent les frais de contentieux. &#8212; En colocation, chaque colocataire doit obtenir son propre visa (baux individuels, sans clause de solidarité).</p></div></li>
           </ul>
         </div>
         <div class="fiche-block">
@@ -15746,7 +15746,7 @@ window.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="fiche-block">
           <div class="fiche-block-title">Erreurs fréquentes</div>
-          <ul class="fiche-erreurs"><li class="fiche-erreur">Demander Visale après la signature du bail (trop tard — doit être avant)</li><li class="fiche-erreur">Ne pas informer le propriétaire de l'existence de Visale (certains ne connaissent pas)</li><li class="fiche-erreur">Dépasser le délai de 3 mois de validité du visa sans avoir signé le bail</li></ul>
+          <ul class="fiche-erreurs"><li class="fiche-erreur">Demander Visale après la signature du bail (trop tard — le visa doit être obtenu avant)</li><li class="fiche-erreur">Cumuler Visale avec une assurance loyers impayés (GLI) ou une autre caution : le cumul est nul (article 22-1 de la loi de 1989)</li><li class="fiche-erreur">Côté bailleur : oublier de déclarer l'impayé dans les 3 mois (perte de la prise en charge des mois écoulés)</li><li class="fiche-erreur">Ne pas informer le propriétaire de l'existence de Visale (certains ne connaissent pas le dispositif)</li><li class="fiche-erreur">Dépasser le délai de 3 mois de validité du visa sans avoir signé le bail</li></ul>
         </div>
         <div class="cerfa-block">
           <div class="cerfa-block-title">📎 Documents & formulaires officiels</div>
