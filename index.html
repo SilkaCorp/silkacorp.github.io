@@ -962,6 +962,65 @@ footer{
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:image" content="https://silkacorp.github.io/og-image.png">
+<style id="silka-tour-css">
+#silka-tour{position:fixed;inset:0;z-index:10000;display:none;font-family:var(--sans)}
+#silka-tour.on{display:block}
+.st-shutter{position:fixed;background:rgba(22,28,22,.60);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);transition:all .35s cubic-bezier(.4,0,.2,1)}
+.st-ring{position:fixed;border-radius:14px;box-shadow:0 0 0 3px var(--sage),0 0 0 9px rgba(130,159,130,.30);transition:all .35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.st-ring.pulse{animation:stPulse 2.2s ease-in-out infinite}
+@keyframes stPulse{0%,100%{box-shadow:0 0 0 3px var(--sage),0 0 0 9px rgba(130,159,130,.30)}50%{box-shadow:0 0 0 3px var(--sage),0 0 0 15px rgba(130,159,130,.10)}}
+.st-pop{position:fixed;max-width:360px;width:calc(100vw - 32px);background:#fff;border-radius:18px;box-shadow:0 24px 64px rgba(0,0,0,.32);padding:1.2rem 1.2rem 1rem;transition:top .35s cubic-bezier(.4,0,.2,1),left .35s cubic-bezier(.4,0,.2,1);border:1px solid var(--xlight);box-sizing:border-box}
+.st-pop-arrow{position:absolute;width:16px;height:16px;background:#fff;transform:rotate(45deg);border:1px solid var(--xlight)}
+.st-badge{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--sage-dark),var(--sage-d));padding:.2rem .55rem;border-radius:100px;margin-bottom:.55rem}
+.st-num{font-size:.7rem;color:var(--light);font-weight:700;margin-bottom:.2rem}
+.st-title{font-family:var(--serif);font-size:1.15rem;color:var(--dark);margin:0 0 .4rem;line-height:1.25}
+.st-text{font-size:.85rem;color:var(--mid);line-height:1.6;margin:0 0 1rem}
+.st-foot{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+.st-dots{display:flex;gap:5px;align-items:center}
+.st-dot{width:6px;height:6px;border-radius:50%;background:var(--xlight);transition:all .25s}
+.st-dot.on{background:var(--sage-d);width:18px;border-radius:100px}
+.st-btns{display:flex;gap:.45rem;align-items:center}
+.st-skip{background:none;border:none;color:var(--light);font-size:.74rem;cursor:pointer;font-family:var(--sans);text-decoration:underline;padding:.3rem}
+.st-prev{background:#fff;border:1.5px solid var(--sage-l);color:var(--sage-d);border-radius:100px;padding:.45rem .85rem;font-size:.79rem;font-weight:700;cursor:pointer;font-family:var(--sans)}
+.st-prev:hover{background:var(--sage-bg)}
+.st-next{background:var(--sage-d);border:none;color:#fff;border-radius:100px;padding:.5rem 1.05rem;font-size:.81rem;font-weight:800;cursor:pointer;font-family:var(--sans);box-shadow:0 4px 14px rgba(90,122,90,.35)}
+.st-next:hover{background:var(--sage-dark)}
+@media(max-width:560px){.st-pop{max-width:none;left:16px!important;right:16px!important;width:auto}.st-pop-arrow{display:none}}
+</style>
+<style id="silka-extra-css">
+.usecase-card{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--xlight);border-radius:16px;padding:1.1rem 1.15rem;cursor:pointer;font-family:var(--sans);transition:all .18s;box-shadow:var(--shadow)}
+.usecase-card:hover{border-color:var(--sage);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.usecase-emoji{font-size:1.5rem;display:block;margin-bottom:.45rem}
+.usecase-title{font-weight:700;font-size:.95rem;color:var(--dark);margin-bottom:.2rem}
+.usecase-desc{font-size:.8rem;color:var(--mid);line-height:1.5}
+.gp-wrap{max-width:980px;margin:0 auto;padding:clamp(2rem,5vw,3.5rem) clamp(1.25rem,5vw,2rem)}
+.gp-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:2rem 0}
+@media(max-width:680px){.gp-cols{grid-template-columns:1fr}}
+.gp-col{border-radius:20px;padding:1.5rem 1.4rem;border:1.5px solid var(--xlight);background:#fff}
+.gp-col.premium{border-color:var(--sage);background:linear-gradient(180deg,var(--sage-bg),#fff)}
+.gp-col h3{font-family:var(--serif);font-size:1.3rem;color:var(--dark);margin:0 0 .15rem}
+.gp-tag{display:inline-block;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:.2rem .6rem;border-radius:100px;margin-bottom:.9rem}
+.gp-tag.free{background:var(--xlight);color:var(--mid)}
+.gp-tag.paid{background:linear-gradient(135deg,var(--sage-dark),var(--sage-d));color:#fff}
+.gp-li{display:flex;gap:.55rem;align-items:flex-start;font-size:.86rem;color:var(--mid);line-height:1.5;padding:.4rem 0}
+.gp-li b{color:var(--dark);font-weight:600}
+.gp-check{color:var(--sage-d);font-weight:800;flex-shrink:0}
+.gp-note{background:var(--sage-bg);border:1px solid var(--sage-l);border-radius:14px;padding:1rem 1.2rem;text-align:center;font-size:.92rem;color:var(--sage-dark);font-weight:600;margin-top:.5rem;line-height:1.5}
+.gp-cta{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center;margin-top:1.75rem}
+</style>
+<style id="silka-landing2-css">
+.founder-grid{display:grid;grid-template-columns:minmax(0,150px) 1fr;gap:1.75rem;align-items:start}
+@media(max-width:600px){.founder-grid{grid-template-columns:1fr;text-align:center}.founder-photo{margin:0 auto}}
+.founder-photo{width:150px;height:150px;border-radius:20px;background:linear-gradient(135deg,var(--sage-l),var(--sage));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--serif);font-size:1.1rem;border:3px solid #fff;box-shadow:var(--shadow-md)}
+.proof-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-top:2rem}
+.proof-tile{background:#fff;border:1.5px solid var(--xlight);border-radius:16px;padding:1.4rem 1rem;text-align:center;box-shadow:var(--shadow)}
+.proof-num{font-family:var(--serif);font-size:1.9rem;color:var(--sage-d);line-height:1}
+.proof-label{font-size:.8rem;color:var(--mid);margin-top:.45rem;line-height:1.4}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1.5rem}
+.testi-card{background:var(--sage-bg);border:1px dashed var(--sage-l);border-radius:16px;padding:1.25rem;text-align:left}
+.testi-quote{font-size:.9rem;color:var(--mid);line-height:1.6;font-style:italic}
+.testi-author{font-size:.8rem;color:var(--sage-dark);font-weight:700;margin-top:.6rem}
+</style>
 </head>
 <body>
 
@@ -1033,11 +1092,11 @@ footer{
     <li><a href="javascript:void(0)" onclick="showPage('boite-outils')">Boîte à outils</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('enquetes')">Enquêtes</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('demo')" style="font-weight:600;color:var(--sage-d)">Guide</a></li>
-    <li><a href="javascript:void(0)" onclick="showPage('home');scrollTo('tarifs-section')">Tarifs</a></li>
+    <li><a href="javascript:void(0)" onclick="showPage('tarifs')">Tarifs</a></li><li><a href="javascript:void(0)" onclick="showPage('gratuit-premium')">Gratuit vs Premium</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('contact')">Contact</a></li>
   </ul>
   <div class="nav-cta-group">
-    <span class="nav-premium-badge" id="premium-badge">⚡ Premium</span>
+    <span class="nav-premium-badge" id="premium-badge">Premium</span>
     <button class="btn-nav-login" onclick="showPage('compte')">Se connecter</button>
     <button class="btn-nav-cta" onclick="openMdpModal()">Accès payant 🔐</button>
   </div>
@@ -1065,29 +1124,31 @@ footer{
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-badge">Bêta — Rejoindre la liste d'attente</div>
-    <h1>Vos démarches admin.<br><em>Enfin simples.</em></h1>
-    <p class="hero-sub">Silka centralise toutes les démarches administratives en France. Trouvez, comprenez, agissez — sans vous perdre dans la jungle des sites officiels.</p>
+    <div class="hero-badge">Bêta · Hébergé en France · Sources officielles</div>
+    <h1>Vos démarches administratives,<br><em>enfin simples.</em></h1>
+    <p class="hero-sub">Silka vous guide pas à pas dans vos démarches en France et vous dit, en clair, <strong>ce à quoi vous avez droit</strong> et comment l'obtenir. Pour les particuliers, les professionnels et les associations.</p>
     <div class="hero-actions">
-      <button class="btn-primary" onclick="showPage('demarches')">Explorer les démarches →</button>
-      <button class="btn-secondary" onclick="showPage('contact')">Rejoindre la bêta</button>
+      <button class="btn-primary" onclick="showPage('demarches')">Trouver ma démarche →</button>
+      <button class="btn-secondary" onclick="SilkaTour.start((function(){try{return localStorage.getItem('silka_profile')||'all'}catch(e){return 'all'}})())">Visite guidée (2 min)</button>
     </div>
-    <div class="hero-stats">
+    <div class="hero-freemium" style="display:flex;flex-wrap:wrap;gap:.55rem .7rem;justify-content:center;align-items:center;margin:0 auto 2rem;max-width:640px"><span style="display:inline-flex;align-items:center;gap:.4rem;background:var(--sage-bg);border:1px solid var(--sage-l);color:var(--sage-dark);font-size:.82rem;font-weight:700;padding:.45rem .85rem;border-radius:100px">&#10003; 100&nbsp;% des fiches gratuites</span><span style="font-size:.82rem;color:var(--mid)">Le Premium est <strong>optionnel</strong>, seulement si vous êtes conquis.</span></div><div class="hero-stats">
       <div class="stat"><span class="stat-num">380</span><span class="stat-label">démarches disponibles</span></div>
       <div class="stat"><span class="stat-num">61%</span><span class="stat-label">des Français en difficulté</span></div>
       <div class="stat"><span class="stat-num">3</span><span class="stat-label">segments : part. · pro · asso</span></div>
     </div>
   </section>
 
-  <!-- BANDE CONFIANCE -->
+  <section class="problem-section" style="background:var(--off);padding:clamp(3rem,6vw,5rem) clamp(1.25rem,5vw,2.5rem)"><div style="max-width:760px;margin:0 auto;text-align:center"><div class="section-eyebrow">Le vrai problème</div><h2 class="section-h2" style="margin-bottom:1.25rem">Face à l'administration, le doute coûte cher.</h2><p style="font-size:1.05rem;color:var(--mid);line-height:1.75;max-width:680px;margin:0 auto 1.5rem">Vous êtes-vous déjà demandé si vous aviez <strong>bien rempli votre avis d'imposition</strong>&nbsp;? Si vous aviez droit à une <strong>aide pour votre nouveau-né</strong>&nbsp;? Quel <strong>statut choisir</strong> pour vous lancer&nbsp;? Un oubli, un mauvais formulaire, une case ratée — et c'est du temps perdu, parfois de l'argent, parfois un droit qui passe.</p><p style="font-size:1.1rem;color:var(--sage-dark);font-weight:600;line-height:1.6">Silka lève ce doute et vous accompagne, du premier clic jusqu'à la fin de la démarche.</p></div></section>
+<!-- BANDE CONFIANCE -->
   <div class="trust-strip">
-    <div class="trust-item"><span>🔒</span> Hébergement France</div>
-    <div class="trust-item"><span>✅</span> Sources officielles</div>
-    <div class="trust-item"><span>🆓</span> Gratuit pour comprendre</div>
-    <div class="trust-item"><span>⚡</span> Mise à jour mensuelle</div>
+    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sage-d)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Hébergement France</span></div>
+    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sage-d)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Sources officielles</span></div>
+    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sage-d)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Gratuit pour comprendre</span></div>
+    <div class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sage-d)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Mise à jour mensuelle</span></div>
   </div>
 
-  <!-- COMMENT ÇA MARCHE -->
+  <div class="usecase-section" style="padding:clamp(2.5rem,5vw,4rem) clamp(1.25rem,5vw,2.5rem);max-width:1100px;margin:0 auto;text-align:center"><div class="section-eyebrow">Des situations concrètes</div><h2 class="section-h2">Par où commencer&nbsp;?</h2><p class="section-lead">Quelques situations de la vie courante. Vous cliquez, Silka vous dit ce à quoi vous avez droit et comment faire.</p><div class="usecase-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;margin-top:2rem;text-align:left"><button class="usecase-card" onclick="showFiche('conge-naissance-nouveau-2026')"><span class="usecase-emoji"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage-d)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><div class="usecase-title">Je viens d&#39;avoir un bébé</div><div class="usecase-desc">Congés, aides et déclarations pour un nouveau-né.</div></button><button class="usecase-card" onclick="showFiche('creer-micro-entreprise')"><span class="usecase-emoji"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage-d)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><div class="usecase-title">Je me lance en indépendant</div><div class="usecase-desc">Quel statut choisir et comment créer mon activité.</div></button><button class="usecase-card" onclick="showFiche('carte-grise')"><span class="usecase-emoji"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage-d)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><div class="usecase-title">Je refais ma carte grise</div><div class="usecase-desc">Changement de titulaire, perte, coût 2026.</div></button><button class="usecase-card" onclick="showFiche('deces-proche-que-faire')"><span class="usecase-emoji"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage-d)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><div class="usecase-title">Un proche est décédé</div><div class="usecase-desc">Les démarches à faire, dans le bon ordre.</div></button></div><button onclick="showPage('demarches')" style="margin-top:1.75rem;background:none;border:1.5px solid var(--sage-l);color:var(--sage-d);border-radius:100px;padding:.6rem 1.5rem;font-size:.85rem;font-weight:700;cursor:pointer;font-family:var(--sans)">Voir les 380 démarches &#8594;</button></div>
+<!-- COMMENT ÇA MARCHE -->
   <div class="how-section">
     <div class="section-eyebrow">Comment ça marche</div>
     <h2 class="section-h2">Simple. Rapide. Fiable.</h2>
@@ -1107,19 +1168,19 @@ footer{
       <p class="section-lead">Silka couvre les trois grands profils d'utilisateurs avec des fiches adaptées à chaque situation.</p>
       <div class="seg-grid">
         <div class="seg-card" onclick="showPage('demarches');filterSegment('Particuliers')">
-          <div class="seg-icon">👤</div>
+          <div class="seg-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--sage-d)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21v-1a8 8 0 0 1 16 0v1"></path></svg></div>
           <h3>Particuliers</h3>
           <p>Impôts, logement, famille, santé, identité, emploi — les démarches du quotidien.</p>
           <div class="seg-link">Explorer →</div>
         </div>
         <div class="seg-card" onclick="showPage('demarches');filterSegment('Professionnels')">
-          <div class="seg-icon">🏢</div>
+          <div class="seg-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--sage-d)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="1.5"></rect><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"></path><line x1="4" y1="13" x2="20" y2="13"></line></svg></div>
           <h3>Professionnels</h3>
           <p>Création d'entreprise, TVA, embauche, propriété intellectuelle, rupture conventionnelle.</p>
           <div class="seg-link">Explorer →</div>
         </div>
         <div class="seg-card" onclick="showPage('demarches');filterSegment('Associations')">
-          <div class="seg-icon">🏛️</div>
+          <div class="seg-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--sage-d)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6"></path><line x1="4" y1="10" x2="4" y2="20"></line><line x1="9" y1="10" x2="9" y2="20"></line><line x1="15" y1="10" x2="15" y2="20"></line><line x1="20" y1="10" x2="20" y2="20"></line><line x1="3" y1="20" x2="21" y2="20"></line></svg></div>
           <h3>Public & Associations</h3>
           <p>Création loi 1901, marchés publics, subventions DRAC et BPI, appels d'offres.</p>
           <div class="seg-link">Explorer →</div>
@@ -1128,105 +1189,17 @@ footer{
     </div>
   </div>
 
-  <!-- TARIFS -->
-  
-  <!-- TARIFS -->
-  <div class="tarifs-section" id="tarifs-section">
-    <div class="section-eyebrow">Tarification</div>
-    <h2 class="section-h2">Un prix juste, sans surprise</h2>
-    <p class="section-lead">Commencez gratuitement. Choisissez la formule adaptée à votre situation.</p>
-
-    <div class="tarif-toggle">
-      <span class="tarif-toggle-label">Engagement :</span>
-      <div class="tarif-toggle-switch">
-        <button class="tarif-toggle-btn active" onclick="toggleEngagement('avec',this)">Avec engagement</button>
-        <button class="tarif-toggle-btn" onclick="toggleEngagement('sans',this)">Sans engagement</button>
-      </div>
-      <span class="tarif-economy" id="economie-label">Économisez 12€/an</span>
-    </div>
-
-    <div class="tarifs-grid-new">
-
-      <!-- PARTICULIER -->
-      <div class="tarif-card">
-        <div class="tarif-name">Particulier</div>
-        <div class="tarif-price" id="tarif-part-price">4,99€<span style="font-size:1rem;font-family:var(--sans)">/mois</span></div>
-        <div class="tarif-period">
-          <span id="tarif-part-eco" class="tarif-economy">Économisez 12€/an</span>
-        </div>
-        <div class="tarif-divider"></div>
-        <ul class="tarif-features">
-          <li class="tarif-feature"><span>✓</span>Accès illimité aux 380 fiches</li>
-          <li class="tarif-feature"><span>✓</span>Téléchargement des Cerfa</li>
-          <li class="tarif-feature"><span>✓</span>Parcours guidé complet</li>
-          <li class="tarif-feature"><span>✓</span>Checklist exportable PDF</li>
-          <li class="tarif-feature"><span>✓</span>Alertes email</li>
-          <li class="tarif-feature"><span>✓</span>Simulateurs intégrés</li>
-          <li class="tarif-feature"><span>✓</span>Conseils Silka exclusifs</li>
-          <li class="tarif-feature locked"><span>—</span>Comptes liés (3 utilisateurs)</li>
-        </ul>
-        <button class="tarif-cta paid" onclick="openMdpModal()">Démo accès payant 🔐</button>
-      </div>
-
-      <!-- PRO & ASSOCIATIONS -->
-      <div class="tarif-card featured">
-        <div class="tarif-badge">PRO & ASSO</div>
-        <div class="tarif-name">Professionnel & Association</div>
-        <div class="tarif-price" id="tarif-pro-price">7,99€<span style="font-size:1rem;font-family:var(--sans)">/mois</span></div>
-        <div class="tarif-period">
-          <span id="tarif-pro-eco" class="tarif-economy">Économisez 24€/an</span>
-        </div>
-        <div class="tarif-divider"></div>
-        <ul class="tarif-features">
-          <li class="tarif-feature"><span>✓</span>Tout du plan Particulier</li>
-          <li class="tarif-feature"><span>✓</span>Fiches Pro & Asso incluses</li>
-          <li class="tarif-feature"><span>✓</span>TVA, embauche, marchés publics</li>
-          <li class="tarif-feature"><span>✓</span>Subventions BPI, DRAC</li>
-          <li class="tarif-feature"><span>✓</span>Brevet, marque, propriété intel.</li>
-        </ul>
-        <div class="pro-users-badge"><span>👥</span>3 utilisateurs sur le même compte</div>
-        <button class="tarif-cta paid" onclick="openMdpModal()">Démo accès payant 🔐</button>
-      </div>
-
-      <!-- CRÉDITS -->
-      <div class="credits-card">
-        <div class="tarif-name">Crédits à l'unité</div>
-        <p style="font-size:.82rem;color:var(--sage-l);margin-bottom:.9rem;line-height:1.55">Sans abonnement. 1 crédit = 1 démarche débloquée pendant 30 jours.</p>
-        <div class="credits-options">
-          <div class="credit-option">
-            <span class="credit-option-name">1 crédit</span>
-            <span class="credit-option-price">2€</span>
-          </div>
-          <div class="credit-option">
-            <span class="credit-option-name">5 crédits</span>
-            <div style="display:flex;align-items:center;gap:.4rem">
-              <span class="credit-option-price">8€</span>
-              <span class="credit-option-badge">-20%</span>
-            </div>
-          </div>
-        </div>
-        <div class="tarif-divider" style="background:rgba(255,255,255,.1)"></div>
-        <ul class="tarif-features" style="margin-bottom:1rem">
-          <li class="tarif-feature"><span style="color:var(--sage-l)">✓</span>Accès complet à 1 fiche à la fois</li>
-          <li class="tarif-feature"><span style="color:var(--sage-l)">✓</span>Valable 30 jours par démarche</li>
-          <li class="tarif-feature"><span style="color:var(--sage-l)">✓</span>Portefeuille dans votre compte</li>
-          <li class="tarif-feature"><span style="color:var(--sage-l)">✓</span>Idéal pour 1 à 2 démarches/an</li>
-        </ul>
-        <button class="tarif-cta-dark" onclick="openCreditModal(null)">Acheter des crédits →</button>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- FOOTER dans home -->
+  <section class="founder-section" style="padding:clamp(3rem,6vw,5rem) clamp(1.25rem,5vw,2.5rem);background:var(--sage-bg)"><div style="max-width:840px;margin:0 auto"><div class="section-eyebrow" style="text-align:center">L'histoire de Silka</div><h2 class="section-h2" style="text-align:center;margin-bottom:2rem">Qui est derrière Silka&nbsp;?</h2><div class="founder-grid"><div class="founder-photo">C</div><div><p style="font-size:1.05rem;color:var(--dark);line-height:1.75;margin:0 0 1rem">«&nbsp;Moi, c'est <strong>Corentin</strong>. Comme beaucoup d'entre nous, je me suis retrouvé perdu face à l'administration&nbsp;: des formulaires obscurs, des droits qu'on ignore, des sites officiels qui se contredisent. J'ai conçu Silka pour qu'aucune personne n'ait à renoncer à un droit faute d'avoir compris une démarche.&nbsp;»</p><p style="font-size:.95rem;color:var(--mid);line-height:1.7;margin:0 0 1rem">Silka tient une promesse simple&nbsp;: <strong>vous accompagner</strong>, en langage clair, du premier doute jusqu'à la démarche aboutie. Une base <strong>100&nbsp;% gratuite</strong> — et, si vous êtes conquis, quelques fonctionnalités de confort en option.</p><p style="font-size:.92rem;color:var(--sage-dark);font-weight:700;margin:0">— Corentin, fondateur de Silka</p></div></div></div></section>
+<section class="proof-section" style="padding:clamp(3rem,6vw,5rem) clamp(1.25rem,5vw,2.5rem)"><div style="max-width:960px;margin:0 auto;text-align:center"><div class="section-eyebrow">Ce qui fait la fiabilité de Silka</div><h2 class="section-h2" style="margin-bottom:.5rem">Des informations vérifiées, à jour, sourcées.</h2><div class="proof-grid"><div class="proof-tile"><div class="proof-num">380</div><div class="proof-label">fiches de démarches rédigées et vérifiées</div></div><div class="proof-tile"><div class="proof-num">100&nbsp;%</div><div class="proof-label">sources officielles (service-public, impots.gouv, URSSAF…)</div></div><div class="proof-tile"><div class="proof-num">2026</div><div class="proof-label">contenus tenus à jour des dernières évolutions</div></div><div class="proof-tile"><div class="proof-num">FR</div><div class="proof-label">données hébergées en France</div></div></div><p style="font-size:.95rem;color:var(--mid);line-height:1.7;max-width:640px;margin:2rem auto 0">Silka est en version bêta&nbsp;: chaque retour d'utilisateur la rend meilleure — et façonne la suite.</p></div></section>
+<section style="text-align:center;padding:clamp(3rem,6vw,5rem) clamp(1.25rem,5vw,2.5rem);background:var(--sage-dark)"><h2 style="font-family:var(--serif);font-size:clamp(1.6rem,4vw,2.4rem);color:#fff;margin:0 0 .6rem">Prêt à y voir clair&nbsp;?</h2><p style="font-size:1rem;color:rgba(255,255,255,.85);max-width:560px;margin:0 auto 1.75rem;line-height:1.6">Commencez gratuitement. Aucune inscription nécessaire pour comprendre vos démarches.</p><button onclick="showPage('demarches')" style="background:#fff;color:var(--sage-dark);border:none;border-radius:100px;padding:.85rem 2rem;font-size:1rem;font-weight:800;cursor:pointer;font-family:var(--sans);box-shadow:0 8px 24px rgba(0,0,0,.2)">Trouver ma démarche →</button><div style="margin-top:1.1rem"><a href="javascript:void(0)" onclick="showPage('tarifs')" style="color:rgba(255,255,255,.7);font-size:.85rem;text-decoration:underline">Voir les options Premium</a></div></section>
+<!-- FOOTER dans home -->
   
 <!-- ===== PAGE : Mentions légales ===== -->
 <div class="page" id="page-mentions-legales">
   <div class="legal-page">
     <h1>Mentions légales</h1>
     <div class="legal-date">Dernière mise à jour : juin 2026</div>
-    <div class="legal-note">⚠️ Certaines informations ci-dessous (forme juridique, SIRET, capital, adresse du siège) doivent être complétées une fois la société immatriculée. Elles sont signalées par des crochets [ ].</div>
+    <div class="legal-note">Certaines informations ci-dessous (forme juridique, SIRET, capital, adresse du siège) doivent être complétées une fois la société immatriculée. Elles sont signalées par des crochets [ ].</div>
     <div class="legal-section">
       <h2>1. Éditeur du site</h2>
       <p>Le site Silka (silkacorp.github.io) est édité par :</p>
@@ -1272,7 +1245,7 @@ footer{
   <div class="legal-page">
     <h1>Conditions Générales de Vente</h1>
     <div class="legal-date">Dernière mise à jour : juin 2026</div>
-    <div class="legal-note">⚠️ À compléter / vérifier avant mise en ligne définitive : prestataire de paiement, tarifs exacts, coordonnées du médiateur de la consommation.</div>
+    <!-- TODO interne (non affiché) : à compléter avant mise en ligne définitive — prestataire de paiement, tarifs exacts, coordonnées du médiateur de la consommation. -->
     <div class="legal-section">
       <h2>1. Objet et champ d'application</h2>
       <p>Les présentes CGV régissent les ventes de services payants proposés par Silka (accès Premium, crédits) aux utilisateurs. Toute commande implique l'acceptation sans réserve des présentes CGV, distinctes des <a href="javascript:void(0)" onclick="showPage('cgu')" style="color:var(--sage-d);text-decoration:underline">Conditions Générales d'Utilisation</a>.</p>
@@ -1373,7 +1346,7 @@ footer{
   <div class="demarches-body">
     <div class="glossaire-wrapper">
       <div class="search-wrap" style="margin-bottom:1rem;position:relative">
-        <input type="text" id="demarche-search" placeholder="🔍 Rechercher une démarche… (ex : passeport, RSA, amende)" oninput="silkaSearch(this.value)" autocomplete="off" style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--sage-l);border-radius:10px;font-size:.92rem;font-family:var(--sans);outline:none;background:#fff;transition:border-color .15s" onfocus="this.style.borderColor='var(--sage-d)'" onblur="this.style.borderColor='var(--sage-l)'">
+        <input type="text" id="demarche-search" placeholder="Rechercher une démarche… (ex : passeport, RSA, amende)" oninput="silkaSearch(this.value)" autocomplete="off" style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--sage-l);border-radius:10px;font-size:.92rem;font-family:var(--sans);outline:none;background:#fff;transition:border-color .15s" onfocus="this.style.borderColor='var(--sage-d)'" onblur="this.style.borderColor='var(--sage-l)'">
         <div id="search-results" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1.5px solid var(--sage-l);border-radius:10px;max-height:320px;overflow-y:auto;z-index:50;box-shadow:0 8px 24px rgba(46,74,46,.12)"></div>
       </div>
       <div class="filter-bar" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:center">
@@ -3017,7 +2990,7 @@ footer{
     </div>
       <div id="tool-alerte-demande-apl" class="fiche-tool-panel" data-alerte-label="Premier versement APL — délai 3 mois">
         <h4>🔔 Recevoir un rappel</h4>
-        <p style="font-size:.82rem;color:var(--mid);margin-bottom:.9rem">Rappel : <strong>Premier versement APL — délai 3 mois</strong></p>
+        <p style="font-size:.82rem;color:var(--mid);margin-bottom:.9rem">Rappel : <strong>Premier versement APL — délai 3 mois</strong></p><p style="font-size:.8rem;background:rgba(90,122,90,.08);border-left:3px solid var(--sage);padding:.5rem .7rem;border-radius:6px;margin:.4rem 0 .8rem"><strong>Nouveau — 1er juillet 2026 (décret du 28 juin 2026) :</strong> les étudiants étrangers ressortissants d'un pays hors UE/EEE/Suisse et non boursiers perdent le droit aux APL. Restent éligibles : les étudiants de l'UE/EEE/Suisse, les boursiers sur critères sociaux du CROUS (toute nationalité), les étudiants exerçant une activité professionnelle et les apprentis.</p>
         <div class="alerte-form">
           <div class="alerte-input-wrap">
             <input type="email" class="alerte-email-real" placeholder="votre@email.fr" style="width:100%">
@@ -8543,7 +8516,7 @@ var botKnowledge = [
     fiche:'aide-alimentaire'},
   { keys:['micro crédit','microcrédit personnel','crédit sans banque','prêt solidaire'],
     resp:"Micro-crédit personnel :\n→ 300€ à 5 000€ pour un projet d'insertion (permis, véhicule, formation)\n→ Via l'ADIE, la CAF, le CCAS ou certaines caisses d'épargne\n→ Taux faible, accompagnement social inclus\n→ Garantie de l'État à 70%",
-    fiche:'microcredit-personnel'},
+    fiche:'credit-consommation-droits'},
 
   // ── LOGEMENT ────────────────────────────────────────────────────────────────
   { keys:['hlm','logement social','logement public','habitation loyer modéré'],
@@ -8942,7 +8915,7 @@ var botKnowledge = [
     fiche:'tribunal-commerce-litige'},
   { keys:['interdit bancaire','FCC','FICP','interdiction chèque'],
     resp:"Lever une interdiction bancaire :\n→ Régulariser la situation (payer le chèque sans provision ou rembourser le crédit)\n→ La banque notifie la Banque de France · levée automatique\n→ Même inscrit au FCC/FICP : droit à un compte de base via la Banque de France\n→ Délai d'inscription sans régularisation : 5 ans",
-    fiche:'interdit-bancaire'},
+    fiche:'surendettement-banque-france'},
 
   // ── ENTREPRISE / PRO ───────────────────────────────────────────────────────
   { keys:['micro entreprise','auto entrepreneur','creer micro','autoentrepreneur','creer auto'],
@@ -9458,7 +9431,7 @@ var botKnowledge = [
     fiche:'commerçant-rcs' },
   { keys:["profession liberale statut", "liberal statut", "bnc statut", "medecin independant statut"],
     resp:"Statut de profession libérale :\\n→ BNC (Bénéfices Non Commerciaux) par défaut\\n→ Réglementée (médecin, avocat, notaire) ou non réglementée\\n→ Caisse de retraite spécifique selon la profession (CIPAV, CARMF, CNBF...)\\n→ Possible en SELARL ou SELAS pour bénéficier de la forme sociétaire",
-    fiche:'profession-liberale' },
+    fiche:'creer-micro-entreprise' },
   { keys:["fermer sarl", "dissoudre sarl", "fermer sa societe sarl", "liquider sarl"],
     resp:"Dissoudre et liquider une SARL :\\n→ Vote en AG extraordinaire · résolution de dissolution · désignation liquidateur\\n→ Publication dans un journal d\'annonces légales\\n→ Délai minimum : 1 mois (opposition créanciers)\\n→ Formulaire M2 (dissolution) puis M4 (clôture liquidation) au greffe",
     fiche:'dissolution-sarl' },
@@ -9482,10 +9455,10 @@ var botKnowledge = [
     fiche:'aide-alimentaire' },
   { keys:["microcredit", "micro credit", "adie", "pret sans banque", "financement permis"],
     resp:"Micro-crédit personnel :\\n→ Pour personnes exclues du système bancaire\\n→ 300€ à 5 000€ · permis de conduire, véhicule pro, formation, caution logement\\n→ Via ADIE, CAF, CCAS, Caisse d\'Épargne Solidaire\\n→ Accompagnement social inclus tout au long du remboursement",
-    fiche:'microcredit-personnel' },
+    fiche:'credit-consommation-droits' },
   { keys:["interdit bancaire", "ficp", "fcc", "interdit chequier", "compte bloque banque"],
     resp:"Lever une interdiction bancaire (FCC/FICP) :\\n→ Régulariser la situation : payer le chèque impayé ou les crédits en retard\\n→ La banque notifie la Banque de France · levée automatique\\n→ Droit au compte de base même avec une interdiction bancaire\\n→ Consulter son dossier à la Banque de France (gratuit)",
-    fiche:'interdit-bancaire' },
+    fiche:'surendettement-banque-france' },
   { keys:["litige consommateur", "signaler arnaque", "mediateur consommateur", "signal conso"],
     resp:"Litige consommateur :\\n→ Réclamation écrite préalable au professionnel (obligatoire · 1 mois d\'attente)\\n→ Saisir le médiateur sectoriel (trouvé sur le site du professionnel)\\n→ Signaler sur signal.conso.gouv.fr (infraction commerciale)\\n→ Tribunal de proximité si montant < 10 000€",
     fiche:'protection-consommateur-litige' },
@@ -10444,20 +10417,20 @@ function showOnboarding() {
   if (modal) { modal.style.display = 'flex'; }
 }
 function setOnboardingProfile(profile) {
-  localStorage.setItem('silka_profile_set', '1');
-  localStorage.setItem('silka_profile', profile);
-  var modal = document.getElementById('onboarding-modal');
-  if (modal) modal.style.display = 'none';
-  // Appliquer le filtre
+  try{localStorage.setItem('silka_profile_set','1');localStorage.setItem('silka_profile',profile);}catch(e){}
   if (profile !== 'all') {
-    filterDemarches(profile);
-    // Mettre à jour les boutons de filtre
-    document.querySelectorAll('.filter-btn').forEach(function(b){
-      b.classList.toggle('active', b.dataset.filter === profile);
-    });
+    if (typeof filterDemarches === 'function') filterDemarches(profile);
+    document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.filter === profile); });
+    obShow('ob-screen-tour');
+  } else {
+    var m=document.getElementById('onboarding-modal'); if(m) m.style.display='none';
+    showPage('demarches');
   }
-  showPage('demarches');
 }
+function obShow(id){ ['ob-screen-intro','ob-screen-profile','ob-screen-tour'].forEach(function(s){ var e=document.getElementById(s); if(e) e.style.display=(s===id?'block':'none'); }); }
+function obStartTour(){ var m=document.getElementById('onboarding-modal'); if(m) m.style.display='none'; var p='all'; try{p=localStorage.getItem('silka_profile')||'all';}catch(e){} SilkaTour.start(p); }
+function obSkipTour(){ var m=document.getElementById('onboarding-modal'); if(m) m.style.display='none'; showPage('demarches'); }
+
 
 // ── MISE À JOUR NAV APRÈS CONNEXION / PREMIUM ───────────────
 function updateNavAfterLogin(userName) {
@@ -24366,7 +24339,7 @@ window.addEventListener('DOMContentLoaded', function() {
       <div class="fiche-tools-bar"><button class="fiche-tool-btn" onclick="toggleFicheTool('tool-cl-acte-mariage',this)">&#128203; Checklist</button><button class="fiche-tool-btn" onclick="toggleFicheTool('tool-al-acte-mariage',this)">&#128276; Rappel</button></div>
       <div id="tool-cl-acte-mariage" class="fiche-tool-panel" data-titre="Obtenir un acte de mariage"><h4>Documents</h4><ul class="checklist-items"><li class="checklist-item" onclick="toggleCheckItem(this)"><input type="checkbox"><label>Pièce d'identité</label></li><li class="checklist-item" onclick="toggleCheckItem(this)"><input type="checkbox"><label>Livret de famille si disponible</label></li><li class="checklist-item" onclick="toggleCheckItem(this)"><input type="checkbox"><label>Indication de la date de mariage et des noms des époux</label></li></ul><div class="checklist-actions"><button class="btn-dl" onclick="downloadChecklist('acte-mariage')">&#11015; .txt</button><button class="btn-dl-ghost" onclick="sendChecklistEmail('acte-mariage')">&#9993;</button></div></div>
       <div id="tool-al-acte-mariage" class="fiche-tool-panel"><h4>&#128276; Rappel</h4><p style="font-size:.82rem;color:var(--mid)"><strong>Acte de mariage — délai 15 jours par courrier, immédiat en mairie</strong></p><input type="email" class="alerte-email-real" placeholder="votre@email.fr" style="width:100%;margin:.5rem 0"><button class="btn-dl" onclick="setAlerteEmail('acte-mariage')">Activer</button><p class="alerte-confirm">&#10003;</p></div>
-      <div class="fiche-full-header"><div class="fiche-full-meta"><div class="fiche-full-tags"><span class="fiche-tag seg">Particuliers</span><span class="fiche-tag theme">🪪 Identité & Documents</span></div><div class="fiche-full-title">Obtenir un acte de mariage</div><p class="fiche-full-desc">L'acte de mariage est un document officiel délivré par la mairie du lieu de mariage. Il est nécessaire pour de nombreuses démarches : divorce, succession, naturalisation, renouvellement de titre de séjour. Il existe en 3 formes : copie intégrale, extrait avec ou sans filiation.</p></div><div class="fiche-full-update">Mai 2026 &#9679; service-public.fr</div></div>
+      <div class="fiche-full-header"><div class="fiche-full-meta"><div class="fiche-full-tags"><span class="fiche-tag seg">Particuliers</span><span class="fiche-tag theme">🪪 Identité & Documents</span></div><div class="fiche-full-title">Obtenir un acte de mariage</div><p class="fiche-full-desc">L'acte de mariage est un document officiel délivré par la mairie du lieu de mariage. Il est nécessaire pour de nombreuses démarches : divorce, succession, naturalisation, renouvellement de titre de séjour. Il existe en 3 formes : copie intégrale, extrait avec ou sans filiation.</p></div><div class="fiche-full-update">Juin 2026 &#9679; service-public.fr</div></div>
       <div class="fiche-grid">
         <div class="fiche-block"><div class="fiche-block-title">Interlocuteur</div><div class="fiche-contact-card"><div class="fiche-contact-icon">&#127981;</div><div style="flex:1"><div class="fiche-contact-name">Mairie du lieu de mariage</div><div class="fiche-contact-detail">&#128222; — · Selon mairie</div><div class="fiche-contact-detail">service-public.fr</div></div><a href="https://www.service-public.fr/particuliers/vosdroits/F1432" target="_blank" class="fiche-contact-link">Accéder &#8594;</a></div></div>
         <div class="fiche-block"><div class="fiche-block-title">Délai</div><div class="fiche-delai">&#9201; Immédiat en mairie · 15 jours par courrier · instantané en ligne (si disponible)</div><div class="fiche-block-title" style="margin-top:1rem">Documents</div><ul class="fiche-docs-list"><li>Pièce d'identité</li><li>Livret de famille si disponible</li><li>Indication de la date de mariage et des noms des époux</li></ul></div>
@@ -24458,7 +24431,7 @@ window.addEventListener('DOMContentLoaded', function() {
       <div id="prog-inscription-listes-electorales" class="demarche-progress"><div class="progress-header"><span class="progress-title">&#128203;</span><span class="progress-pct">0%</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:0%"></div></div><div class="progress-steps" id="prog-steps-inscription-listes-electorales"></div><div class="credit-expiry" id="credit-expiry-inscription-listes-electorales" style="display:none"></div><div class="progress-actions"><button class="btn-progress-end" onclick="terminerDemarche('inscription-listes-electorales')">&#10003; Terminée</button></div></div>
       <div class="fiche-tools-bar"><button class="fiche-tool-btn" onclick="toggleFicheTool('tool-cl-inscription-listes-electorales',this)">&#128203; Checklist</button><button class="fiche-tool-btn" onclick="toggleFicheTool('tool-al-inscription-listes-electorales',this)">&#128276; Rappel</button></div>
       <div id="tool-cl-inscription-listes-electorales" class="fiche-tool-panel" data-titre="S'inscrire sur les listes électorales"><h4>Documents</h4><ul class="checklist-items"><li class="checklist-item" onclick="toggleCheckItem(this)"><input type="checkbox"><label>Pièce d'identité</label></li><li class="checklist-item" onclick="toggleCheckItem(this)"><input type="checkbox"><label>Justificatif de domicile (moins de 3 mois)</label></li></ul><div class="checklist-actions"><button class="btn-dl" onclick="downloadChecklist('inscription-listes-electorales')">&#11015; .txt</button><button class="btn-dl-ghost" onclick="sendChecklistEmail('inscription-listes-electorales')">&#9993;</button></div></div>
-      <div id="tool-al-inscription-listes-electorales" class="fiche-tool-panel"><h4>&#128276; Rappel</h4><p style="font-size:.82rem;color:var(--mid)"><strong>Inscription listes électorales — avant le 31 décembre pour voter l'année suivante</strong></p><input type="email" class="alerte-email-real" placeholder="votre@email.fr" style="width:100%;margin:.5rem 0"><button class="btn-dl" onclick="setAlerteEmail('inscription-listes-electorales')">Activer</button><p class="alerte-confirm">&#10003;</p></div>
+      <div id="tool-al-inscription-listes-electorales" class="fiche-tool-panel"><h4>&#128276; Rappel</h4><p style="font-size:.82rem;color:var(--mid)"><strong>Inscription listes électorales — avant le 31 décembre pour voter l'année suivante</strong></p><p style="font-size:.8rem;background:rgba(90,122,90,.08);border-left:3px solid var(--sage);padding:.5rem .7rem;border-radius:6px;margin:.4rem 0 .8rem"><strong>Depuis le 1er juillet 2026 :</strong> le délai d'inscription est unifié — en ligne comme en mairie, la date limite est le 6e vendredi précédant le scrutin (auparavant le 6e mercredi pour les inscriptions en ligne). Le décret prévoit aussi le masquage de l'adresse des personnes protégées par une ordonnance de protection sur la liste communicable à un tiers.</p><input type="email" class="alerte-email-real" placeholder="votre@email.fr" style="width:100%;margin:.5rem 0"><button class="btn-dl" onclick="setAlerteEmail('inscription-listes-electorales')">Activer</button><p class="alerte-confirm">&#10003;</p></div>
       <div class="fiche-full-header"><div class="fiche-full-meta"><div class="fiche-full-tags"><span class="fiche-tag seg">Particuliers</span><span class="fiche-tag theme">🪪 Identité & Documents</span></div><div class="fiche-full-title">S'inscrire sur les listes électorales</div><p class="fiche-full-desc">Pour voter en France, il faut être inscrit sur les listes électorales. L'inscription est automatique à 18 ans si les démarches d'état civil ont été correctement faites. En cas de déménagement ou d'oubli, l'inscription doit être faite avant le 31 décembre pour pouvoir voter l'année suivante (ou jusqu'au 6e vendredi avant le scrutin pour les élections ponctuelles).</p></div><div class="fiche-full-update">Mai 2026 &#9679; service-public.fr</div></div>
       <div class="fiche-grid">
         <div class="fiche-block"><div class="fiche-block-title">Interlocuteur</div><div class="fiche-contact-card"><div class="fiche-contact-icon">&#127981;</div><div style="flex:1"><div class="fiche-contact-name">Mairie du domicile · ou en ligne sur service-public.fr</div><div class="fiche-contact-detail">&#128222; — · Selon mairie</div><div class="fiche-contact-detail">service-public.fr</div></div><a href="https://www.service-public.fr/particuliers/vosdroits/F1373" target="_blank" class="fiche-contact-link">Accéder &#8594;</a></div></div>
@@ -25406,7 +25379,7 @@ window.addEventListener('DOMContentLoaded', function() {
       <div id="prog-dpe-audit" class="demarche-progress"><div class="progress-header"><span class="progress-title">Progression</span><span class="progress-pct">0%</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:0%"></div></div><div class="progress-steps" id="prog-steps-dpe-audit"></div><div class="credit-expiry" id="credit-expiry-dpe-audit" style="display:none"></div><div class="progress-actions"><button class="btn-progress-end" onclick="terminerDemarche('dpe-audit')">&#10003; Terminée</button></div></div>
       <div class="fiche-tools-bar"><button class="fiche-tool-btn" onclick="toggleFicheTool('tool-checklist-dpe-audit', this)">&#128203; Checklist</button><button class="fiche-tool-btn" onclick="toggleFicheTool('tool-alerte-dpe-audit', this)">&#128276; Rappel</button></div>
       <div id="tool-checklist-dpe-audit" class="fiche-tool-panel" data-titre="Faire réaliser un DPE ou un audit énergétique"><h4>Documents</h4><ul class="checklist-items"><li class="checklist-item" onclick="toggleCheckItem(this)"><input type="checkbox"><label>Titre de propriété</label></li><li class="checklist-item" onclick="toggleCheckItem(this)"><input type="checkbox"><label>Plans du logement si disponibles</label></li><li class="checklist-item" onclick="toggleCheckItem(this)"><input type="checkbox"><label>Factures de chauffage</label></li><li class="checklist-item" onclick="toggleCheckItem(this)"><input type="checkbox"><label>Informations sur les équipements (chaudière, isolation...)</label></li></ul><div class="checklist-actions"><button class="btn-dl" onclick="downloadChecklist('dpe-audit')">&#11015; .txt</button> <button class="btn-dl-ghost" onclick="sendChecklistEmail('dpe-audit')">&#9993; Email</button></div></div>
-      <div id="tool-alerte-dpe-audit" class="fiche-tool-panel"><h4>Rappel</h4><p style="font-size:.82rem;color:var(--mid);margin-bottom:.75rem"><strong>DPE — obligatoire avant toute vente ou location · audit obligatoire pour les passoires thermiques</strong></p><input type="email" class="alerte-email-real" placeholder="votre@email.fr" style="width:100%;margin-bottom:.5rem"><button class="btn-dl" onclick="setAlerteEmail('dpe-audit')">Activer</button><p class="alerte-confirm">&#10003; Activé</p></div>
+      <div id="tool-alerte-dpe-audit" class="fiche-tool-panel"><h4>Rappel</h4><p style="font-size:.82rem;color:var(--mid);margin-bottom:.75rem"><strong>DPE — obligatoire avant toute vente ou location · audit obligatoire pour les passoires thermiques</strong></p><p style="font-size:.8rem;background:rgba(90,122,90,.08);border-left:3px solid var(--sage);padding:.5rem .7rem;border-radius:6px;margin:.4rem 0 .8rem"><strong>Mise à jour — 1er juillet 2026 :</strong> le mode de calcul du DPE évolue. Le coefficient de conversion de l'électricité passe de 2,3 à 1,9 : les diagnostics réalisés à partir de cette date afficheront des classes révisées et certains logements chauffés à l'électricité gagneront une classe (parfois de passoire G/F vers E). Un DPE établi avant le 1er juillet reste valable, mais peut être refait pour bénéficier du nouveau calcul.</p><input type="email" class="alerte-email-real" placeholder="votre@email.fr" style="width:100%;margin-bottom:.5rem"><button class="btn-dl" onclick="setAlerteEmail('dpe-audit')">Activer</button><p class="alerte-confirm">&#10003; Activé</p></div>
       <div class="fiche-full-header"><div class="fiche-full-meta"><div class="fiche-full-tags"><span class="fiche-tag seg">Particuliers</span><span class="fiche-tag theme">🏠 Logement</span></div><div class="fiche-full-title">Faire réaliser un DPE ou un audit énergétique</div><p class="fiche-full-desc">Le Diagnostic de Performance Énergétique (DPE) est obligatoire avant toute vente ou mise en location. Depuis 2022, les logements classés G ne peuvent plus être loués (interdiction progressive). L'audit énergétique est obligatoire depuis 2023 pour les passoires thermiques (F et G) mis en vente.</p></div><div class="fiche-full-update">Mis à jour : mai 2026<br><span>Source : service-public.fr</span></div></div>
       <div class="fiche-grid">
         <div class="fiche-block"><div class="fiche-block-title">Interlocuteur</div><div class="fiche-contact-card"><div class="fiche-contact-icon">&#127981;</div><div style="flex:1"><div class="fiche-contact-name">Diagnostiqueur immobilier certifié</div><div class="fiche-contact-detail">— · Selon diagnostiqueur</div><div class="fiche-contact-detail">service-public.fr</div></div><a href="https://www.service-public.fr/particuliers/vosdroits/F16096" target="_blank" class="fiche-contact-link">Accéder &#8594;</a></div></div>
@@ -27009,7 +26982,7 @@ window.addEventListener('DOMContentLoaded', function() {
       <div id="prog-acre-aide-creation" class="demarche-progress"><div class="progress-header"><span class="progress-title">Progression</span><span class="progress-pct">0%</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:0%"></div></div><div class="progress-steps" id="prog-steps-acre-aide-creation"></div><div class="credit-expiry" id="credit-expiry-acre-aide-creation" style="display:none"></div><div class="progress-actions"><button class="btn-progress-end" onclick="terminerDemarche('acre-aide-creation')">&#10003; Terminée</button></div></div>
       <div class="fiche-tools-bar"><button class="fiche-tool-btn" onclick="toggleFicheTool('tool-checklist-acre-aide-creation', this)">&#128203; Checklist</button><button class="fiche-tool-btn" onclick="toggleFicheTool('tool-alerte-acre-aide-creation', this)">&#128276; Rappel</button></div>
       <div id="tool-checklist-acre-aide-creation" class="fiche-tool-panel" data-titre="Bénéficier de l'ACRE (exonération de charges à la création d'entreprise)"><h4>Documents</h4><ul class="checklist-items"><li class="checklist-item" onclick="toggleCheckItem(this)"><input type="checkbox"><label>Pour micro : demande via guichet unique</label></li><li class="checklist-item" onclick="toggleCheckItem(this)"><input type="checkbox"><label>Pour autres : formulaire URSSAF + attestation de création</label></li></ul><div class="checklist-actions"><button class="btn-dl" onclick="downloadChecklist('acre-aide-creation')">&#11015; .txt</button> <button class="btn-dl-ghost" onclick="sendChecklistEmail('acre-aide-creation')">&#9993; Email</button></div></div>
-      <div id="tool-alerte-acre-aide-creation" class="fiche-tool-panel"><h4>Rappel</h4><p style="font-size:.82rem;color:var(--mid);margin-bottom:.75rem"><strong>ACRE — demande dans les 45 jours de la création · ne pas rater ce délai</strong></p><input type="email" class="alerte-email-real" placeholder="votre@email.fr" style="width:100%;margin-bottom:.5rem"><button class="btn-dl" onclick="setAlerteEmail('acre-aide-creation')">Activer</button><p class="alerte-confirm">&#10003; Activé</p></div>
+      <div id="tool-alerte-acre-aide-creation" class="fiche-tool-panel"><h4>Rappel</h4><p style="font-size:.82rem;color:var(--mid);margin-bottom:.75rem"><strong>ACRE — demande dans les 45 jours de la création · ne pas rater ce délai</strong></p><p style="font-size:.8rem;background:rgba(90,122,90,.08);border-left:3px solid var(--sage);padding:.5rem .7rem;border-radius:6px;margin:.4rem 0 .8rem"><strong>Changement — 1er juillet 2026 :</strong> pour les micro-entrepreneurs, l'exonération de cotisations de début d'activité (1re année) passe de 50 % à 25 % pour les créations ou reprises à compter de cette date. Pensez à déposer votre demande d'ACRE dans les délais après l'immatriculation.</p><input type="email" class="alerte-email-real" placeholder="votre@email.fr" style="width:100%;margin-bottom:.5rem"><button class="btn-dl" onclick="setAlerteEmail('acre-aide-creation')">Activer</button><p class="alerte-confirm">&#10003; Activé</p></div>
       <div class="fiche-full-header"><div class="fiche-full-meta"><div class="fiche-full-tags"><span class="fiche-tag seg">Professionnels</span><span class="fiche-tag theme">🏗️ Création entreprise</span></div><div class="fiche-full-title">Bénéficier de l'ACRE (exonération de charges à la création d'entreprise)</div><p class="fiche-full-desc">L'ACRE est une exonération partielle de charges sociales pendant la première année. Automatique pour les micro-entrepreneurs, elle doit être demandée pour les autres statuts dans les 45 jours.</p></div><div class="fiche-full-update">Mis à jour : mai 2026<br><span>Source : service-public.fr</span></div></div>
       <div class="fiche-grid">
         <div class="fiche-block"><div class="fiche-block-title">Interlocuteur</div><div class="fiche-contact-card"><div class="fiche-contact-icon">&#127981;</div><div style="flex:1"><div class="fiche-contact-name">URSSAF · Guichet unique</div><div class="fiche-contact-detail">3957 · Lun-Ven 9h-17h</div><div class="fiche-contact-detail">service-public.fr</div></div><a href="https://www.service-public.fr/professionnels-entreprises/vosdroits/F11677" target="_blank" class="fiche-contact-link">Accéder &#8594;</a></div></div>
@@ -27951,6 +27924,96 @@ window.addEventListener('DOMContentLoaded', function() {
 <!-- ════════════════════════════════════════════
      PAGE : DÉMO
 ════════════════════════════════════════════ -->
+<div class="page" id="page-tarifs"><div class="gp-wrap" style="text-align:center;padding-bottom:0"><div class="section-eyebrow">Tarifs</div><h1 style="font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.6rem);color:var(--dark);margin:.3rem 0 .5rem">Les options Premium</h1><p style="font-size:1rem;color:var(--mid);max-width:620px;margin:0 auto;line-height:1.6">Rappel : <strong>tout le contenu reste gratuit</strong>. Le Premium n'ajoute que du confort, si vous êtes conquis.</p></div><div class="tarifs-section" id="tarifs-section">
+    <div class="section-eyebrow">Tarification</div>
+    <h2 class="section-h2">Un prix juste, sans surprise</h2>
+    <p class="section-lead">Commencez gratuitement. Choisissez la formule adaptée à votre situation.</p>
+
+    <div class="tarif-toggle">
+      <span class="tarif-toggle-label">Engagement :</span>
+      <div class="tarif-toggle-switch">
+        <button class="tarif-toggle-btn active" onclick="toggleEngagement('avec',this)">Avec engagement</button>
+        <button class="tarif-toggle-btn" onclick="toggleEngagement('sans',this)">Sans engagement</button>
+      </div>
+      <span class="tarif-economy" id="economie-label">Économisez 12€/an</span>
+    </div>
+
+    <div class="tarifs-grid-new">
+
+      <!-- PARTICULIER -->
+      <div class="tarif-card">
+        <div class="tarif-name">Particulier</div>
+        <div class="tarif-price" id="tarif-part-price">4,99€<span style="font-size:1rem;font-family:var(--sans)">/mois</span></div>
+        <div class="tarif-period">
+          <span id="tarif-part-eco" class="tarif-economy">Économisez 12€/an</span>
+        </div>
+        <div class="tarif-divider"></div>
+        <ul class="tarif-features">
+          <li class="tarif-feature"><span>✓</span>Accès illimité aux 380 fiches</li>
+          <li class="tarif-feature"><span>✓</span>Téléchargement des Cerfa</li>
+          <li class="tarif-feature"><span>✓</span>Parcours guidé complet</li>
+          <li class="tarif-feature"><span>✓</span>Checklist exportable PDF</li>
+          <li class="tarif-feature"><span>✓</span>Alertes email</li>
+          <li class="tarif-feature"><span>✓</span>Simulateurs intégrés</li>
+          <li class="tarif-feature"><span>✓</span>Conseils Silka exclusifs</li>
+          <li class="tarif-feature locked"><span>—</span>Comptes liés (3 utilisateurs)</li>
+        </ul>
+        <button class="tarif-cta paid" onclick="openMdpModal()">Démo accès payant 🔐</button>
+      </div>
+
+      <!-- PRO & ASSOCIATIONS -->
+      <div class="tarif-card featured">
+        <div class="tarif-badge">PRO & ASSO</div>
+        <div class="tarif-name">Professionnel & Association</div>
+        <div class="tarif-price" id="tarif-pro-price">7,99€<span style="font-size:1rem;font-family:var(--sans)">/mois</span></div>
+        <div class="tarif-period">
+          <span id="tarif-pro-eco" class="tarif-economy">Économisez 24€/an</span>
+        </div>
+        <div class="tarif-divider"></div>
+        <ul class="tarif-features">
+          <li class="tarif-feature"><span>✓</span>Tout du plan Particulier</li>
+          <li class="tarif-feature"><span>✓</span>Fiches Pro & Asso incluses</li>
+          <li class="tarif-feature"><span>✓</span>TVA, embauche, marchés publics</li>
+          <li class="tarif-feature"><span>✓</span>Subventions BPI, DRAC</li>
+          <li class="tarif-feature"><span>✓</span>Brevet, marque, propriété intel.</li>
+        </ul>
+        <div class="pro-users-badge"><span>👥</span>3 utilisateurs sur le même compte</div>
+        <button class="tarif-cta paid" onclick="openMdpModal()">Démo accès payant 🔐</button>
+      </div>
+
+      <!-- CRÉDITS -->
+      <div class="credits-card">
+        <div class="tarif-name">Crédits à l'unité</div>
+        <p style="font-size:.82rem;color:var(--sage-l);margin-bottom:.9rem;line-height:1.55">Sans abonnement. 1 crédit = 1 démarche débloquée pendant 30 jours.</p>
+        <div class="credits-options">
+          <div class="credit-option">
+            <span class="credit-option-name">1 crédit</span>
+            <span class="credit-option-price">2€</span>
+          </div>
+          <div class="credit-option">
+            <span class="credit-option-name">5 crédits</span>
+            <div style="display:flex;align-items:center;gap:.4rem">
+              <span class="credit-option-price">8€</span>
+              <span class="credit-option-badge">-20%</span>
+            </div>
+          </div>
+        </div>
+        <div class="tarif-divider" style="background:rgba(255,255,255,.1)"></div>
+        <ul class="tarif-features" style="margin-bottom:1rem">
+          <li class="tarif-feature"><span style="color:var(--sage-l)">✓</span>Accès complet à 1 fiche à la fois</li>
+          <li class="tarif-feature"><span style="color:var(--sage-l)">✓</span>Valable 30 jours par démarche</li>
+          <li class="tarif-feature"><span style="color:var(--sage-l)">✓</span>Portefeuille dans votre compte</li>
+          <li class="tarif-feature"><span style="color:var(--sage-l)">✓</span>Idéal pour 1 à 2 démarches/an</li>
+        </ul>
+        <button class="tarif-cta-dark" onclick="openCreditModal(null)">Acheter des crédits →</button>
+      </div>
+
+    </div>
+  </div>
+
+
+  </div>
+<div class="page" id="page-gratuit-premium"><div class="gp-wrap"><div class="section-eyebrow" style="text-align:center">En toute transparence</div><h1 style="font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.6rem);color:var(--dark);text-align:center;margin:.3rem 0 .5rem">Gratuit vs Premium</h1><p style="text-align:center;font-size:1rem;color:var(--mid);max-width:640px;margin:0 auto;line-height:1.6">Le <strong>contenu est gratuit</strong>. Le Premium, lui, n&#39;ajoute que du <strong>confort</strong> — jamais une démarche verrouillée.</p><div class="gp-cols"><div class="gp-col"><span class="gp-tag free">Toujours gratuit</span><h3>Tout le contenu</h3><div class="gp-li"><span class="gp-check">&#10003;</span><span>Les <b>380 fiches</b> de démarches, sans exception</span></div><div class="gp-li"><span class="gp-check">&#10003;</span><span><b>Recherche</b> en langage courant</span></div><div class="gp-li"><span class="gp-check">&#10003;</span><span>Les <b>étapes essentielles</b> de chaque démarche</span></div><div class="gp-li"><span class="gp-check">&#10003;</span><span>Filtres par profil, glossaire, sources officielles</span></div><div class="gp-li"><span class="gp-check">&#10003;</span><span>Mises à jour régulières (évolutions 2026 incluses)</span></div></div><div class="gp-col premium"><span class="gp-tag paid">Premium · confort</span><h3>Le confort en plus</h3><div class="gp-li"><span class="gp-check">&#10022;</span><span><b>Étapes plus détaillées</b> et délais personnalisés</span></div><div class="gp-li"><span class="gp-check">&#10022;</span><span><b>Modèles de courriers</b> pré-remplis, prêts à envoyer</span></div><div class="gp-li"><span class="gp-check">&#10022;</span><span><b>Coffre-fort sécurisé</b> pour vos documents</span></div><div class="gp-li"><span class="gp-check">&#10022;</span><span><b>Dossier unique</b> : vos démarches centralisées</span></div><div class="gp-li"><span class="gp-check">&#10022;</span><span><b>Assistant</b> et suivi avec rappels d&#39;échéances</span></div></div></div><div class="gp-note">Aucune démarche n&#39;est cachée derrière le paiement. Silka est là pour aider — pas pour faire de l&#39;argent.</div><div class="gp-cta"><button class="btn-primary" onclick="showPage('demarches')">Explorer les démarches (gratuit) &#8594;</button><button class="btn-secondary" onclick="showPage('tarifs')">Voir les tarifs Premium</button></div></div></div>
 <div class="page" id="page-demo">
 <style>
   /* Styles spécifiques à la page démo */
@@ -30008,37 +30071,178 @@ window.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <!-- MODAL ONBOARDING -->
-<div id="onboarding-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:24px;padding:2.5rem 2rem;max-width:480px;width:90%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.25);animation:slideUp .35s ease">
-    <div style="font-size:2rem;margin-bottom:.5rem">🌿</div>
-    <h2 style="font-family:var(--serif);font-size:1.4rem;color:var(--dark);margin-bottom:.4rem">Bienvenue sur Silka</h2>
-    <p style="font-size:.85rem;color:var(--mid);line-height:1.6;margin-bottom:1.75rem;max-width:340px;margin-left:auto;margin-right:auto">Pour personnaliser votre glossaire, dites-nous qui vous êtes. Vous pourrez changer à tout moment.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem">
-      <button onclick="setOnboardingProfile('Particuliers')" style="border:2px solid var(--xlight);border-radius:16px;padding:1.25rem .75rem;background:#fff;cursor:pointer;font-family:var(--sans);transition:all .2s;text-align:center">
-        <div style="font-size:1.5rem;margin-bottom:.4rem">👤</div>
-        <div style="font-weight:700;font-size:.88rem;color:var(--dark)">Particulier</div>
-        <div style="font-size:.72rem;color:var(--mid);margin-top:.2rem">Démarches du quotidien</div>
-      </button>
-      <button onclick="setOnboardingProfile('Professionnels')" style="border:2px solid var(--xlight);border-radius:16px;padding:1.25rem .75rem;background:#fff;cursor:pointer;font-family:var(--sans);transition:all .2s;text-align:center">
-        <div style="font-size:1.5rem;margin-bottom:.4rem">🏢</div>
-        <div style="font-weight:700;font-size:.88rem;color:var(--dark)">Professionnel</div>
-        <div style="font-size:.72rem;color:var(--mid);margin-top:.2rem">Entreprises & freelances</div>
-      </button>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
-      <button onclick="setOnboardingProfile('Associations')" style="border:2px solid var(--xlight);border-radius:16px;padding:1.25rem .75rem;background:#fff;cursor:pointer;font-family:var(--sans);transition:all .2s;text-align:center">
-        <div style="font-size:1.5rem;margin-bottom:.4rem">🏛️</div>
-        <div style="font-weight:700;font-size:.88rem;color:var(--dark)">Association</div>
-        <div style="font-size:.72rem;color:var(--mid);margin-top:.2rem">Loi 1901</div>
-      </button>
-      
-    </div>
-    <button onclick="setOnboardingProfile('all')" style="margin-top:1rem;background:none;border:none;font-size:.78rem;color:var(--light);cursor:pointer;font-family:var(--sans);text-decoration:underline">Voir toutes les démarches →</button>
-  </div>
-</div>
+<div id="onboarding-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);align-items:center;justify-content:center"><div style="background:#fff;border-radius:24px;padding:2.25rem 1.75rem;max-width:500px;width:92%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.25);animation:slideUp .35s ease;max-height:92vh;overflow:auto"><div id="ob-screen-intro"><h2 style="font-family:var(--serif);font-size:1.45rem;color:var(--dark);margin-bottom:.5rem">Bienvenue sur Silka</h2><p style="font-size:.88rem;color:var(--mid);line-height:1.65;margin:0 auto 1.25rem;max-width:380px">Silka, c'est un <strong>guide qui vous accompagne</strong> et vous dit <strong>ce à quoi vous avez droit</strong>. Pas pour faire de l'argent — pour aider, au quotidien&nbsp;:</p><div style="display:grid;gap:.6rem;text-align:left;max-width:380px;margin:0 auto 1.5rem"><div style="display:flex;gap:.7rem;align-items:flex-start"><div><strong style="font-size:.86rem;color:var(--dark)">Trouvez</strong><div style="font-size:.78rem;color:var(--mid);line-height:1.5">la bonne démarche en langage courant, parmi 380 fiches vérifiées</div></div></div><div style="display:flex;gap:.7rem;align-items:flex-start"><div><strong style="font-size:.86rem;color:var(--dark)">Comprenez</strong><div style="font-size:.78rem;color:var(--mid);line-height:1.5">chaque étape, les pièces à fournir, les délais et les pièges à éviter</div></div></div><div style="display:flex;gap:.7rem;align-items:flex-start"><div><strong style="font-size:.86rem;color:var(--dark)">Agissez</strong><div style="font-size:.78rem;color:var(--mid);line-height:1.5">courriers pré-remplis, suivi de vos démarches et rappels d'échéances</div></div></div></div><div style="background:var(--sage-bg);border:1px solid var(--sage-l);border-radius:12px;padding:.7rem .85rem;margin:0 auto 1.25rem;max-width:380px;text-align:left"><div style="font-size:.8rem;color:var(--sage-dark);font-weight:700;margin-bottom:.2rem">✓ 100&nbsp;% des fiches sont gratuites</div><div style="font-size:.74rem;color:var(--mid);line-height:1.5">Le Premium ne verrouille aucune démarche : il ajoute seulement du <strong>confort</strong> — étapes plus détaillées, coffre-fort sécurisé, dossier unique et assistant.</div></div><button onclick="obShow('ob-screen-profile')" style="background:var(--sage-d);border:none;color:#fff;border-radius:100px;padding:.7rem 1.9rem;font-size:.9rem;font-weight:700;cursor:pointer;font-family:var(--sans);box-shadow:0 6px 18px rgba(90,122,90,.35)">Commencer →</button></div><div id="ob-screen-profile" style="display:none"><h2 style="font-family:var(--serif);font-size:1.35rem;color:var(--dark);margin-bottom:.4rem">Vous êtes…</h2><p style="font-size:.83rem;color:var(--mid);line-height:1.55;margin:0 auto 1.4rem;max-width:350px">Pour vous montrer les bonnes démarches en priorité. Vous pourrez changer à tout moment.</p><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.55rem;margin-bottom:.9rem"><button onclick="setOnboardingProfile('Particuliers')" style="border:2px solid var(--xlight);border-radius:16px;padding:1.1rem .5rem;background:#fff;cursor:pointer;font-family:var(--sans);transition:all .2s;text-align:center" onmouseover="this.style.borderColor='var(--sage)';this.style.background='var(--sage-bg)'" onmouseout="this.style.borderColor='var(--xlight)';this.style.background='#fff'"><div style="font-weight:700;font-size:.84rem;color:var(--dark)">Particulier</div><div style="font-size:.68rem;color:var(--mid);margin-top:.15rem">Quotidien</div></button><button onclick="setOnboardingProfile('Professionnels')" style="border:2px solid var(--xlight);border-radius:16px;padding:1.1rem .5rem;background:#fff;cursor:pointer;font-family:var(--sans);transition:all .2s;text-align:center" onmouseover="this.style.borderColor='var(--sage)';this.style.background='var(--sage-bg)'" onmouseout="this.style.borderColor='var(--xlight)';this.style.background='#fff'"><div style="font-weight:700;font-size:.84rem;color:var(--dark)">Pro</div><div style="font-size:.68rem;color:var(--mid);margin-top:.15rem">Entreprise</div></button><button onclick="setOnboardingProfile('Associations')" style="border:2px solid var(--xlight);border-radius:16px;padding:1.1rem .5rem;background:#fff;cursor:pointer;font-family:var(--sans);transition:all .2s;text-align:center" onmouseover="this.style.borderColor='var(--sage)';this.style.background='var(--sage-bg)'" onmouseout="this.style.borderColor='var(--xlight)';this.style.background='#fff'"><div style="font-weight:700;font-size:.84rem;color:var(--dark)">Asso</div><div style="font-size:.68rem;color:var(--mid);margin-top:.15rem">Loi 1901</div></button></div><button onclick="setOnboardingProfile('all')" style="margin-top:.2rem;background:none;border:none;font-size:.78rem;color:var(--light);cursor:pointer;font-family:var(--sans);text-decoration:underline">Voir toutes les démarches →</button></div><div id="ob-screen-tour" style="display:none"><h2 style="font-family:var(--serif);font-size:1.35rem;color:var(--dark);margin-bottom:.4rem">Visite guidée express</h2><p style="font-size:.85rem;color:var(--mid);line-height:1.6;margin:0 auto 1.5rem;max-width:360px">En 2 minutes, on vous montre comment Silka vous accompagne — de la recherche d'une démarche jusqu'aux courriers prêts à envoyer.</p><div style="display:flex;flex-direction:column;gap:.55rem;max-width:300px;margin:0 auto"><button onclick="obStartTour()" style="background:var(--sage-d);border:none;color:#fff;border-radius:100px;padding:.75rem 1.4rem;font-size:.9rem;font-weight:700;cursor:pointer;font-family:var(--sans);box-shadow:0 6px 18px rgba(90,122,90,.35)">Démarrer la visite (2 min)</button><button onclick="obSkipTour()" style="background:none;border:none;font-size:.8rem;color:var(--light);cursor:pointer;font-family:var(--sans);text-decoration:underline">Plus tard, explorer par moi-même</button></div></div></div></div>
 <style>
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 #onboarding-modal button:hover{border-color:var(--sage-d)!important;background:var(--sage-bg)!important;transform:translateY(-2px)}
 </style><button id="silka-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">↑</button>
+<div id="silka-tour" aria-live="polite" role="dialog" aria-label="Visite guidée Silka">
+  <div class="st-shutter" id="st-top"></div>
+  <div class="st-shutter" id="st-bottom"></div>
+  <div class="st-shutter" id="st-left"></div>
+  <div class="st-shutter" id="st-right"></div>
+  <div class="st-ring pulse" id="st-ring"></div>
+  <div class="st-pop" id="st-pop">
+    <div class="st-pop-arrow" id="st-arrow"></div>
+    <div id="st-badge-slot"></div>
+    <div class="st-num" id="st-num"></div>
+    <h3 class="st-title" id="st-title"></h3>
+    <p class="st-text" id="st-text"></p>
+    <div class="st-foot">
+      <div class="st-dots" id="st-dots"></div>
+      <div class="st-btns">
+        <button class="st-skip" id="st-skip">Passer</button>
+        <button class="st-prev" id="st-prev">Précédent</button>
+        <button class="st-next" id="st-next">Suivant</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script id="silka-tour-js">
+var SilkaTour=(function(){
+  var steps=[],idx=0,active=false,raf=null;
+  function $(id){return document.getElementById(id);}
+  function safe(fn){try{if(typeof fn==='function')fn();}catch(e){}}
+
+  function buildSteps(profile){
+    var who = profile==='Professionnels' ? 'votre activité professionnelle'
+            : profile==='Associations' ? 'votre association'
+            : 'votre vie quotidienne';
+    return [
+      {sel:'.hero h1', nav:function(){closeAll();showPage('home');},
+       title:'Bienvenue sur Silka',
+       text:"Silka réunit toutes les démarches administratives françaises au même endroit. On vous aide à trouver la bonne démarche, à comprendre quoi faire, puis à agir — sans vous perdre entre les sites officiels."},
+      {sel:'#demarche-search', nav:function(){closeAll();showPage('demarches');},
+       title:'Décrivez votre besoin',
+       text:"Tapez ce que vous voulez faire en langage courant — « j'ai perdu ma carte grise », « créer mon association ». Silka trouve la fiche correspondante parmi 380 démarches."},
+      {sel:'#page-demarches .filter-bar', nav:function(){closeAll();showPage('demarches');},
+       title:'Adapté à votre profil',
+       text:"Particulier, professionnel ou association : le catalogue se filtre pour ne montrer que ce qui concerne "+who+"."},
+      {sel:'#page-demarches .theme-card', nav:function(){closeAll();showPage('demarches');},
+       title:'Rangé par thème',
+       text:"Logement, santé, famille, véhicule, entreprise… chaque thème regroupe ses démarches pour vous y retrouver d'un coup d'œil."},
+      {sel:'#fsteps-gratuit-carte-grise', nav:function(){closeAll();showFiche('carte-grise');},
+       title:'Une démarche, étape par étape',
+       text:"Chaque fiche découpe la démarche en étapes claires : ce qu'il faut, où aller, combien de temps, les pièges à éviter. Ici, l'exemple de la carte grise."},
+      {sel:'#fsteps-gratuit-carte-grise', nav:function(){closeAll();showFiche('carte-grise');}, premium:true,
+       title:'Le Premium, c\'est du confort',
+       text:"Le contenu de la fiche reste gratuit. Le Premium ajoute du confort : étapes encore plus détaillées, délais personnalisés et modèles de courriers pré-remplis — vous n'avez plus qu'à signer."},
+      {sel:'#page-boite-outils h1', nav:function(){closeAll();showPage('boite-outils');}, premium:true,
+       title:'La boîte à outils',
+       text:"Générez vos courriers, attestations et contrats en quelques clics : résiliation, mise en demeure, attestation d'hébergement… pré-remplis et prêts à envoyer."},
+      {sel:'#page-mes-demarches h1', nav:function(){closeAll();showPage('mes-demarches');}, premium:true,
+       title:'Votre suivi personnel',
+       text:"Retrouvez vos démarches en cours, vos brouillons et vos échéances au même endroit. Silka vous rappelle les dates importantes pour ne plus rien oublier."},
+      {sel:'#chatbotPanel', nav:function(){showPage('home');openChat();},
+       title:'Un assistant à vos côtés',
+       text:"Une question, un doute ? L'assistant Silka répond et vous oriente vers la bonne fiche, à tout moment."},
+      {sel:'#page-compte h1', nav:function(){closeAll();showPage('compte');}, premium:true,
+       title:'Le contenu gratuit, le confort en option',
+       text:"Les 380 fiches restent 100 % gratuites. Le Premium n'ajoute que du confort : coffre-fort sécurisé, dossier unique, étapes détaillées et assistant — sans limite. Vous gardez la main, Silka fait le reste."},
+      {sel:'.hero-actions', nav:function(){closeAll();showPage('home');},
+       title:'À vous de jouer',
+       text:"Vous avez l'essentiel en main. Explorez les démarches dès maintenant — et relancez cette visite quand vous voulez via le bouton « Visite guidée »."}
+    ];
+  }
+  function closeAll(){ try{if(typeof closeFiche==='function')closeFiche();}catch(e){} closeChat(); }
+  function chatOpen(){ var p=$('chatbotPanel'); return !!(p && p.classList.contains('open')); }
+  function openChat(){ if(!chatOpen()){ safe(window.toggleChat); } }
+  function closeChat(){ if(chatOpen()){ safe(window.toggleChat); } }
+
+  function start(profile){
+    steps=buildSteps(profile||'all'); idx=0; active=true;
+    var ov=$('silka-tour'); ov.classList.add('on');
+    document.body.style.overflow='hidden';
+    window.addEventListener('resize',reflow); window.addEventListener('scroll',reflow,true);
+    $('st-next').onclick=next; $('st-prev').onclick=prev; $('st-skip').onclick=end;
+    document.addEventListener('keydown',onKey);
+    go(0);
+  }
+  function onKey(e){ if(!active)return; if(e.key==='Escape')end(); else if(e.key==='ArrowRight')next(); else if(e.key==='ArrowLeft')prev(); }
+  function go(i){
+    idx=Math.max(0,Math.min(steps.length-1,i));
+    var s=steps[idx];
+    safe(s.nav);
+    // contenu
+    $('st-badge-slot').innerHTML = s.premium ? '<span class="st-badge">Version complète</span>' : '';
+    $('st-num').textContent='Étape '+(idx+1)+' / '+steps.length;
+    $('st-title').textContent=s.title;
+    $('st-text').textContent=s.text;
+    $('st-prev').style.display = idx===0 ? 'none':'inline-block';
+    $('st-next').textContent = idx===steps.length-1 ? 'Terminer' : 'Suivant';
+    var dots=''; for(var k=0;k<steps.length;k++){dots+='<span class="st-dot'+(k===idx?' on':'')+'"></span>';}
+    $('st-dots').innerHTML=dots;
+    // laisser la navigation s'appliquer puis mesurer
+    setTimeout(function(){
+      var el=null; try{el=document.querySelector(s.sel);}catch(e){}
+      if(el){ try{el.scrollIntoView({block:'center',inline:'center',behavior:'smooth'});}catch(e){} }
+      setTimeout(function(){ layout(el); },360);
+    },80);
+  }
+  function reflow(){ if(!active)return; if(raf)cancelAnimationFrame(raf); raf=requestAnimationFrame(function(){ var s=steps[idx],el=null; try{el=document.querySelector(s.sel);}catch(e){} layout(el); }); }
+  function clamp(v){return v<0?0:v;}
+  function layout(el){
+    var W=window.innerWidth,H=window.innerHeight,pad=8;
+    var top=$('st-top'),bot=$('st-bottom'),lft=$('st-left'),rgt=$('st-right'),ring=$('st-ring'),pop=$('st-pop'),arrow=$('st-arrow');
+    var r=null;
+    if(el){var b=el.getBoundingClientRect(); if(b.width>4&&b.height>4) r=b;}
+    if(!r){
+      // pas de cible : tout flouté, encadré centré, pas d'anneau
+      top.style.cssText='position:fixed;left:0;top:0;width:'+W+'px;height:'+H+'px;'; 
+      bot.style.cssText=lft.style.cssText=rgt.style.cssText='display:none';
+      top.style.display='block';
+      ring.style.opacity='0';
+      arrow.style.display='none';
+      pop.style.left=Math.round((W-Math.min(360,W-32))/2)+'px';
+      pop.style.top=Math.round(H/2-110)+'px';
+      return;
+    }
+    ring.style.opacity='1';
+    [top,bot,lft,rgt].forEach(function(s){s.style.display='block';});
+    var rt=r.top-pad, rl=r.left-pad, rb=r.bottom+pad, rr=r.right+pad;
+    rt=clamp(rt); rl=clamp(rl); if(rb>H)rb=H; if(rr>W)rr=W;
+    top.style.cssText='position:fixed;left:0;top:0;width:'+W+'px;height:'+clamp(rt)+'px';
+    bot.style.cssText='position:fixed;left:0;top:'+rb+'px;width:'+W+'px;height:'+clamp(H-rb)+'px';
+    lft.style.cssText='position:fixed;left:0;top:'+rt+'px;width:'+clamp(rl)+'px;height:'+clamp(rb-rt)+'px';
+    rgt.style.cssText='position:fixed;left:'+rr+'px;top:'+rt+'px;width:'+clamp(W-rr)+'px;height:'+clamp(rb-rt)+'px';
+    ring.style.left=rl+'px'; ring.style.top=rt+'px'; ring.style.width=(rr-rl)+'px'; ring.style.height=(rb-rt)+'px';
+    // placement de l'encadré
+    var mobile=W<=560;
+    var popW=Math.min(360,W-32), popH=pop.offsetHeight||220, gap=16;
+    if(mobile){
+      arrow.style.display='none';
+      // bas si la cible est dans la moitié haute, sinon haut
+      if(r.bottom < H*0.5){ pop.style.top=Math.min(rb+gap, H-popH-12)+'px'; }
+      else { pop.style.top=clamp(rt-popH-gap)+'px'; }
+      pop.style.left=''; // CSS gère left/right 16px
+      return;
+    }
+    arrow.style.display='block';
+    var left=Math.min(Math.max(rl, 16), W-popW-16);
+    pop.style.left=left+'px';
+    var below = rb+gap+popH <= H-12;
+    var top2 = below ? rb+gap : clamp(rt-gap-popH);
+    pop.style.top=top2+'px';
+    // flèche
+    var ax=Math.min(Math.max((r.left+r.width/2)-left-8, 14), popW-30);
+    arrow.style.left=ax+'px';
+    if(below){ arrow.style.top='-8px'; arrow.style.borderRight='none'; arrow.style.borderBottom='none'; }
+    else { arrow.style.top=(popH-8)+'px'; arrow.style.borderLeft='none'; arrow.style.borderTop='none'; }
+  }
+  function next(){ if(idx>=steps.length-1){ finish(); } else go(idx+1); }
+  function prev(){ if(idx>0) go(idx-1); }
+  function teardown(){
+    active=false; var ov=$('silka-tour'); ov.classList.remove('on');
+    document.body.style.overflow='';
+    window.removeEventListener('resize',reflow); window.removeEventListener('scroll',reflow,true);
+    document.removeEventListener('keydown',onKey);
+    closeChat();
+    try{localStorage.setItem('silka_tour_done','1');}catch(e){}
+  }
+  function end(){ teardown(); }                 // « Passer » : on reste où on est
+  function finish(){ teardown(); closeAll(); showPage('demarches'); }  // fin : vers le catalogue
+  return {start:start,next:next,prev:prev,end:end};
+})();
+</script>
 </body>
 </html>
