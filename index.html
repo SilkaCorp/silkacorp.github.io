@@ -8060,7 +8060,7 @@ function showPage(pageId) {
   var page = document.getElementById('page-' + pageId);
   if (page) {
     page.classList.add('active');
-    if(window.location.hash) { history.pushState(null, '', window.location.pathname); }
+    if(pageId === 'home'){ if(window.location.hash){ history.pushState(null, '', window.location.pathname); } } else if(window.location.hash !== '#' + pageId){ history.pushState(null, '', '#' + pageId); }
     if(pageId === 'mes-demarches' && typeof silkaRenderDashboard === 'function'){ silkaRenderDashboard(); }
     currentPage = pageId;
     silkaSetActiveNav(pageId);
@@ -29942,6 +29942,8 @@ window.addEventListener('DOMContentLoaded', function() {
     var hash = window.location.hash.replace('#', '');
     if (hash && document.getElementById('fiche-' + hash)) {
       showFiche(hash);
+    } else if (hash && document.getElementById('page-' + hash)) {
+      showPage(hash);
     } else {
       showPage('home');
     }
