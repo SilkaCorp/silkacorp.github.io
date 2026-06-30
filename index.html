@@ -8287,6 +8287,129 @@ window.addEventListener('load',function(){ if(checkPremium()) activatePremium();
 // ── AUTHENTIFICATION (simulée) ────────────────────────────────
 var DEMO_USER = { email:'demo@silka.fr', pwd:'demo1234', name:'Demo Silka' };
 
+/* ════════ AUTHENTIFICATION RÉELLE (Supabase) — inerte tant que non configurée ════════
+   Activation : créez un projet gratuit sur supabase.com, activez l'authentification e-mail,
+   puis collez ci-dessous l'URL du projet et la clé « anon public ».
+   Tant que ces deux champs sont vides, Silka conserve EXACTEMENT le comportement démo actuel. */
+var SILKA_AUTH = { url: '', anonKey: '' };
+var __sbClient = null, __otpAwait = false;
+function silkaAuthEnabled(){ return !!(SILKA_AUTH.url && SILKA_AUTH.anonKey); }
+function silkaGetClient(){
+  return new Promise(function(resolve, reject){
+    if(!silkaAuthEnabled()){ resolve(null); return; }
+    if(__sbClient){ resolve(__sbClient); return; }
+    function mk(){ try { __sbClient = window.supabase.createClient(SILKA_AUTH.url, SILKA_AUTH.anonKey); resolve(__sbClient); } catch(e){ reject(e); } }
+    if(window.supabase && window.supabase.createClient){ mk(); return; }
+    var sc = document.createElement('script');
+    sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+    sc.onload = mk; sc.onerror = function(){ reject(new Error('cdn')); };
+    document.head.appendChild(sc);
+  });
+}
+function silkaAuthToast(text){
+  var m = document.createElement('div'); m.textContent = text;
+  m.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--dark,#2b2b2b);color:#fff;padding:.7rem 1.1rem;border-radius:10px;font-size:.85rem;max-width:90%;text-align:center;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,.2)';
+  document.body.appendChild(m);
+  setTimeout(function(){ m.style.transition='opacity .4s'; m.style.opacity='0'; setTimeout(function(){ m.remove(); }, 400); }, 4800);
+}
+function silkaAuthFr(msg){
+  msg = (msg||'').toLowerCase();
+  if(msg.indexOf('already')>-1 && msg.indexOf('regist')>-1) return 'Cet e-mail est déjà utilisé.';
+  if(msg.indexOf('rate limit')>-1 || msg.indexOf('too many')>-1) return 'Trop de tentatives. Réessayez dans quelques minutes.';
+  if(msg.indexOf('not confirmed')>-1) return 'Confirmez votre e-mail (lien reçu par mail) avant de vous connecter.';
+  if(msg.indexOf('token')>-1 || msg.indexOf('otp')>-1 || msg.indexOf('expired')>-1) return 'Code invalide ou expiré.';
+  return 'Une erreur est survenue. Réessayez.';
+}
+function switchAuthTabByName(tab){
+  var tabs = document.querySelectorAll('.auth-tab');
+  tabs.forEach(function(t){ t.classList.remove('active'); });
+  if(tab==='login' && tabs[0]) tabs[0].classList.add('active');
+  if(tab==='register' && tabs[1]) tabs[1].classList.add('active');
+  var lg=document.getElementById('auth-login'), rg=document.getElementById('auth-register');
+  if(lg) lg.style.display = tab==='login'?'block':'none';
+  if(rg) rg.style.display = tab==='register'?'block':'none';
+}
+function silkaRegisterSupabase(){
+  var name = document.getElementById('reg-name').value.trim();
+  var email = document.getElementById('reg-email').value.trim();
+  var pwd = document.getElementById('reg-pwd').value;
+  var err = document.getElementById('reg-error');
+  if(!name || !email || pwd.length < 6){ err.textContent='Veuillez renseigner tous les champs (mot de passe : 6 caractères min).'; err.classList.add('show'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.textContent='Email invalide.'; err.classList.add('show'); return; }
+  err.classList.remove('show');
+  silkaGetClient().then(function(sb){
+    return sb.auth.signUp({ email: email, password: pwd, options: { data: { full_name: name } } });
+  }).then(function(res){
+    if(res.error){ err.textContent = silkaAuthFr(res.error.message); err.classList.add('show'); return; }
+    var u = res.data && res.data.user;
+    if(u && u.identities && u.identities.length === 0){ err.textContent='Cet e-mail est déjà utilisé.'; err.classList.add('show'); return; }
+    silkaAuthToast('Compte créé. Vérifiez votre boîte mail pour confirmer votre adresse, puis connectez-vous.');
+    switchAuthTabByName('login');
+    var le=document.getElementById('login-email'); if(le) le.value = email;
+  }).catch(function(){ err.textContent='Connexion au service impossible. Réessayez.'; err.classList.add('show'); });
+}
+function silkaLoginOtp(){
+  var email = document.getElementById('login-email').value.trim();
+  var err = document.getElementById('login-error');
+  if(!email){ err.textContent='Veuillez saisir votre e-mail.'; err.classList.add('show'); return; }
+  if(!__otpAwait){
+    err.classList.remove('show');
+    silkaGetClient().then(function(sb){
+      return sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false } });
+    }).then(function(res){
+      if(res.error){ err.textContent = silkaAuthFr(res.error.message); err.classList.add('show'); return; }
+      __otpAwait = true;
+      if(!document.getElementById('login-otp')){
+        var inp = document.createElement('input');
+        inp.type='text'; inp.inputMode='numeric'; inp.className='auth-input'; inp.id='login-otp'; inp.placeholder='123456';
+        inp.addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+        var lbl = document.createElement('label'); lbl.className='auth-label'; lbl.textContent='Code reçu par e-mail';
+        var grp = document.createElement('div'); grp.className='auth-group'; grp.id='login-otp-group';
+        grp.appendChild(lbl); grp.appendChild(inp);
+        var anchor = err.parentNode ? err : null;
+        if(anchor){ anchor.parentNode.insertBefore(grp, anchor); }
+      } else { var g=document.getElementById('login-otp-group'); if(g) g.style.display='block'; }
+      var btn = document.querySelector('#auth-login .auth-submit'); if(btn) btn.textContent='Valider le code →';
+      silkaAuthToast('Un code de connexion vous a été envoyé par e-mail.');
+    }).catch(function(){ err.textContent='Connexion au service impossible. Réessayez.'; err.classList.add('show'); });
+    return;
+  }
+  var oc = document.getElementById('login-otp');
+  var token = oc ? oc.value.trim() : '';
+  if(!token){ err.textContent='Saisissez le code reçu par e-mail.'; err.classList.add('show'); return; }
+  silkaGetClient().then(function(sb){
+    return sb.auth.verifyOtp({ email: email, token: token, type: 'email' });
+  }).then(function(res){
+    if(res.error){ err.textContent = silkaAuthFr(res.error.message); err.classList.add('show'); return; }
+    err.classList.remove('show'); __otpAwait = false;
+    silkaFinishSupabaseLogin(res.data && res.data.user);
+  }).catch(function(){ err.textContent='Code invalide. Réessayez.'; err.classList.add('show'); });
+}
+function silkaFinishSupabaseLogin(sbUser){
+  var meta = (sbUser && sbUser.user_metadata) || {};
+  var name = meta.full_name || (sbUser && sbUser.email ? sbUser.email.split('@')[0] : 'Mon compte');
+  var user = { name: name, email: sbUser ? sbUser.email : '' };
+  localStorage.setItem('silka_user', JSON.stringify(user));
+  var g=document.getElementById('login-otp-group'); if(g) g.style.display='none';
+  var oc=document.getElementById('login-otp'); if(oc) oc.value='';
+  var btn = document.querySelector('#auth-login .auth-submit'); if(btn) btn.textContent='Recevoir un code par e-mail →';
+  showConnected(user); updateNavAfterLogin(name);
+}
+function silkaAuthInitUI(){
+  if(!silkaAuthEnabled()) return;
+  var pwd = document.getElementById('login-pwd');
+  if(pwd){ var g = pwd.closest('.auth-group'); if(g) g.style.display='none'; }
+  document.querySelectorAll('#auth-login p').forEach(function(p){ if(p.id!=='login-error' && /Démo/.test(p.textContent)) p.style.display='none'; });
+  var lbtn = document.querySelector('#auth-login .auth-submit'); if(lbtn) lbtn.textContent='Recevoir un code par e-mail →';
+}
+function silkaAuthRestore(){
+  if(!silkaAuthEnabled()) return;
+  silkaGetClient().then(function(sb){ return sb.auth.getSession(); }).then(function(res){
+    var s = res && res.data && res.data.session;
+    if(s && s.user){ silkaFinishSupabaseLogin(s.user); }
+  }).catch(function(){});
+}
+
 function switchAuthTab(tab, btn) {
   document.querySelectorAll('.auth-tab').forEach(function(t){ t.classList.remove('active'); });
   btn.classList.add('active');
@@ -8294,6 +8417,7 @@ function switchAuthTab(tab, btn) {
   document.getElementById('auth-register').style.display = tab==='register'?'block':'none';
 }
 function doLogin() {
+  if (silkaAuthEnabled()) { silkaLoginOtp(); return; }
   var email = document.getElementById('login-email').value.trim();
   var pwd = document.getElementById('login-pwd').value;
   var err = document.getElementById('login-error');
@@ -8314,6 +8438,7 @@ function doLogin() {
   }
 }
 function doRegister() {
+  if (silkaAuthEnabled()) { silkaRegisterSupabase(); return; }
   var name = document.getElementById('reg-name').value.trim();
   var email = document.getElementById('reg-email').value.trim();
   var pwd = document.getElementById('reg-pwd').value;
@@ -8344,6 +8469,7 @@ function showConnected(user) {
   applyPremiumState();
 }
 function doLogout() {
+  if (silkaAuthEnabled() && __sbClient) { try { __sbClient.auth.signOut(); } catch(e){} }
   localStorage.removeItem('silka_user');
   document.getElementById('compte-guest').style.display='block';
   document.getElementById('compte-connected').classList.remove('show');
@@ -10489,6 +10615,8 @@ window.addEventListener('DOMContentLoaded', function() {
     updateNavAfterPremium();
   }
   applyPremiumState();
+  silkaAuthInitUI();
+  silkaAuthRestore();
   // Restaurer l'état connecté
   var saved = localStorage.getItem('silka_user');
   if (saved) {
@@ -11798,7 +11926,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     <div class="legal-section">
       <h2>1. Présentation du service</h2>
-      <p>Silka est une plateforme d'aide aux démarches administratives en France, éditée par Silka SAS. Le service est accessible via le site silka.fr et propose des fiches pratiques, des outils d'aide et un accompagnement aux particuliers, professionnels et associations.</p>
+      <p>Silka est une plateforme d'aide aux démarches administratives en France, éditée par Silka. Le service est accessible via le site silka.fr et propose des fiches pratiques, des outils d'aide et un accompagnement aux particuliers, professionnels et associations.</p>
     </div>
 
     <div class="legal-section">
@@ -11878,7 +12006,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     <div class="legal-section">
       <h2>4. Hébergement et sécurité</h2>
-      <p>Le site est hébergé par GitHub Pages (GitHub, Inc., États-Unis). Les données de progression de vos démarches et la plupart de vos préférences sont stockées localement (localStorage) sur votre appareil et ne sont pas transmises à nos serveurs. Les mots de passe sont chiffrés et ne sont jamais stockés en clair.</p>
+      <p>Le site est hébergé par GitHub Pages (GitHub, Inc., États-Unis). Les données de progression de vos démarches et la plupart de vos préférences sont stockées localement (localStorage) sur votre appareil et ne sont pas transmises à nos serveurs. Aucun mot de passe n'est stocké en clair.</p>
     </div>
 
     <div class="legal-section">
