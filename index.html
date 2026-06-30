@@ -1021,6 +1021,7 @@ footer{
 .testi-quote{font-size:.9rem;color:var(--mid);line-height:1.6;font-style:italic}
 .testi-author{font-size:.8rem;color:var(--sage-dark);font-weight:700;margin-top:.6rem}
 </style>
+<style id="silka-navactive-css">.nav-links a.silka-active,.mobile-menu a.silka-active{color:var(--sage-d)!important;font-weight:700!important}</style>
 </head>
 <body>
 
@@ -1091,7 +1092,7 @@ footer{
     <li><a href="javascript:void(0)" onclick="showPage('mes-demarches')">Mes démarches</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('boite-outils')">Boîte à outils</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('enquetes')">Enquêtes</a></li>
-    <li><a href="javascript:void(0)" onclick="showPage('demo')" style="font-weight:600;color:var(--sage-d)">Guide</a></li>
+    <li><a href="javascript:void(0)" onclick="showPage('demo')">Guide</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('tarifs')">Tarifs</a></li><li><a href="javascript:void(0)" onclick="showPage('gratuit-premium')">Gratuit vs Premium</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('contact')">Contact</a></li>
   </ul>
@@ -1109,8 +1110,8 @@ footer{
 <div class="mobile-menu" id="mobile-menu">
   <a href="javascript:void(0)" onclick="showPage('demarches');closeMenu()">Démarches</a>
   <a href="javascript:void(0)" onclick="showPage('enquetes');closeMenu()">Enquêtes</a>
-  <a href="javascript:void(0)" onclick="showPage('demo');closeMenu()" style="font-weight:600;color:var(--sage-d)">Guide</a>
-  <a href="javascript:void(0)" onclick="showPage('home');closeMenu();setTimeout(()=>document.getElementById('tarifs-section').scrollIntoView({behavior:'smooth'}),200)">Tarifs</a>
+  <a href="javascript:void(0)" onclick="showPage('demo');closeMenu()">Guide</a>
+  <a href="javascript:void(0)" onclick="showPage('tarifs');closeMenu()">Tarifs</a>
   <a href="javascript:void(0)" onclick="showPage('contact');closeMenu()">Contact</a>
   <div class="mobile-menu-divider"></div>
   <button class="btn-mobile-login" onclick="showPage('compte');closeMenu()">Se connecter</button>
@@ -8044,6 +8045,13 @@ footer{
 var currentPage = 'home';
 var currentFiche = null;
 
+function silkaSetActiveNav(pageId){
+  document.querySelectorAll('.nav-links a, .mobile-menu a').forEach(function(a){
+    var oc=a.getAttribute('onclick')||'';
+    var m=oc.match(/showPage\(\s*'([a-z0-9\-]+)'\s*\)/);
+    a.classList.toggle('silka-active', !!pageId && !!m && m[1]===pageId);
+  });
+}
 function showPage(pageId) {
   // Cacher toutes les pages
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
@@ -8055,6 +8063,7 @@ function showPage(pageId) {
     if(window.location.hash) { history.pushState(null, '', window.location.pathname); }
     if(pageId === 'mes-demarches' && typeof silkaRenderDashboard === 'function'){ silkaRenderDashboard(); }
     currentPage = pageId;
+    silkaSetActiveNav(pageId);
     currentFiche = null;
     window.scrollTo(0,0);
   }
@@ -8069,6 +8078,7 @@ function showFiche(slug) {
   if (fiche) {
     fiche.classList.add('active');
     currentFiche = slug;
+    silkaSetActiveNav(null);
     window.scrollTo(0,0);
     if(window.location.hash !== '#' + slug) { history.pushState(null, '', '#' + slug); }
     try { silkaInitDrafts(); } catch(e){}
