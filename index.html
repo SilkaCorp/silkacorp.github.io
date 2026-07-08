@@ -10492,10 +10492,7 @@ function submitCreditBuy() {
 var activeDemarches = {};
 
 function demarrerDemarche(slug) {
-  // Vérifier accès (premium ou crédit)
-  if (!checkPremium() && !getCreditForFiche(slug)) {
-    return; // Ne rien faire, les boutons gèrent ça
-  }
+  // Suivi de démarche gratuit pour tous — aucun verrou premium/crédit.
   activeDemarches[slug] = true;
   var prog = document.getElementById('prog-' + slug);
   if (prog) prog.classList.add('active');
@@ -10621,24 +10618,8 @@ window.addEventListener('load', function() {
 });
 
 function checkAndStartDemarche(slug) {
-  if (checkPremium() || getCreditForFiche(slug)) {
-    demarrerDemarche(slug);
-  } else {
-    // Montrer le choix : premium ou crédit
-    var w = getWallet();
-    if (w.credits > 0) {
-      if (confirm('Utiliser 1 crédit pour démarrer cette démarche ? (' + w.credits + ' crédit(s) restant(s))')) {
-        activateFicheCredit(slug);
-      }
-    } else {
-      // Proposer d'acheter
-      if (confirm('Vous n\'avez pas de crédit. Passer au Premium ou acheter des crédits ?\n\n• OK → Acheter des crédits\n• Annuler → Passer au Premium')) {
-        openCreditModal(slug);
-      } else {
-        openMdpModal();
-      }
-    }
-  }
+  // Le suivi de démarche est gratuit pour tous — accès direct sans premium ni crédit.
+  demarrerDemarche(slug);
 }
 
 
