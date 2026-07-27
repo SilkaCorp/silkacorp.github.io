@@ -8380,47 +8380,22 @@ function silkaLoginOtp(){
   var email = document.getElementById('login-email').value.trim();
   var err = document.getElementById('login-error');
   if(!email){ err.textContent='Veuillez saisir votre e-mail.'; err.classList.add('show'); return; }
-  if(!__otpAwait){
-    err.classList.remove('show');
-    silkaGetClient().then(function(sb){
-      return sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false } });
-    }).then(function(res){
-      if(res.error){ err.textContent = silkaAuthFr(res.error.message); err.classList.add('show'); return; }
-      __otpAwait = true;
-      if(!document.getElementById('login-otp')){
-        var inp = document.createElement('input');
-        inp.type='text'; inp.inputMode='numeric'; inp.className='auth-input'; inp.id='login-otp'; inp.placeholder='123456';
-        inp.addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
-        var lbl = document.createElement('label'); lbl.className='auth-label'; lbl.textContent='Code reçu par e-mail';
-        var grp = document.createElement('div'); grp.className='auth-group'; grp.id='login-otp-group';
-        grp.appendChild(lbl); grp.appendChild(inp);
-        var anchor = err.parentNode ? err : null;
-        if(anchor){ anchor.parentNode.insertBefore(grp, anchor); }
-      } else { var g=document.getElementById('login-otp-group'); if(g) g.style.display='block'; }
-      var btn = document.querySelector('#auth-login .auth-submit'); if(btn) btn.textContent='Valider le code →';
-      silkaAuthToast('Un code de connexion vous a été envoyé par e-mail.');
-    }).catch(function(){ err.textContent='Connexion au service impossible. Réessayez.'; err.classList.add('show'); });
-    return;
-  }
-  var oc = document.getElementById('login-otp');
-  var token = oc ? oc.value.trim() : '';
-  if(!token){ err.textContent='Saisissez le code reçu par e-mail.'; err.classList.add('show'); return; }
+  err.classList.remove('show');
+  var btn = document.querySelector('#auth-login .auth-submit');
   silkaGetClient().then(function(sb){
-    return sb.auth.verifyOtp({ email: email, token: token, type: 'email' });
+    return sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + window.location.pathname } });
   }).then(function(res){
     if(res.error){ err.textContent = silkaAuthFr(res.error.message); err.classList.add('show'); return; }
-    err.classList.remove('show'); __otpAwait = false;
-    silkaFinishSupabaseLogin(res.data && res.data.user);
-  }).catch(function(){ err.textContent='Code invalide. Réessayez.'; err.classList.add('show'); });
+    if(btn){ btn.textContent='E-mail envoyé ✓'; btn.disabled = true; setTimeout(function(){ btn.disabled = false; btn.textContent='Recevoir un lien de connexion →'; }, 30000); }
+    silkaAuthToast('Un lien de connexion vous a été envoyé par e-mail. Ouvrez-le pour vous connecter.');
+  }).catch(function(){ err.textContent='Connexion au service impossible. Réessayez.'; err.classList.add('show'); });
 }
 function silkaFinishSupabaseLogin(sbUser){
   var meta = (sbUser && sbUser.user_metadata) || {};
   var name = meta.full_name || (sbUser && sbUser.email ? sbUser.email.split('@')[0] : 'Mon compte');
   var user = { name: name, email: sbUser ? sbUser.email : '' };
   localStorage.setItem('silka_user', JSON.stringify(user));
-  var g=document.getElementById('login-otp-group'); if(g) g.style.display='none';
-  var oc=document.getElementById('login-otp'); if(oc) oc.value='';
-  var btn = document.querySelector('#auth-login .auth-submit'); if(btn) btn.textContent='Recevoir un code par e-mail →';
+  var btn = document.querySelector('#auth-login .auth-submit'); if(btn){ btn.disabled = false; btn.textContent='Recevoir un lien de connexion →'; }
   showConnected(user); updateNavAfterLogin(name);
 }
 function silkaAuthInitUI(){
@@ -8428,7 +8403,7 @@ function silkaAuthInitUI(){
   var pwd = document.getElementById('login-pwd');
   if(pwd){ var g = pwd.closest('.auth-group'); if(g) g.style.display='none'; }
   document.querySelectorAll('#auth-login p').forEach(function(p){ if(p.id!=='login-error' && /Démo/.test(p.textContent)) p.style.display='none'; });
-  var lbtn = document.querySelector('#auth-login .auth-submit'); if(lbtn) lbtn.textContent='Recevoir un code par e-mail →';
+  var lbtn = document.querySelector('#auth-login .auth-submit'); if(lbtn) lbtn.textContent='Recevoir un lien de connexion →';
 }
 function silkaAuthRestore(){
   if(!silkaAuthEnabled()) return;
