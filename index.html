@@ -8094,6 +8094,7 @@ function showFiche(slug) {
   if (fiche) {
     fiche.classList.add('active');
     currentFiche = slug;
+    try { silkaRestoreFicheState(slug); } catch(e){}
     silkaSetActiveNav(null);
     window.scrollTo(0,0);
     if(window.location.hash !== '#' + slug) { history.pushState(null, '', '#' + slug); }
@@ -8169,6 +8170,7 @@ function toggleCheckItem(item) {
   item.classList.toggle('done');
   var cb = item.querySelector('input[type=checkbox]');
   if(cb) cb.checked = !cb.checked;
+  try { var box = item.closest('[id^="tool-checklist-"]'); if(box){ silkaSaveChecklistState(box.id.replace('tool-checklist-','')); } } catch(e){}
 }
 function downloadChecklist(ficheId) {
   var panel = document.getElementById('tool-checklist-' + ficheId);
@@ -10489,9 +10491,33 @@ function submitCreditBuy() {
 // ════════════════════════════════════════════════════════
 var activeDemarches = {};
 
+function silkaGetStore(key){ try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch(e){ return {}; } }
+function silkaSetStore(key, obj){ try { localStorage.setItem(key, JSON.stringify(obj)); } catch(e){} }
+function silkaSaveDemarcheState(slug, status){ var s = silkaGetStore('silka_demarches'); if(status){ s[slug] = status; } else { delete s[slug]; } silkaSetStore('silka_demarches', s); }
+function silkaSaveChecklistState(slug){ var box = document.getElementById('tool-checklist-' + slug); if(!box) return; var items = box.querySelectorAll('.checklist-item'); var checked = []; items.forEach(function(it, idx){ if(it.classList.contains('done')) checked.push(idx); }); var s = silkaGetStore('silka_checklists'); if(checked.length){ s[slug] = checked; } else { delete s[slug]; } silkaSetStore('silka_checklists', s); }
+function silkaRestoreFicheState(slug){
+  var st = silkaGetStore('silka_demarches')[slug];
+  if(st){
+    var prog = document.getElementById('prog-' + slug);
+    var btn = document.getElementById('btn-start-' + slug);
+    if(st === 'started'){
+      activeDemarches[slug] = true;
+      if(prog) prog.classList.add('active');
+      if(btn){ btn.textContent = '\u25B6 D\u00e9marche en cours...'; btn.classList.add('started'); btn.disabled = true; }
+    } else if(st === 'done'){
+      if(prog){ prog.classList.add('active'); prog.querySelectorAll('.progress-step').forEach(function(s){ s.classList.add('done'); }); var fill = prog.querySelector('.progress-bar-fill'); if(fill) fill.style.width = '100%'; var pct = prog.querySelector('.progress-pct'); if(pct) pct.textContent = '100%'; }
+      if(btn){ btn.textContent = '\u2713 D\u00e9marche termin\u00e9e'; btn.classList.add('started'); btn.disabled = true; }
+    }
+  }
+  var chk = silkaGetStore('silka_checklists')[slug];
+  if(chk && chk.length){
+    var cbox = document.getElementById('tool-checklist-' + slug);
+    if(cbox){ var citems = cbox.querySelectorAll('.checklist-item'); chk.forEach(function(idx){ var it = citems[idx]; if(it){ it.classList.add('done'); var cb = it.querySelector('input[type=checkbox]'); if(cb) cb.checked = true; } }); }
+  }
+}
 function demarrerDemarche(slug) {
   // Suivi de démarche gratuit pour tous — aucun verrou premium/crédit.
-  activeDemarches[slug] = true;
+  activeDemarches[slug] = true; silkaSaveDemarcheState(slug, 'started');
   var prog = document.getElementById('prog-' + slug);
   if (prog) prog.classList.add('active');
   var btnStart = document.getElementById('btn-start-' + slug);
@@ -10522,7 +10548,7 @@ function activateFicheCredit(slug) {
 
 function terminerDemarche(slug) {
   markFicheDone(slug);
-  activeDemarches[slug] = false;
+  activeDemarches[slug] = false; silkaSaveDemarcheState(slug, 'done');
   var prog = document.getElementById('prog-' + slug);
   if (prog) {
     // Cocher toutes les étapes
