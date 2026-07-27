@@ -1144,23 +1144,14 @@ footer{
 <!-- MODAL ACHAT CRÉDIT -->
 <div class="credit-modal" id="credit-modal">
   <div class="credit-modal-box">
-    <h3>Acheter des crédits</h3>
-    <p>1 crédit = 1 démarche débloquée pendant 30 jours. Les crédits restent dans votre portefeuille sans expiration.</p>
-    <div class="credit-options-buy">
-      <div class="credit-option-btn" onclick="selectCreditOption({credits:1, label:'1 crédit — 2€'}, this)">
-        <span class="credit-option-btn-name">1 crédit</span>
-        <span class="credit-option-btn-price">2€</span>
-      </div>
-      <div class="credit-option-btn" onclick="selectCreditOption({credits:5, label:'5 crédits — 8€'}, this)">
-        <span class="credit-option-btn-name">5 crédits</span>
-        <span class="credit-option-btn-price">8€ <span class="credit-option-btn-save">-20%</span></span>
-      </div>
-    </div>
+    <h3>Crédits — prochainement</h3>
+    <p>1 crédit donnera accès à une démarche accompagnée. Cette option n'est pas encore ouverte.</p>
+    <div class="legal-note" style="margin:.6rem 0">Les crédits et l'abonnement Premium ne sont <strong>pas encore disponibles</strong>. Silka est actuellement gratuit et sans paiement possible. Ces options arriveront prochainement.</div>
     <div class="credit-pwd">
-      <label>Code d'accès (démo)</label>
+      <label>Code d'accès (démo interne)</label>
       <input type="password" id="credit-buy-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')submitCreditBuy()">
     </div>
-    <button class="credit-buy-submit" onclick="submitCreditBuy()">Confirmer l'achat →</button>
+    <button class="credit-buy-submit" onclick="submitCreditBuy()">Débloquer avec le code démo →</button>
     <p class="credit-buy-error" id="credit-buy-error"></p>
     <span class="credit-modal-cancel" onclick="closeCreditModal()">Annuler</span>
   </div>
@@ -1298,23 +1289,20 @@ footer{
   <div class="legal-page">
     <h1>Mentions légales</h1>
     <div class="legal-date">Dernière mise à jour : juin 2026</div>
-    <div class="legal-note">Certaines informations ci-dessous (forme juridique, SIRET, capital, adresse du siège) doivent être complétées une fois la société immatriculée. Elles sont signalées par des crochets [ ].</div>
+    <div class="legal-note">Silka est un projet personnel édité par une personne physique. Le site est en accès libre et gratuit : aucun service payant n'est commercialisé à ce jour.</div>
     <div class="legal-section">
       <h2>1. Éditeur du site</h2>
-      <p>Le site Silka (silkacorp.fr) est édité par :</p>
+      <p>Le site Silka (silkacorp.fr) est édité à titre personnel et non professionnel par :</p>
       <ul>
-        <li>Silka — [forme juridique : SAS / SASU / micro-entreprise]</li>
-        <li>Capital social : [montant] €</li>
-        <li>Siège social : [adresse complète]</li>
-        <li>SIREN / SIRET : [numéro]</li>
-        <li>RCS / Ville d'immatriculation : [le cas échéant]</li>
-        <li>N° de TVA intracommunautaire : [le cas échéant]</li>
+        <li>Corentin PERRUT</li>
+        <li>06 avenue Victor Hugo, 92220 Bagneux, France</li>
         <li>Contact : corentinperrut.pro@gmail.com</li>
       </ul>
+      <p>Silka n'est pas une société immatriculée. Le site ne propose aucun service payant à ce jour et ne donne lieu à aucune transaction.</p>
     </div>
     <div class="legal-section">
       <h2>2. Directeur de la publication</h2>
-      <p>Le directeur de la publication est le représentant légal de Silka. Contact : corentinperrut.pro@gmail.com</p>
+      <p>Le directeur de la publication est Corentin PERRUT. Contact : corentinperrut.pro@gmail.com</p>
     </div>
     <div class="legal-section">
       <h2>3. Hébergement</h2>
@@ -1334,7 +1322,7 @@ footer{
     </div>
     <div class="legal-section">
       <h2>7. Médiation et litiges</h2>
-      <p>Conformément à l'article L.616-1 du Code de la consommation, un consommateur peut recourir gratuitement à un médiateur de la consommation : [nom et coordonnées du médiateur à désigner]. Plateforme européenne de règlement en ligne des litiges : ec.europa.eu/consumers/odr.</p>
+      <p>Conformément à l'article L.616-1 du Code de la consommation, un consommateur peut recourir gratuitement à un médiateur de la consommation, qui sera désigné et indiqué ici avant toute commercialisation. Plateforme européenne de règlement en ligne des litiges : ec.europa.eu/consumers/odr.</p>
     </div>
   </div>
 </div>
@@ -1343,7 +1331,8 @@ footer{
 <div class="page" id="page-cgv">
   <div class="legal-page">
     <h1>Conditions Générales de Vente</h1>
-    <div class="legal-date">Dernière mise à jour : juin 2026</div>
+    <div class="legal-date">Dernière mise à jour : juillet 2026</div>
+    <div class="legal-note"><strong>Aucun service payant n'est commercialisé à ce jour.</strong> Silka est intégralement gratuit et aucune transaction n'est possible sur le site. Les présentes conditions ne s'appliqueront qu'à l'ouverture éventuelle d'offres payantes, après immatriculation de l'activité.</div>
     <!-- TODO interne (non affiché) : à compléter avant mise en ligne définitive — prestataire de paiement, tarifs exacts, coordonnées du médiateur de la consommation. -->
     <div class="legal-section">
       <h2>1. Objet et champ d'application</h2>
@@ -1355,7 +1344,7 @@ footer{
     </div>
     <div class="legal-section">
       <h2>3. Commande et paiement</h2>
-      <p>La commande est validée après acceptation des CGV et paiement en ligne via le prestataire de paiement sécurisé [à préciser, ex. Stripe]. Silka n'a pas connaissance des données bancaires complètes, traitées par le prestataire. La confirmation de commande est adressée par voie électronique.</p>
+      <p>La commande est validée après acceptation des CGV et paiement en ligne via un prestataire de paiement sécurisé, qui sera indiqué ici à l'ouverture des offres payantes. Silka n'a pas connaissance des données bancaires complètes, traitées par le prestataire. La confirmation de commande est adressée par voie électronique.</p>
     </div>
     <div class="legal-section">
       <h2>4. Droit de rétractation</h2>
@@ -1376,7 +1365,7 @@ footer{
     </div>
     <div class="legal-section">
       <h2>8. Médiation de la consommation</h2>
-      <p>En cas de litige non résolu, le consommateur peut recourir gratuitement à un médiateur de la consommation : [nom et coordonnées à désigner]. Plateforme européenne : ec.europa.eu/consumers/odr.</p>
+      <p>En cas de litige non résolu, le consommateur peut recourir gratuitement à un médiateur de la consommation, qui sera désigné et indiqué ici avant toute commercialisation. Plateforme européenne : ec.europa.eu/consumers/odr.</p>
     </div>
     <div class="legal-section">
       <h2>9. Droit applicable</h2>
@@ -2057,7 +2046,7 @@ footer{
             <div class="wallet-label">crédit(s) disponible(s)</div>
           </div>
           <div class="wallet-actions">
-            <button class="btn-buy-credit" onclick="openCreditModal(null)">+ Acheter des crédits</button>
+            <button class="btn-buy-credit" onclick="openCreditModal(null)">Crédits — prochainement</button>
           </div>
         </div>
         <div style="font-size:.72rem;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">Historique des démarches</div>
@@ -26843,7 +26832,7 @@ window.addEventListener('DOMContentLoaded', function() {
 <!-- ════════════════════════════════════════════
      PAGE : DÉMO
 ════════════════════════════════════════════ -->
-<div class="page" id="page-tarifs"><div class="gp-wrap" style="text-align:center;padding-bottom:0"><div class="section-eyebrow">Tarifs</div><h1 style="font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.6rem);color:var(--dark);margin:.3rem 0 .5rem">Les options Premium</h1><p style="font-size:1rem;color:var(--mid);max-width:620px;margin:0 auto;line-height:1.6">Rappel : <strong>tout le contenu reste gratuit</strong>. Le Premium n'ajoute que du confort, si vous êtes conquis.</p></div><div class="tarifs-section" id="tarifs-section">
+<div class="page" id="page-tarifs"><div class="gp-wrap" style="text-align:center;padding-bottom:0"><div class="section-eyebrow">Tarifs</div><h1 style="font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.6rem);color:var(--dark);margin:.3rem 0 .5rem">Les options Premium</h1><p style="font-size:1rem;color:var(--mid);max-width:620px;margin:0 auto;line-height:1.6">Rappel : <strong>tout le contenu reste gratuit</strong>. Le Premium n'ajoute que du confort, si vous êtes conquis.</p><p style="max-width:620px;margin:.9rem auto 0;padding:.7rem 1rem;background:var(--sage-bg);border:1px solid var(--sage-l);border-radius:10px;font-size:.9rem;color:var(--sage-dark)"><strong>Ces offres ne sont pas encore disponibles.</strong> Les tarifs ci-dessous sont indicatifs et aucun paiement n'est possible sur le site à ce jour. Silka est entièrement gratuit.</p></div><div class="tarifs-section" id="tarifs-section">
     <div class="section-eyebrow">Tarification</div>
     <h2 class="section-h2">Un prix juste, sans surprise</h2>
     <p class="section-lead">Commencez gratuitement. Choisissez la formule adaptée à votre situation.</p>
