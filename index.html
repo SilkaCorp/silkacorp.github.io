@@ -6,9 +6,9 @@
 <title>Silka — Vos démarches admin, enfin simples</title>
 <meta name="description" content="Silka : 386 démarches administratives françaises expliquées simplement — délais, pièges à éviter, règles cachées et optimisations. Générateurs de documents juridiques gratuits (mise en demeure, procuration, résiliation…).">
 <meta name="keywords" content="démarches administratives, France, passeport, RSA, carte grise, mise en demeure, procuration, résiliation, aide sociale">
-<link rel="canonical" href="https://silkacorp.github.io/">
+<link rel="canonical" href="https://silkacorp.fr/">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://silkacorp.github.io/">
+<meta property="og:url" content="https://silkacorp.fr/">
 <meta property="og:title" content="Silka — Vos démarches admin, enfin simples">
 <meta property="og:description" content="386 démarches expliquées : délais critiques, pièges, règles cachées. + 11 générateurs de documents juridiques gratuits.">
 <meta property="og:locale" content="fr_FR">
@@ -988,10 +988,10 @@ footer{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="/icon-192.png">
-  <meta property="og:image" content="https://silkacorp.github.io/og-image.png">
+  <meta property="og:image" content="https://silkacorp.fr/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta name="twitter:image" content="https://silkacorp.github.io/og-image.png">
+  <meta name="twitter:image" content="https://silkacorp.fr/og-image.png">
 <style id="silka-tour-css">
 #silka-tour{position:fixed;inset:0;z-index:10000;display:none;font-family:var(--sans)}
 #silka-tour.on{display:block}
@@ -1233,7 +1233,7 @@ footer{
     <div class="legal-note">Certaines informations ci-dessous (forme juridique, SIRET, capital, adresse du siège) doivent être complétées une fois la société immatriculée. Elles sont signalées par des crochets [ ].</div>
     <div class="legal-section">
       <h2>1. Éditeur du site</h2>
-      <p>Le site Silka (silkacorp.github.io) est édité par :</p>
+      <p>Le site Silka (silkacorp.fr) est édité par :</p>
       <ul>
         <li>Silka — [forme juridique : SAS / SASU / micro-entreprise]</li>
         <li>Capital social : [montant] €</li>
@@ -1922,7 +1922,7 @@ footer{
             </div>
             <p class="auth-error" id="login-error">Email ou mot de passe incorrect.</p>
             <button class="auth-submit" onclick="doLogin()">Se connecter →</button>
-            <p style="font-size:.75rem;color:var(--light);text-align:center;margin-top:.75rem">Démo : email <strong>demo@silka.fr</strong> · mdp <strong>demo1234</strong></p>
+            <p style="font-size:.75rem;color:var(--light);text-align:center;margin-top:.75rem">Démo : email <strong>demo@silkacorp.fr</strong> · mdp <strong>demo1234</strong></p>
           </div>
           <!-- Register -->
           <div id="auth-register" style="display:none">
@@ -8179,7 +8179,7 @@ function downloadChecklist(ficheId) {
   items.forEach(function(l) {
     lines.push((l.closest('.checklist-item').classList.contains('done')?'[x] ':'[ ] ') + l.textContent);
   });
-  lines.push('','— Silka · silka.fr');
+  lines.push('','— Silka · silkacorp.fr');
   var a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/plain'}));
   a.download = 'checklist-' + ficheId + '.txt';
@@ -8311,7 +8311,7 @@ document.addEventListener('keydown',function(e){
 window.addEventListener('load',function(){ if(checkPremium()) activatePremium(); });
 
 // ── AUTHENTIFICATION (simulée) ────────────────────────────────
-var DEMO_USER = { email:'demo@silka.fr', pwd:'demo1234', name:'Demo Silka' };
+var DEMO_USER = { email:'demo@silkacorp.fr', pwd:'demo1234', name:'Demo Silka' };
 
 /* ════════ AUTHENTIFICATION RÉELLE (Supabase) — inerte tant que non configurée ════════
    Activation : créez un projet gratuit sur supabase.com, activez l'authentification e-mail,
@@ -12027,7 +12027,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     <div class="legal-section">
       <h2>1. Présentation du service</h2>
-      <p>Silka est une plateforme d'aide aux démarches administratives en France, éditée par Silka. Le service est accessible via le site silka.fr et propose des fiches pratiques, des outils d'aide et un accompagnement aux particuliers, professionnels et associations.</p>
+      <p>Silka est une plateforme d'aide aux démarches administratives en France, éditée par Silka. Le service est accessible via le site silkacorp.fr et propose des fiches pratiques, des outils d'aide et un accompagnement aux particuliers, professionnels et associations.</p>
     </div>
 
     <div class="legal-section">
@@ -30211,7 +30211,7 @@ window.addEventListener('DOMContentLoaded', function() {
         doc.setPage(p);
         doc.setFont('helvetica','normal'); doc.setFontSize(7.6);
         doc.setTextColor(150,150,150);
-        doc.text('Document généré via Silka \u2014 silkacorp.github.io', M, H - 10);
+        doc.text('Document généré via Silka \u2014 silkacorp.fr', M, H - 10);
         doc.text('Réf. ' + result.ref + '  \u00B7  Page ' + p + '/' + n, W - M, H - 10, {align:'right'});
       }
       doc.save((filename||'document-silka') + '-' + result.ref + '.pdf');
@@ -30705,7 +30705,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
   // Bouton "Partager" sur chaque fiche : copie le lien direct ou partage natif
   function silkaShareFiche(slug, titre){
-    var url = 'https://silkacorp.github.io/#' + slug;
+    var url = 'https://silkacorp.fr/#' + slug;
     if(navigator.share){
       navigator.share({ title: 'Silka — ' + titre, url: url }).catch(function(){});
     } else if(navigator.clipboard && navigator.clipboard.writeText){
