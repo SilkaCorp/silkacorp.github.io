@@ -8319,7 +8319,7 @@ var DEMO_USER = { email:'demo@silkacorp.fr', pwd:'demo1234', name:'Demo Silka' }
    Activation : créez un projet gratuit sur supabase.com, activez l'authentification e-mail,
    puis collez ci-dessous l'URL du projet et la clé « anon public ».
    Tant que ces deux champs sont vides, Silka conserve EXACTEMENT le comportement démo actuel. */
-var SILKA_AUTH = { url: '', anonKey: '' };
+var SILKA_AUTH = { url: 'https://ynfawigvgapikcsvhobc.supabase.co', anonKey: 'sb_publishable_5LvdhdCZcznr1AmYwQ_cDw_tRf-dykI' };
 var __sbClient = null, __otpAwait = false;
 function silkaAuthEnabled(){ return !!(SILKA_AUTH.url && SILKA_AUTH.anonKey); }
 function silkaGetClient(){
