@@ -1204,7 +1204,7 @@ footer{
   <div class="nav-cta-group">
     <span class="nav-premium-badge" id="premium-badge">Premium</span>
     <button class="btn-nav-login" onclick="silkaGoAuth('register')">Créer mon compte</button>
-    <button class="btn-nav-login silka-install-btn" onclick="silkaInstall()" style="display:none;background:transparent;color:var(--sage-d);border-color:var(--sage-d)">⬇ Installer l'app</button>
+    <button class="btn-nav-login silka-install-btn" onclick="silkaInstall()" style="display:none;background:var(--sage-dark);color:#fff;border-color:var(--sage-dark)">⬇ Installer l'app</button>
     <button class="btn-nav-cta" onclick="openMdpModal()">Accès payant 🔐</button>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -1221,7 +1221,7 @@ footer{
   <a href="javascript:void(0)" onclick="showPage('contact');closeMenu()">Contact</a>
   <div class="mobile-menu-divider"></div>
   <button class="btn-mobile-login" onclick="silkaGoAuth('register');closeMenu()" style="background:var(--sage-d);color:#fff;border-color:var(--sage-d);font-weight:600">Créer mon compte gratuit</button>
-  <button class="btn-mobile-login silka-install-btn" onclick="silkaInstall();closeMenu()" style="display:none">⬇ Installer l'application</button>
+  <button class="btn-mobile-login silka-install-btn" onclick="silkaInstall();closeMenu()" style="display:none;background:var(--sage-dark);color:#fff;border-color:var(--sage-dark);font-weight:600">⬇ Installer l'application</button>
   <button class="btn-mobile-cta" onclick="openMdpModal();closeMenu()">Accès payant 🔐</button>
 </div>
 
@@ -8669,7 +8669,7 @@ var botKnowledge = [
     resp:"Racheter des trimestres :\n→ Études supérieures (max 12 trimestres) + années incomplètes\n→ Demander un chiffrage à la CNAV (délai 2-3 mois)\n→ Le montant est déductible du revenu imposable l'année du paiement\n→ Rentable si vous vivez 20+ ans après la retraite",
     fiche:'rachat-trimestres'},
   { keys:['plan épargne retraite','PER ','PERP','épargne retraite','plan retraite'],
-    resp:"Plan d'Épargne Retraite (PER) :\n→ Versements déductibles jusqu'à 10% des revenus (max 37 680€ en 2026)\n→ Surtout avantageux pour les TMI de 30% et plus\n→ Sortie en rente ou en capital (imposable)\n→ Comparer au moins 3 établissements (frais de gestion 0,5 à 3%)",
+    resp:"Plan d'Épargne Retraite (PER) :\n→ Versements déductibles jusqu'à 10% des revenus (plafond 38 448€ en 2026, soit 10% de 8 PASS)\n→ Surtout avantageux pour les TMI de 30% et plus\n→ Sortie en rente ou en capital (imposable)\n→ Comparer au moins 3 établissements (frais de gestion 0,5 à 3%)",
     fiche:'epargne-retraite-per'},
   { keys:['retraite anticipée','carrière longue','pénibilité retraite'],
     resp:"Retraite anticipée :\n→ Carrière longue : début avant 18 ans → départ dès 58 ans\n→ Pénibilité : points C2P → 8 points = 1 trimestre de retraite anticipée\n→ Rassembler les preuves d'activité avant 20 ans (bulletins de salaire anciens)\n→ Délai : 6 mois avant la date souhaitée",
