@@ -7699,7 +7699,7 @@ function showPage(pageId) {
 }
 
 function showFiche(slug) {
-  var __silkaRedir = {'deces-demarches':'deces-proche-que-faire','indemnite-depart-retraite':'retraite-indemnite-depart','per-plan-epargne-retraite':'epargne-retraite-per','voiture-electrique-bonus':'bonus-vehicule-electrique'};
+  var __silkaRedir = {'ordonnance-protection-viol':'ordonnance-protection','protection-marque':'marque-inpi','arret-judiciaire-entreprise':'redressement-judiciaire','deces-demarches':'deces-proche-que-faire','indemnite-depart-retraite':'retraite-indemnite-depart','per-plan-epargne-retraite':'epargne-retraite-per','voiture-electrique-bonus':'bonus-vehicule-electrique'};
   if (__silkaRedir[slug]) { slug = __silkaRedir[slug]; }
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
   document.querySelectorAll('.fiche-page').forEach(function(f){ f.classList.remove('active'); });
@@ -8731,7 +8731,7 @@ var botKnowledge = [
     fiche:'divorce-judiciaire'},
   { keys:['violence conjugale','femme battue','violences domestiques','ordonnance protection'],
     resp:"Violences conjugales :\n→ Appeler le 3919 (24h/24 · gratuit)\n→ Ordonnance de protection : obtenue en 6 jours (JAF)\n→ Pas besoin de plainte préalable pour l'ordonnance\n→ Des solutions d'hébergement d'urgence existent via le 3919",
-    fiche:'ordonnance-protection-viol'},
+    fiche:'ordonnance-protection'},
   { keys:['maltraitance enfant','enfant en danger','signalement enfant'],
     resp:"Signaler un enfant en danger :\n→ Appeler le 119 (24h/24 · gratuit · confidentiel)\n→ Le signalement n'entraîne pas automatiquement le retrait de l'enfant\n→ Professionnels : rapport à l'ASE (Aide Sociale à l'Enfance)\n→ Ne pas attendre d'être sûr : le doute justifie le signalement",
     fiche:'protection-enfance-signalement'},
@@ -9210,7 +9210,7 @@ var botKnowledge = [
     fiche:'ordonnance-protection' },
   { keys:["protection violence conjugale", "eloigner conjoint", "victime violence"],
     resp:"Ordonnance de protection :\\n→ Demande au JAF (tribunal judiciaire) · audience sous 6 jours\\n→ Pas besoin de plainte préalable\\n→ Éloignement du conjoint · interdiction de contact · garde des enfants en urgence\\n→ Dure 6 mois · renouvelable · 3919 pour un accompagnement immédiat",
-    fiche:'ordonnance-protection-viol' },
+    fiche:'ordonnance-protection' },
   { keys:["faire appel jugement", "appel civil", "contester jugement", "appel cour"],
     resp:"Faire appel d\'un jugement civil :\\n→ Délai : 1 mois à compter de la notification du jugement (délai fatal)\\n→ Avocat obligatoire devant la cour d\'appel\\n→ Déclaration d\'appel par RPVA (voie électronique)\\n→ Délai de jugement : 18 mois à 3 ans",
     fiche:'appel-jugement-civil' },
@@ -9267,7 +9267,7 @@ var botKnowledge = [
     fiche:'subvention-drac' },
   { keys:["deposer marque", "marque inpi", "proteger nom entreprise", "marque commerciale"],
     resp:"Déposer une marque à l\'INPI :\\n→ 190€ pour 1 classe + 40€ par classe supplémentaire\\n→ Recherche d\'antériorités obligatoire avant le dépôt\\n→ Protection rétroactive à la date de dépôt\\n→ Validité : 10 ans renouvelables",
-    fiche:'protection-marque' },
+    fiche:'marque-inpi' },
   { keys:["pinel", "loi pinel", "investissement locatif", "reduction impot immobilier"],
     resp:"Dispositif Pinel (investissement locatif) :\\n→ Réduction d\'impôt pour achat d\'un logement neuf mis en location\\n→ Dispositif clos depuis le 31/12/2024 : aucun nouvel investissement éligible (engagements en cours maintenus)\\n→ Engagement de location : 6, 9 ou 12 ans\\n→ Plafonds de loyer et de ressources du locataire à respecter",
     fiche:'defiscalisation-pinel' },
@@ -9628,7 +9628,7 @@ var botKnowledge = [
     fiche:'dsn-declaration-sociale'},
   { keys:['liquidation judiciaire','redressement judiciaire','entreprise en difficulte','cessation paiement','depot de bilan'],
     resp:"Entreprise en difficulté :\n→ Cessation des paiements : déclaration au tribunal sous 45 jours\n→ Procédures : sauvegarde, redressement, liquidation judiciaire\n→ Le mandataire/administrateur judiciaire intervient\n→ Anticipez : mandat ad hoc et conciliation sont confidentiels et préventifs",
-    fiche:'arret-judiciaire-entreprise'},
+    fiche:'redressement-judiciaire'},
   { keys:['tombola','loterie association','loto associatif','organiser tombola','vente billets tombola'],
     resp:"Tombola / loterie d\'association :\n→ Légale sans autorisation si but social/culturel/sportif\n→ Pas de bénéfice commercial, billets vendus localement\n→ Privilégiez les lots en nature (gains en espèces limités)\n→ Conservez les pièces comptables",
     fiche:'tombola-loterie-asso'},
