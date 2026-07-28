@@ -20,6 +20,11 @@ import os
 import re
 import sys
 import collections
+try:
+    from html import unescape
+except ImportError:
+    from HTMLParser import HTMLParser
+    unescape = HTMLParser().unescape
 
 RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX = os.path.join(RACINE, 'index.html')
@@ -209,6 +214,91 @@ if suspects:
     print('  (une reference historique est legitime : "depuis 2025" par exemple)')
 else:
     print('  OK - aucun millesime anterieur a %d' % annee_courante)
+
+
+# --------------------------------------------------- 7. principe Premium
+titre('7. Premium ne verrouille jamais un droit')
+
+# Fonctions qui donnent acces au contenu et aux demarches : elles doivent
+# rester exemptes de tout test d'abonnement. Si un verrou y reapparait,
+# c'est une regression sur l'engagement fondateur du service.
+DROITS_LIBRES = {
+    'switchFicheTab': u"l'onglet \u00c9tapes d\u00e9taill\u00e9es",
+    'checkAndStartDemarche': u"le lancement d'une d\u00e9marche",
+    'downloadCerfa': u"le t\u00e9l\u00e9chargement des Cerfa",
+}
+MARQUEURS_PREMIUM = ['checkPremium', 'premium-gate', 'premium-blur',
+                     'activatePremium', 'silka_premium', 'openMdpModal']
+
+# Fonctionnalites de confort annoncees comme payantes : chacune doit
+# correspondre a un verrou reellement present dans le code. Si le verrou
+# disparait, la page tarifaire vend quelque chose de gratuit.
+VERROUS_ATTENDUS = {
+    u'Coffre-fort': 'compte-card-lock',
+    u'Dossier unique': 'compte-card-lock',
+    u'Mod\u00e8les de courriers': 'premium-gate-overlay',
+}
+
+
+def corps_fonction(nom, source):
+    debut = source.find('function %s(' % nom)
+    if debut < 0:
+        return None
+    ouvrante = source.find('{', debut)
+    if ouvrante < 0:
+        return None
+    profondeur = 0
+    for k in range(ouvrante, min(ouvrante + 30000, len(source))):
+        if source[k] == '{':
+            profondeur += 1
+        elif source[k] == '}':
+            profondeur -= 1
+            if profondeur == 0:
+                return source[debut:k + 1]
+    return None
+
+
+for fonction, libelle in sorted(DROITS_LIBRES.items()):
+    corps = corps_fonction(fonction, S)
+    if corps is None:
+        avertissements.append('fonction "%s" introuvable : controle impossible' % fonction)
+        print('  ?    %-30s (fonction introuvable)' % libelle)
+        continue
+    presents = [m for m in MARQUEURS_PREMIUM if m in corps]
+    if presents:
+        anomalies.append(
+            u'%s est desormais conditionne a Premium (%s dans %s)'
+            % (libelle, ', '.join(presents), fonction))
+        print('  NON  %-30s verrou detecte : %s' % (libelle, ', '.join(presents)))
+    else:
+        print('  OK   %-30s libre' % libelle)
+
+print('')
+for promesse, marqueur in sorted(VERROUS_ATTENDUS.items()):
+    if S.count(marqueur) == 0:
+        anomalies.append(
+            u'"%s" est annonce comme Premium mais le verrou "%s" a disparu du code'
+            % (promesse, marqueur))
+        print('  NON  %-30s verrou "%s" absent' % (promesse, marqueur))
+    else:
+        print('  OK   %-30s %d verrou(s) "%s"'
+              % (promesse, S.count(marqueur), marqueur))
+
+# Rappel de la page tarifaire, pour relecture humaine
+debut_gp = S.find('id="page-gratuit-premium"')
+if debut_gp > 0:
+    bloc = S[debut_gp:debut_gp + 4000]
+    libres = re.findall(r'<span class="gp-check">&#10003;</span><span>(.*?)</span>', bloc)
+    payants = re.findall(r'<span class="gp-check">&#10022;</span><span>(.*?)</span>', bloc)
+    nettoyer = lambda t: ' '.join(unescape(re.sub(r'<[^>]+>', '', t)).split())
+    print('\n  Page tarifaire \u2014 annonce gratuit (%d) :' % len(libres))
+    for t in libres:
+        print('     . ' + nettoyer(t))
+    print('  Page tarifaire \u2014 annonce Premium (%d) :' % len(payants))
+    for t in payants:
+        print('     . ' + nettoyer(t))
+    print('  (relire : chaque ligne "Premium" doit correspondre a un confort,')
+    print('   jamais a un droit ni a un contenu)')
 
 
 # --------------------------------------------------- verdict
