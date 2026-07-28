@@ -1063,11 +1063,13 @@ footer{
   window.addEventListener('beforeinstallprompt', function(e){
     e.preventDefault();
     window.__silkaIP = e;
+    window.__silkaInstalledNow = false;
+    try{ localStorage.removeItem('silka_installed'); }catch(e2){}
     if(typeof window.silkaRefreshInstallUI === 'function') window.silkaRefreshInstallUI();
   });
   window.addEventListener('appinstalled', function(){
     window.__silkaIP = null;
-    try{ localStorage.setItem('silka_installed','1'); }catch(e){}
+    window.__silkaInstalledNow = true;
     if(typeof window.silkaRefreshInstallUI === 'function') window.silkaRefreshInstallUI();
   });
 })();
@@ -29255,10 +29257,11 @@ function silkaIsIOS(){
       || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 }
 function silkaRefreshInstallUI(){
-  /* Le bouton est visible dès que l'app n'est pas déjà installée :
-     on ne dépend plus du bon vouloir de beforeinstallprompt. */
-  var show = !silkaIsStandalone();
-  try { if(localStorage.getItem('silka_installed') === '1') show = false; } catch(e){}
+  /* Visible dès que l'app n'est pas ouverte en mode installé.
+     On n'utilise AUCUN drapeau persistant : une désinstallation doit
+     refaire apparaître le bouton immédiatement. */
+  try { localStorage.removeItem('silka_installed'); } catch(e){}
+  var show = !silkaIsStandalone() && !window.__silkaInstalledNow;
   var b = document.querySelectorAll('.silka-install-btn');
   for(var i=0;i<b.length;i++){ b[i].style.display = show ? '' : 'none'; }
 }
