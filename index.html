@@ -29255,7 +29255,9 @@ function silkaIsIOS(){
       || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 }
 function silkaRefreshInstallUI(){
-  var show = !silkaIsStandalone() && (!!window.__silkaIP || silkaIsIOS());
+  /* Le bouton est visible dès que l'app n'est pas déjà installée :
+     on ne dépend plus du bon vouloir de beforeinstallprompt. */
+  var show = !silkaIsStandalone();
   try { if(localStorage.getItem('silka_installed') === '1') show = false; } catch(e){}
   var b = document.querySelectorAll('.silka-install-btn');
   for(var i=0;i<b.length;i++){ b[i].style.display = show ? '' : 'none'; }
@@ -29273,7 +29275,7 @@ function silkaInstall(){
     return;
   }
   if(silkaIsIOS()){ silkaShowIOSHelp(); return; }
-  silkaToast('Utilisez le menu de votre navigateur, puis \u00ab Installer \u00bb ou \u00ab Ajouter \u00e0 l\'\u00e9cran d\'accueil \u00bb.');
+  silkaShowGenericHelp();
 }
 function silkaToast(t){
   var x = document.createElement('div');
@@ -29281,6 +29283,30 @@ function silkaToast(t){
   x.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2b2b2b;color:#fff;padding:.7rem 1.1rem;border-radius:10px;font-size:.85rem;max-width:90%;text-align:center;z-index:100001;box-shadow:0 8px 24px rgba(0,0,0,.2)';
   document.body.appendChild(x);
   setTimeout(function(){ x.remove(); }, 4500);
+}
+function silkaShowGenericHelp(){
+  var ua = navigator.userAgent || '';
+  var etapes;
+  if(/Android/i.test(ua)){
+    etapes = '<li>Ouvrez le menu <strong>\u22ee</strong> en haut \u00e0 droite de Chrome</li>'
+           + '<li>Touchez <strong>Ajouter \u00e0 l\'\u00e9cran d\'accueil</strong> ou <strong>Installer l\'application</strong></li>'
+           + '<li>Confirmez avec <strong>Installer</strong></li>';
+  } else {
+    etapes = '<li>Cliquez sur l\'ic\u00f4ne <strong>\u2295</strong> ou <strong>\u2b07</strong> \u00e0 droite de la barre d\'adresse</li>'
+           + '<li>Si elle n\'appara\u00eet pas\u00a0: menu <strong>\u22ee</strong> puis <strong>Installer Silka</strong></li>'
+           + '<li>Confirmez avec <strong>Installer</strong></li>';
+  }
+  var d = document.getElementById('silka-gen-help');
+  if(d) d.remove();
+  d = document.createElement('div');
+  d.id = 'silka-gen-help';
+  d.style.cssText = 'position:fixed;inset:0;background:rgba(20,28,20,.55);backdrop-filter:blur(3px);z-index:100000;display:flex;align-items:center;justify-content:center;padding:1.25rem';
+  d.innerHTML = '<div style="background:#fff;border-radius:18px;max-width:400px;width:100%;padding:1.8rem 1.5rem;box-shadow:0 24px 60px rgba(0,0,0,.28);font-family:var(--sans)">'
+    + '<h3 style="font-family:var(--serif);font-size:1.25rem;margin:0 0 .8rem;color:var(--dark,#2b2b2b);text-align:center">Installer Silka</h3>'
+    + '<ol style="font-size:.9rem;color:var(--mid);line-height:1.85;margin:0 0 1.3rem;padding-left:1.2rem">' + etapes + '</ol>'
+    + '<button onclick="document.getElementById(\'silka-gen-help\').remove()" style="width:100%;background:var(--sage-d);color:#fff;border:none;border-radius:100px;padding:.8rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:var(--sans)">J\'ai compris</button>'
+    + '</div>';
+  document.body.appendChild(d);
 }
 function silkaShowIOSHelp(){
   var d = document.getElementById('silka-ios-help');
