@@ -7955,8 +7955,10 @@ function silkaAuthToast(text){
 }
 function silkaAuthFr(msg){
   msg = (msg||'').toLowerCase();
+  if(msg.indexOf('not authorized')>-1 || msg.indexOf('address not authorized')>-1)
+    return 'L\'envoi d\'e-mails n\'est pas encore ouvert à toutes les adresses. Écrivez-nous et nous vous connectons manuellement.';
   if(msg.indexOf('already')>-1 && msg.indexOf('regist')>-1) return 'Cet e-mail est déjà utilisé.';
-  if(msg.indexOf('rate limit')>-1 || msg.indexOf('too many')>-1) return 'Trop de tentatives. Réessayez dans quelques minutes.';
+  if(msg.indexOf('rate limit')>-1 || msg.indexOf('too many')>-1) return 'Trop d\'envois d\'e-mails pour le moment. Ce quota se remet à zéro au bout d\'une heure — inutile de réessayer avant.';
   if(msg.indexOf('not confirmed')>-1) return 'Confirmez votre e-mail (lien reçu par mail) avant de vous connecter.';
   if(msg.indexOf('token')>-1 || msg.indexOf('otp')>-1 || msg.indexOf('expired')>-1) return 'Code invalide ou expiré.';
   return 'Une erreur est survenue. Réessayez.';
@@ -7995,10 +7997,22 @@ function silkaLoginOtp(){
   if(!email){ err.textContent='Veuillez saisir votre e-mail.'; err.classList.add('show'); return; }
   err.classList.remove('show');
   var btn = document.querySelector('#auth-login .auth-submit');
+  /* Le quota d'e-mails est partagé par tout le projet : on évite de le
+     consommer avec des clics répétés depuis le même appareil. */
+  var dernier = 0;
+  try { dernier = parseInt(localStorage.getItem('silka_otp_dernier')||'0', 10); } catch(x){}
+  var attente = 60000 - (Date.now() - dernier);
+  if(dernier && attente > 0){
+    err.textContent = 'Un lien vient d\'être envoyé à cette adresse. Vérifiez vos e-mails '
+                    + '(pensez aux indésirables) ou patientez ' + Math.ceil(attente/1000) + ' s.';
+    err.classList.add('show');
+    return;
+  }
   silkaGetClient().then(function(sb){
     return sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + window.location.pathname } });
   }).then(function(res){
     if(res.error){ err.textContent = silkaAuthFr(res.error.message); err.classList.add('show'); return; }
+    try { localStorage.setItem('silka_otp_dernier', String(Date.now())); } catch(x){}
     if(btn){ btn.textContent='E-mail envoyé ✓'; btn.disabled = true; setTimeout(function(){ btn.disabled = false; btn.textContent='Recevoir un lien de connexion →'; }, 30000); }
     silkaAuthToast('Un lien de connexion vous a été envoyé par e-mail. Ouvrez-le pour vous connecter.');
   }).catch(function(){ err.textContent='Connexion au service impossible. Réessayez.'; err.classList.add('show'); });
