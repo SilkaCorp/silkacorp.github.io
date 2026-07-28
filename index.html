@@ -1056,6 +1056,22 @@ footer{
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <link rel="manifest" href="/manifest.json">
+<script>
+(function(){
+  if('serviceWorker' in navigator){ try{ navigator.serviceWorker.register('/sw.js').catch(function(){}); }catch(e){} }
+  window.__silkaIP = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    window.__silkaIP = e;
+    if(typeof window.silkaRefreshInstallUI === 'function') window.silkaRefreshInstallUI();
+  });
+  window.addEventListener('appinstalled', function(){
+    window.__silkaIP = null;
+    try{ localStorage.setItem('silka_installed','1'); }catch(e){}
+    if(typeof window.silkaRefreshInstallUI === 'function') window.silkaRefreshInstallUI();
+  });
+})();
+</script>
   <link rel="apple-touch-icon" href="/icon-192.png">
   <meta property="og:image" content="https://silkacorp.fr/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -1188,6 +1204,7 @@ footer{
   <div class="nav-cta-group">
     <span class="nav-premium-badge" id="premium-badge">Premium</span>
     <button class="btn-nav-login" onclick="silkaGoAuth('register')">Créer mon compte</button>
+    <button class="btn-nav-login silka-install-btn" onclick="silkaInstall()" style="display:none;background:transparent;color:var(--sage-d);border-color:var(--sage-d)">⬇ Installer l'app</button>
     <button class="btn-nav-cta" onclick="openMdpModal()">Accès payant 🔐</button>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -1204,6 +1221,7 @@ footer{
   <a href="javascript:void(0)" onclick="showPage('contact');closeMenu()">Contact</a>
   <div class="mobile-menu-divider"></div>
   <button class="btn-mobile-login" onclick="silkaGoAuth('register');closeMenu()" style="background:var(--sage-d);color:#fff;border-color:var(--sage-d);font-weight:600">Créer mon compte gratuit</button>
+  <button class="btn-mobile-login silka-install-btn" onclick="silkaInstall();closeMenu()" style="display:none">⬇ Installer l'application</button>
   <button class="btn-mobile-cta" onclick="openMdpModal();closeMenu()">Accès payant 🔐</button>
 </div>
 
@@ -1518,6 +1536,7 @@ footer{
         <a href="javascript:void(0)" onclick="showFiche('fsl')" class="demarche-link" data-segment="Particuliers">Demander une aide du Fonds de Solidarité pour le Logement (FSL)</a>
         <a href="javascript:void(0)" onclick="showFiche('complementaire-sante-solidaire')" class="demarche-link" data-segment="Particuliers">Demander la Complémentaire Santé Solidaire (CSS)</a>
         <a href="javascript:void(0)" onclick="showFiche('cheque-energie')" class="demarche-link" data-segment="Particuliers">Demander le chèque énergie</a>
+        <a href="javascript:void(0)" onclick="showFiche('aide-carburant-grands-rouleurs-2026')" class="demarche-link" data-segment="Particuliers">Demander l'aide carburant « grands rouleurs » 2026</a>
         <a href="javascript:void(0)" onclick="showFiche('aide-alimentaire')" class="demarche-link" data-segment="Particuliers">Accéder à l'aide alimentaire</a>
         <a href="javascript:void(0)" onclick="showFiche('aide-domicile-personne-agee')" class="demarche-link" data-segment="Particuliers">Demander une aide à domicile pour personne âgée (APA)</a>
       <a href="javascript:void(0)" onclick="showFiche('action-logement-aide')" class="demarche-link" data-segment="Particuliers">Demander une aide Action Logement (Mobili-Pass, Locapass)</a><a href="javascript:void(0)" onclick="showFiche('aide-juridique-gratuite')" class="demarche-link" data-segment="Particuliers">Bénéficier d'une consultation juridique gratuite</a><a href="javascript:void(0)" onclick="showFiche('hebergement-urgence-115')" class="demarche-link" data-segment="Particuliers">Hébergement d'urgence (numéro 115)</a><a href="javascript:void(0)" onclick="showFiche('cheque-vacances-ancv')" class="demarche-link" data-segment="Particuliers">Chèques-vacances (ANCV)</a><a href="javascript:void(0)" onclick="showFiche('garantie-jeunes-cej')" class="demarche-link" data-segment="Particuliers">Contrat d'Engagement Jeune (CEJ)</a></div>
@@ -1572,6 +1591,7 @@ footer{
         <a href="javascript:void(0)" onclick="showFiche('changement-adresse')" class="demarche-link" data-segment="Particuliers">Déclarer un changement d'adresse</a>
         <a href="javascript:void(0)" onclick="showFiche('acte-mariage')" class="demarche-link" data-segment="Particuliers">Obtenir un acte de mariage</a>
         <a href="javascript:void(0)" onclick="showFiche('acte-deces')" class="demarche-link" data-segment="Particuliers">Obtenir un acte de décès</a>
+        <a href="javascript:void(0)" onclick="showFiche('deces-proche-que-faire')" class="demarche-link" data-segment="Particuliers">Décès d'un proche : que faire et dans quels délais</a>
         <a href="javascript:void(0)" onclick="showFiche('livret-famille')" class="demarche-link" data-segment="Particuliers">Obtenir ou mettre à jour un livret de famille</a>
         <a href="javascript:void(0)" onclick="showFiche('changement-prenom')" class="demarche-link" data-segment="Particuliers">Changer de prénom ou de nom de famille</a>
         <a href="javascript:void(0)" onclick="showFiche('procuration-vote')" class="demarche-link" data-segment="Particuliers">Établir une procuration pour voter</a>
@@ -28944,12 +28964,7 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // PWA : enregistrement du service worker (hors-ligne)
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('/sw.js').catch(function(){});
-    });
-  }
+  // PWA : le service worker est désormais enregistré tôt, dans le <head>.
 
   // Bouton retour en haut
   window.addEventListener('scroll', function() {
@@ -29228,6 +29243,71 @@ function silkaInjectCompteCTA(slug){
     } catch(e){}
   };
 })();
+
+/* ── SILKA — INSTALLATION DE L'APPLICATION (PWA) ─────────────────── */
+function silkaIsStandalone(){
+  return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+      || window.navigator.standalone === true;
+}
+function silkaIsIOS(){
+  var ua = navigator.userAgent || '';
+  return /iPad|iPhone|iPod/.test(ua)
+      || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+function silkaRefreshInstallUI(){
+  var show = !silkaIsStandalone() && (!!window.__silkaIP || silkaIsIOS());
+  try { if(localStorage.getItem('silka_installed') === '1') show = false; } catch(e){}
+  var b = document.querySelectorAll('.silka-install-btn');
+  for(var i=0;i<b.length;i++){ b[i].style.display = show ? '' : 'none'; }
+}
+window.silkaRefreshInstallUI = silkaRefreshInstallUI;
+
+function silkaInstall(){
+  if(window.__silkaIP){
+    var p = window.__silkaIP;
+    window.__silkaIP = null;
+    p.prompt();
+    if(p.userChoice && p.userChoice.then){
+      p.userChoice.then(function(){ silkaRefreshInstallUI(); });
+    }
+    return;
+  }
+  if(silkaIsIOS()){ silkaShowIOSHelp(); return; }
+  silkaToast('Utilisez le menu de votre navigateur, puis \u00ab Installer \u00bb ou \u00ab Ajouter \u00e0 l\'\u00e9cran d\'accueil \u00bb.');
+}
+function silkaToast(t){
+  var x = document.createElement('div');
+  x.textContent = t;
+  x.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2b2b2b;color:#fff;padding:.7rem 1.1rem;border-radius:10px;font-size:.85rem;max-width:90%;text-align:center;z-index:100001;box-shadow:0 8px 24px rgba(0,0,0,.2)';
+  document.body.appendChild(x);
+  setTimeout(function(){ x.remove(); }, 4500);
+}
+function silkaShowIOSHelp(){
+  var d = document.getElementById('silka-ios-help');
+  if(!d){
+    d = document.createElement('div');
+    d.id = 'silka-ios-help';
+    d.style.cssText = 'position:fixed;inset:0;background:rgba(20,28,20,.55);backdrop-filter:blur(3px);z-index:100000;display:flex;align-items:center;justify-content:center;padding:1.25rem';
+    d.innerHTML = '<div style="background:#fff;border-radius:18px;max-width:400px;width:100%;padding:1.8rem 1.5rem;box-shadow:0 24px 60px rgba(0,0,0,.28);font-family:var(--sans)">'
+      + '<h3 style="font-family:var(--serif);font-size:1.25rem;margin:0 0 .8rem;color:var(--dark,#2b2b2b);text-align:center">Installer Silka sur iPhone</h3>'
+      + '<ol style="font-size:.9rem;color:var(--mid);line-height:1.85;margin:0 0 1.3rem;padding-left:1.2rem">'
+      +   '<li>Touchez l\'ic\u00f4ne <strong>Partager</strong> en bas de Safari</li>'
+      +   '<li>Faites d\u00e9filer, puis <strong>Sur l\'\u00e9cran d\'accueil</strong></li>'
+      +   '<li>Confirmez avec <strong>Ajouter</strong></li>'
+      + '</ol>'
+      + '<p style="font-size:.78rem;color:var(--light);line-height:1.5;margin:0 0 1.1rem;text-align:center">Depuis Safari uniquement\u00a0\u2014 Chrome sur iPhone ne le permet pas.</p>'
+      + '<button onclick="document.getElementById(\'silka-ios-help\').style.display=\'none\'" style="width:100%;background:var(--sage-d);color:#fff;border:none;border-radius:100px;padding:.8rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:var(--sans)">J\'ai compris</button>'
+      + '</div>';
+    document.body.appendChild(d);
+  }
+  d.style.display = 'flex';
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', silkaRefreshInstallUI);
+} else {
+  silkaRefreshInstallUI();
+}
+setTimeout(silkaRefreshInstallUI, 1500);
 
 </script>
 </body>
