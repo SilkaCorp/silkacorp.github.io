@@ -7994,7 +7994,15 @@ function silkaRegisterSupabase(){
     if(res.error){ err.textContent = silkaAuthFr(res.error.message); err.classList.add('show'); return; }
     var u = res.data && res.data.user;
     if(u && u.identities && u.identities.length === 0){ err.textContent='Cet e-mail est déjà utilisé.'; err.classList.add('show'); return; }
-    silkaAuthToast('Compte créé. Vérifiez votre boîte mail pour confirmer votre adresse, puis connectez-vous.');
+    /* Confirmation d'e-mail désactivée : Supabase renvoie directement une session.
+       Dans ce cas on connecte la personne, sans lui demander de vérifier un e-mail
+       qui n'arrivera jamais. */
+    if(res.data && res.data.session && u){
+      silkaAuthToast('Bienvenue ! Votre compte Silka est créé.');
+      silkaFinishSupabaseLogin(u);
+      return;
+    }
+    silkaAuthToast('Compte créé. Ouvrez l\'e-mail de confirmation, puis connectez-vous.');
     switchAuthTabByName('login');
     var le=document.getElementById('login-email'); if(le) le.value = email;
   }).catch(function(){ err.textContent='Connexion au service impossible. Réessayez.'; err.classList.add('show'); });
@@ -8047,7 +8055,7 @@ function silkaAuthInitUI(){
     a.href='javascript:void(0)';
     a.textContent='Mot de passe oublié ? Recevoir un lien par e-mail';
     a.style.cssText='display:block;text-align:center;margin-top:.7rem;font-size:.78rem;color:var(--light);text-decoration:underline';
-    a.onclick=function(){ silkaLoginOtp(); };
+    a.onclick=function(){ silkaResetDemande(); };
     zone.appendChild(a);
   }
 }
@@ -29408,6 +29416,96 @@ function silkaToggleMdp(btn, cible){
   btn.setAttribute('aria-pressed', visible ? 'false' : 'true');
   try { champ.focus({preventScroll:true}); } catch(e){ champ.focus(); }
 }
+
+/* ── SILKA — RÉINITIALISATION DE MOT DE PASSE ────────────────────
+   Envoi du lien, puis saisie du nouveau mot de passe au retour.
+   Nécessite un SMTP configuré dans Supabase pour atteindre de vrais utilisateurs. */
+function silkaResetDemande(){
+  var champ = document.getElementById('login-email');
+  var err = document.getElementById('login-error');
+  var email = champ ? champ.value.trim() : '';
+  if(!email){
+    err.textContent='Saisissez d\'abord votre e-mail, puis recliquez sur ce lien.';
+    err.classList.add('show');
+    if(champ) champ.focus();
+    return;
+  }
+  err.classList.remove('show');
+  var dernier = 0;
+  try { dernier = parseInt(localStorage.getItem('silka_reset_dernier')||'0', 10); } catch(x){}
+  var attente = 60000 - (Date.now() - dernier);
+  if(dernier && attente > 0){
+    err.textContent = 'Un lien vient d\'être envoyé. Patientez ' + Math.ceil(attente/1000) + ' s.';
+    err.classList.add('show');
+    return;
+  }
+  silkaGetClient().then(function(sb){
+    return sb.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + window.location.pathname
+    });
+  }).then(function(res){
+    if(res && res.error){
+      err.textContent = silkaAuthFr(res.error.message); err.classList.add('show'); return;
+    }
+    try { localStorage.setItem('silka_reset_dernier', String(Date.now())); } catch(x){}
+    silkaAuthToast('Si un compte existe pour cette adresse, un lien de réinitialisation vient d\'être envoyé.');
+  }).catch(function(){
+    err.textContent='Service indisponible. Réessayez.'; err.classList.add('show');
+  });
+}
+
+function silkaResetFormulaire(){
+  if(document.getElementById('silka-reset-modal')) return;
+  var d = document.createElement('div');
+  d.id='silka-reset-modal';
+  d.style.cssText='position:fixed;inset:0;background:rgba(20,28,20,.6);backdrop-filter:blur(3px);z-index:100000;display:flex;align-items:center;justify-content:center;padding:1.25rem';
+  d.innerHTML='<div style="background:#fff;border-radius:18px;max-width:400px;width:100%;padding:1.8rem 1.5rem;box-shadow:0 24px 60px rgba(0,0,0,.28);font-family:var(--sans)">'
+    + '<h3 style="font-family:var(--serif);font-size:1.25rem;margin:0 0 .9rem;color:var(--dark,#2b2b2b);text-align:center">Choisissez un nouveau mot de passe</h3>'
+    + '<div class="auth-pwd-wrap" style="margin-bottom:.6rem"><input type="password" class="auth-input" id="silka-reset-pwd" placeholder="Au moins 8 caractères" style="width:100%">'
+    + '<button type="button" class="auth-eye" onclick="silkaToggleMdp(this,\'silka-reset-pwd\')">\uD83D\uDC41</button></div>'
+    + '<p class="auth-error" id="silka-reset-err" style="display:none"></p>'
+    + '<button onclick="silkaResetValider()" style="width:100%;background:var(--sage-d);color:#fff;border:none;border-radius:100px;padding:.8rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:var(--sans)">Enregistrer</button>'
+    + '</div>';
+  document.body.appendChild(d);
+}
+
+function silkaResetValider(){
+  var champ = document.getElementById('silka-reset-pwd');
+  var err = document.getElementById('silka-reset-err');
+  var pwd = champ ? champ.value : '';
+  if(pwd.length < 8){
+    err.textContent='8 caractères minimum.'; err.style.display='block'; return;
+  }
+  err.style.display='none';
+  silkaGetClient().then(function(sb){
+    return sb.auth.updateUser({ password: pwd });
+  }).then(function(res){
+    if(res && res.error){
+      err.textContent = silkaAuthFr(res.error.message); err.style.display='block'; return;
+    }
+    var m = document.getElementById('silka-reset-modal');
+    if(m) m.remove();
+    if(history.replaceState) history.replaceState(null,'',window.location.pathname);
+    silkaAuthToast('Mot de passe mis à jour. Vous êtes connecté.');
+    var u = res.data && res.data.user;
+    if(u) silkaFinishSupabaseLogin(u);
+  }).catch(function(){
+    err.textContent='Lien expiré ou invalide. Redemandez un e-mail.'; err.style.display='block';
+  });
+}
+
+/* Au retour du lien de réinitialisation, Supabase place type=recovery dans l'URL. */
+(function(){
+  function verifier(){
+    var h = window.location.hash || '';
+    var q = window.location.search || '';
+    if(h.indexOf('type=recovery') > -1 || q.indexOf('type=recovery') > -1){
+      setTimeout(silkaResetFormulaire, 400);
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', verifier);
+  else verifier();
+})();
 
 </script>
 </body>
