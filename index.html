@@ -500,6 +500,10 @@ nav{
 .auth-tab.active{color:var(--sage-d);border-bottom-color:var(--sage-d)}
 .auth-group{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.85rem}
 .auth-label{font-size:.75rem;font-weight:600;color:var(--mid)}
+.auth-pwd-wrap{position:relative;display:flex}
+.auth-pwd-wrap .auth-input{flex:1;padding-right:2.9rem}
+.auth-eye{position:absolute;right:.35rem;top:50%;transform:translateY(-50%);width:2.2rem;height:2.2rem;display:flex;align-items:center;justify-content:center;border:none;background:transparent;cursor:pointer;padding:0;color:var(--light);font-size:1.05rem;line-height:1;border-radius:8px}
+.auth-eye:hover{color:var(--sage-d);background:rgba(90,122,90,.08)}
 .auth-input{padding:.6rem .85rem;border:1.5px solid var(--xlight);border-radius:10px;font-size:.875rem;font-family:var(--sans);color:var(--dark);background:var(--off);transition:border-color .15s}
 .auth-input:focus{outline:none;border-color:var(--sage-l)}
 .auth-submit{width:100%;padding:.75rem;background:var(--sage-d);color:var(--white);border:none;border-radius:10px;font-size:.875rem;font-weight:600;cursor:pointer;font-family:var(--sans);margin-top:.25rem;transition:background .15s}
@@ -1994,7 +1998,7 @@ footer{
             </div>
             <div class="auth-group">
               <label class="auth-label">Mot de passe</label>
-              <input type="password" class="auth-input" id="login-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+              <div class="auth-pwd-wrap"><input type="password" class="auth-input" id="login-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"><button type="button" class="auth-eye" aria-label="Afficher le mot de passe" onclick="silkaToggleMdp(this,'login-pwd')">👁</button></div>
             </div>
             <p class="auth-error" id="login-error">Email ou mot de passe incorrect.</p>
             <button class="auth-submit" onclick="doLogin()">Se connecter →</button>
@@ -2002,17 +2006,14 @@ footer{
           </div>
           <!-- Register -->
           <div id="auth-register" style="display:none">
-            <div class="auth-group">
-              <label class="auth-label">Prénom et nom</label>
-              <input type="text" class="auth-input" id="reg-name" placeholder="Marie Dupont">
-            </div>
+            <div class="auth-group"><label class="auth-label">Prénom</label><input type="text" class="auth-input" id="reg-firstname" autocomplete="given-name" placeholder="Marie"></div><div class="auth-group"><label class="auth-label">Nom</label><input type="text" class="auth-input" id="reg-lastname" autocomplete="family-name" placeholder="Dupont"></div>
             <div class="auth-group">
               <label class="auth-label">Email</label>
               <input type="email" class="auth-input" id="reg-email" placeholder="vous@exemple.fr">
             </div>
             <div class="auth-group">
               <label class="auth-label">Mot de passe</label>
-              <input type="password" class="auth-input" id="reg-pwd" onkeydown="if(event.key==='Enter')doRegister()" placeholder="Au moins 8 caractères">
+              <div class="auth-pwd-wrap"><input type="password" class="auth-input" id="reg-pwd" onkeydown="if(event.key==='Enter')doRegister()" placeholder="Au moins 8 caractères"><button type="button" class="auth-eye" aria-label="Afficher le mot de passe" onclick="silkaToggleMdp(this,'reg-pwd')">👁</button></div>
             </div>
             <p class="auth-error" id="reg-error">Veuillez remplir tous les champs.</p>
             <button class="auth-submit" onclick="doRegister()">Créer mon compte →</button>
@@ -7973,7 +7974,10 @@ function switchAuthTabByName(tab){
   if(rg) rg.style.display = tab==='register'?'block':'none';
 }
 function silkaRegisterSupabase(){
-  var name = document.getElementById('reg-name').value.trim();
+  var prenom = (document.getElementById('reg-firstname')||{}).value || '';
+  var nom = (document.getElementById('reg-lastname')||{}).value || '';
+  prenom = prenom.trim(); nom = nom.trim();
+  var name = (prenom + ' ' + nom).trim();
   var email = document.getElementById('reg-email').value.trim();
   var pwd = document.getElementById('reg-pwd').value;
   var err = document.getElementById('reg-error');
@@ -8172,11 +8176,14 @@ function doLogin() {
 }
 function doRegister() {
   if (silkaAuthEnabled()) { silkaRegisterSupabase(); return; }
-  var name = document.getElementById('reg-name').value.trim();
+  var prenom = (document.getElementById('reg-firstname')||{}).value || '';
+  var nom = (document.getElementById('reg-lastname')||{}).value || '';
+  prenom = prenom.trim(); nom = nom.trim();
+  var name = (prenom + ' ' + nom).trim();
   var email = document.getElementById('reg-email').value.trim();
   var pwd = document.getElementById('reg-pwd').value;
   var err = document.getElementById('reg-error');
-  if (!name || !email || pwd.length < 6) {
+  if (!prenom || !nom || !email || pwd.length < 6) {
     err.textContent = 'Veuillez renseigner tous les champs (mot de passe : 6 caractères min).';
     err.classList.add('show');
     return;
@@ -29351,6 +29358,18 @@ if(document.readyState === 'loading'){
   silkaRefreshInstallUI();
 }
 setTimeout(silkaRefreshInstallUI, 1500);
+
+/* ── SILKA — AFFICHER / MASQUER UN MOT DE PASSE ────────────────── */
+function silkaToggleMdp(btn, cible){
+  var champ = document.getElementById(cible);
+  if(!champ) return;
+  var visible = champ.type === 'text';
+  champ.type = visible ? 'password' : 'text';
+  btn.textContent = visible ? '\uD83D\uDC41' : '\uD83D\uDE48';
+  btn.setAttribute('aria-label', visible ? 'Afficher le mot de passe' : 'Masquer le mot de passe');
+  btn.setAttribute('aria-pressed', visible ? 'false' : 'true');
+  try { champ.focus({preventScroll:true}); } catch(e){ champ.focus(); }
+}
 
 </script>
 </body>
