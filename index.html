@@ -486,6 +486,58 @@ nav{
 
 .fiche-steps-label{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:700;color:var(--sage-dark);background:var(--sage-bg);border:1px solid var(--sage-l);padding:.3rem .8rem;border-radius:100px;margin-bottom:.9rem}
 .cerfa-badge-silka{display:inline-block;font-size:.64rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--sage-d);padding:.12rem .45rem;border-radius:100px;margin-right:.4rem;vertical-align:middle}
+/* ── Coffre-fort documents ─────────────────────────────── */
+.cf-wrap{max-width:900px;margin:0 auto;padding:2.5rem clamp(1.25rem,5vw,2.5rem) 4rem}
+.cf-head h1{font-family:var(--serif);font-size:clamp(1.6rem,4vw,2.2rem);color:var(--dark);margin:.3rem 0 .5rem}
+.cf-head p{font-size:.92rem;color:var(--mid);line-height:1.65;max-width:640px}
+.cf-privacy{display:flex;gap:.7rem;align-items:flex-start;background:var(--sage-bg);border:1px solid var(--sage-l);
+  border-radius:12px;padding:.85rem 1rem;margin:1.25rem 0;font-size:.82rem;color:var(--sage-dark);line-height:1.55}
+.cf-privacy strong{color:var(--sage-dark)}
+.cf-drop{border:2px dashed var(--sage-l);border-radius:16px;background:var(--off);padding:1.6rem 1.25rem;text-align:center;transition:all .15s}
+.cf-drop.over{border-color:var(--sage-d);background:var(--sage-bg)}
+.cf-drop-icon{font-size:1.8rem;margin-bottom:.4rem}
+.cf-drop-txt{font-size:.86rem;color:var(--mid);margin-bottom:.9rem}
+.cf-btn{padding:.6rem 1.2rem;border-radius:100px;border:none;background:var(--sage-d);color:#fff;font-size:.85rem;
+  font-weight:600;font-family:var(--sans);cursor:pointer}
+.cf-btn:hover{background:var(--sage-dark)}
+.cf-btn-ghost{background:var(--white);color:var(--sage-d);border:1.5px solid var(--sage-l)}
+.cf-btn-ghost:hover{background:var(--sage-bg)}
+.cf-btn-danger{background:var(--white);color:#b3261e;border:1.5px solid #f0cfcc}
+.cf-btn-danger:hover{background:#fdf3f2}
+.cf-bar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:1.5rem 0 .9rem}
+.cf-chip{padding:.35rem .85rem;border-radius:100px;border:1px solid var(--xlight);background:var(--white);
+  font-size:.78rem;color:var(--mid);cursor:pointer;font-family:var(--sans)}
+.cf-chip.active{background:var(--sage-d);color:#fff;border-color:var(--sage-d);font-weight:600}
+.cf-stats{font-size:.78rem;color:var(--light);margin-left:auto}
+.cf-list{display:flex;flex-direction:column;gap:.6rem}
+.cf-item{display:flex;gap:.85rem;align-items:center;background:var(--white);border:1px solid var(--xlight);
+  border-radius:14px;padding:.85rem 1rem}
+.cf-item-icon{font-size:1.4rem;flex-shrink:0}
+.cf-item-main{flex:1;min-width:0}
+.cf-item-name{font-size:.88rem;font-weight:600;color:var(--dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cf-item-meta{font-size:.74rem;color:var(--light);margin-top:.15rem}
+.cf-item-cat{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--sage-dark);background:var(--sage-bg);border:1px solid var(--sage-l);padding:.1rem .45rem;border-radius:100px;margin-right:.4rem}
+.cf-item-exp{display:inline-block;font-size:.68rem;font-weight:700;padding:.1rem .45rem;border-radius:100px;margin-left:.35rem}
+.cf-exp-ok{color:var(--sage-dark);background:var(--sage-bg)}
+.cf-exp-soon{color:#8a5a00;background:#fdf3e0}
+.cf-exp-out{color:#b3261e;background:#fdeceb}
+.cf-item-actions{display:flex;gap:.35rem;flex-shrink:0}
+.cf-ico-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--xlight);background:var(--white);
+  cursor:pointer;font-size:.95rem;line-height:1;display:flex;align-items:center;justify-content:center}
+.cf-ico-btn:hover{background:var(--sage-bg);border-color:var(--sage-l)}
+.cf-empty{text-align:center;padding:2.5rem 1rem;color:var(--light);font-size:.88rem}
+.cf-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.7rem;margin-top:1rem;text-align:left}
+.cf-field label{display:block;font-size:.74rem;font-weight:600;color:var(--mid);margin-bottom:.25rem}
+.cf-field input,.cf-field select{width:100%;padding:.55rem .75rem;border:1.5px solid var(--xlight);border-radius:9px;
+  font-size:.85rem;font-family:var(--sans);color:var(--dark);background:var(--white)}
+.cf-field input:focus,.cf-field select:focus{outline:none;border-color:var(--sage-l)}
+.cf-note{font-size:.76rem;color:var(--light);line-height:1.55;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--xlight)}
+@media(max-width:600px){
+  .cf-item{flex-wrap:wrap}
+  .cf-item-actions{width:100%;justify-content:flex-end}
+  .cf-stats{margin-left:0;width:100%}
+}
 /* Liens connexes */
 .connexion-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.5rem}
 .connexion-tag{
@@ -1076,6 +1128,7 @@ footer{
     <li><a href="javascript:void(0)" onclick="showPage('demarches')">Démarches</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('mes-demarches')">Mes démarches</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('boite-outils')">Boîte à outils</a></li>
+    <li><a href="javascript:void(0)" onclick="showPage('coffre-fort')">Coffre-fort</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('enquetes')">Enquêtes</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('demo')">Guide</a></li>
     <li><a href="javascript:void(0)" onclick="showPage('contact')">Contact</a></li>
@@ -1093,6 +1146,7 @@ footer{
 <!-- MENU MOBILE -->
 <div class="mobile-menu" id="mobile-menu">
   <a href="javascript:void(0)" onclick="showPage('demarches');closeMenu()">Démarches</a><a href="javascript:void(0)" onclick="showPage('boite-outils');closeMenu()">Boîte à outils</a>
+  <a href="javascript:void(0)" onclick="showPage('coffre-fort');closeMenu()">Coffre-fort</a>
   <a href="javascript:void(0)" onclick="showPage('enquetes');closeMenu()">Enquêtes</a>
   <a href="javascript:void(0)" onclick="showPage('demo');closeMenu()">Guide</a>
   <a href="javascript:void(0)" onclick="showPage('contact');closeMenu()">Contact</a>
@@ -1882,8 +1936,8 @@ footer{
         <div class="compte-card">
           <div class="compte-card-icon">🗂️</div>
           <div class="compte-card-title">Coffre-fort documents</div>
-          <div class="compte-card-desc">CNI, RIB, justificatif de domicile — réutilisables sur toutes vos démarches.</div>
-          <div class="compte-card-lock" id="card-coffre-lock" style="background:var(--sage-bg);color:var(--sage-dark);border:1px solid var(--sage-l)">🛠️ En préparation — sera gratuit</div>
+          <div class="compte-card-desc">CNI, RIB, justificatif de domicile — stockés sur votre appareil, jamais transmis.</div>
+          <button class="compte-card-lock" id="card-coffre-lock" onclick="showPage('coffre-fort')" style="background:var(--sage-d);color:#fff;border:none;cursor:pointer;font-family:var(--sans);font-weight:600">→ Ouvrir mon coffre-fort</button>
         </div>
         <div class="compte-card">
           <div class="compte-card-icon">📁</div>
@@ -1913,6 +1967,42 @@ footer{
 <!-- ════════════════════════════════════════════
      PAGE : CONTACT
 ════════════════════════════════════════════ -->
+<div class="page" id="page-coffre-fort">
+  <div class="cf-wrap">
+    <div class="cf-head">
+      <div class="section-eyebrow">Mon espace</div>
+      <h1>Coffre-fort documents</h1>
+      <p>Rangez ici les pièces que vous ressortez sans arrêt : carte d'identité, RIB, justificatif de domicile, avis d'imposition… Vous les retrouvez en deux touches au moment de remplir une démarche.</p>
+    </div>
+
+    <div class="cf-privacy">
+      <span style="font-size:1.1rem;line-height:1">🔒</span>
+      <span><strong>Vos documents ne quittent pas votre appareil.</strong> Ils sont enregistrés dans la mémoire de ce navigateur, sur ce téléphone ou cet ordinateur. Silka ne les reçoit pas, ne les stocke pas et ne peut pas les lire. Conséquence directe : ils ne se synchronisent pas d'un appareil à l'autre, et effacer les données du site les supprime définitivement. Gardez toujours vos originaux ailleurs.</span>
+    </div>
+
+    <div class="cf-drop" id="cf-drop">
+      <div class="cf-drop-icon">📎</div>
+      <div class="cf-drop-txt">Photo, scan ou PDF — <strong>10 Mo maximum</strong> par document</div>
+      <input type="file" id="cf-file" accept="image/*,application/pdf" style="display:none" onchange="cfPick(this)">
+      <button class="cf-btn" onclick="document.getElementById('cf-file').click()">Ajouter un document</button>
+      <div class="cf-form" id="cf-form" style="display:none">
+        <div class="cf-field"><label>Nom du document</label><input type="text" id="cf-nom" placeholder="Carte d'identité — recto"></div>
+        <div class="cf-field"><label>Catégorie</label><select id="cf-cat"></select></div>
+        <div class="cf-field"><label>Date d'expiration (facultatif)</label><input type="date" id="cf-exp"></div>
+        <div class="cf-field" style="display:flex;align-items:flex-end;gap:.5rem">
+          <button class="cf-btn" style="flex:1" onclick="cfSave()">Enregistrer</button>
+          <button class="cf-btn cf-btn-ghost" onclick="cfCancel()">Annuler</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cf-bar" id="cf-filters"></div>
+    <div class="cf-list" id="cf-list"></div>
+
+    <p class="cf-note">💡 Astuce : nommez précisément vos fichiers (« RIB Crédit Agricole », « Justificatif de domicile — EDF mars 2026 ») et renseignez la date d'expiration de vos titres d'identité : Silka vous signalera ceux qui arrivent à échéance. Pensez à télécharger une copie de sauvegarde avant de changer de téléphone ou de vider le cache de votre navigateur.</p>
+  </div>
+</div>
+
 <div class="page" id="page-contact">
   <div class="contact-wrapper">
     <div class="contact-grid2">
@@ -6690,6 +6780,7 @@ function silkaSetActiveNav(pageId){
   });
 }
 function showPage(pageId) {
+  if (pageId === 'coffre-fort') setTimeout(cfRender, 30);
   // Cacher toutes les pages
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
   // Cacher toutes les fiches
@@ -27061,6 +27152,198 @@ function silkaResetValider(){
   else verifier();
 })();
 
+
+/* ══════════════════════════════════════════════════════════
+   COFFRE-FORT DOCUMENTS — stockage 100 % local (IndexedDB)
+   Aucun fichier n'est transmis à Silka ni à un tiers.
+   ══════════════════════════════════════════════════════════ */
+var CF_CATS = ['Identité','Domicile','Bancaire','Emploi & revenus','Santé',
+               'Logement','Véhicule','Famille','Études','Autre'];
+var CF_ICONS = {'Identité':'🪪','Domicile':'🏠','Bancaire':'🏦','Emploi & revenus':'💼',
+  'Santé':'🏥','Logement':'🔑','Véhicule':'🚗','Famille':'👶','Études':'🎓','Autre':'📄'};
+var cfDb = null, cfFilter = 'Tous', cfPending = null;
+
+function cfOpen() {
+  return new Promise(function(res, rej) {
+    if (cfDb) { res(cfDb); return; }
+    if (!window.indexedDB) { rej(new Error('no-idb')); return; }
+    var rq = indexedDB.open('silka-coffre', 1);
+    rq.onupgradeneeded = function(e) {
+      var db = e.target.result;
+      if (!db.objectStoreNames.contains('docs')) {
+        db.createObjectStore('docs', { keyPath: 'id', autoIncrement: true });
+      }
+    };
+    rq.onsuccess = function(e) { cfDb = e.target.result; res(cfDb); };
+    rq.onerror = function() { rej(rq.error); };
+  });
+}
+function cfTx(mode) { return cfOpen().then(function(db){ return db.transaction('docs', mode).objectStore('docs'); }); }
+function cfAll() {
+  return cfTx('readonly').then(function(st){
+    return new Promise(function(res, rej){
+      var r = st.getAll(); r.onsuccess = function(){ res(r.result || []); }; r.onerror = function(){ rej(r.error); };
+    });
+  });
+}
+function cfOctets(n) {
+  if (n < 1024) return n + ' o';
+  if (n < 1048576) return (n/1024).toFixed(0) + ' Ko';
+  return (n/1048576).toFixed(1) + ' Mo';
+}
+function cfEsc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function cfPick(input) {
+  var f = input.files && input.files[0];
+  if (!f) return;
+  if (f.size > 10 * 1024 * 1024) {
+    alert('Ce fichier dépasse 10 Mo. Réduisez sa taille ou photographiez-le en qualité plus basse.');
+    input.value = ''; return;
+  }
+  cfPending = f;
+  var sel = document.getElementById('cf-cat');
+  if (sel && !sel.options.length) {
+    sel.innerHTML = CF_CATS.map(function(c){ return '<option>' + c + '</option>'; }).join('');
+  }
+  var nom = document.getElementById('cf-nom');
+  if (nom) nom.value = f.name.replace(/\.[^.]+$/, '');
+  document.getElementById('cf-form').style.display = 'grid';
+}
+function cfCancel() {
+  cfPending = null;
+  document.getElementById('cf-form').style.display = 'none';
+  document.getElementById('cf-file').value = '';
+}
+function cfSave() {
+  if (!cfPending) return;
+  var doc = {
+    nom: (document.getElementById('cf-nom').value || cfPending.name).trim(),
+    categorie: document.getElementById('cf-cat').value || 'Autre',
+    expiration: document.getElementById('cf-exp').value || '',
+    type: cfPending.type || 'application/octet-stream',
+    taille: cfPending.size,
+    ajout: Date.now(),
+    blob: cfPending
+  };
+  cfTx('readwrite').then(function(st){
+    var r = st.add(doc);
+    r.onsuccess = function(){ cfCancel(); cfRender(); };
+    r.onerror = function(){ alert("Enregistrement impossible : la mémoire du navigateur est peut-être saturée."); };
+  }).catch(function(){ alert("Le coffre-fort n'est pas disponible dans ce navigateur."); });
+}
+function cfDelete(id) {
+  if (!confirm('Supprimer définitivement ce document du coffre-fort ?')) return;
+  cfTx('readwrite').then(function(st){ st.delete(id).onsuccess = cfRender; });
+}
+function cfRename(id) {
+  cfTx('readwrite').then(function(st){
+    var g = st.get(id);
+    g.onsuccess = function(){
+      var d = g.result; if (!d) return;
+      var n = prompt('Nouveau nom du document :', d.nom);
+      if (n === null) return;
+      d.nom = n.trim() || d.nom;
+      st.put(d).onsuccess = cfRender;
+    };
+  });
+}
+function cfWith(id, cb) {
+  cfTx('readonly').then(function(st){
+    var g = st.get(id);
+    g.onsuccess = function(){ if (g.result) cb(g.result); };
+  });
+}
+function cfView(id) {
+  cfWith(id, function(d){
+    var u = URL.createObjectURL(d.blob);
+    window.open(u, '_blank');
+    setTimeout(function(){ URL.revokeObjectURL(u); }, 60000);
+  });
+}
+function cfDownload(id) {
+  cfWith(id, function(d){
+    var ext = (d.type.indexOf('pdf') > -1) ? '.pdf' : (d.type.indexOf('png') > -1) ? '.png' : '.jpg';
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(d.blob);
+    a.download = d.nom.replace(/[\\/:*?"<>|]/g, '-') + ext;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 20000);
+  });
+}
+function cfExpBadge(d) {
+  if (!d.expiration) return '';
+  var t = new Date(d.expiration + 'T12:00:00').getTime();
+  if (isNaN(t)) return '';
+  var j = Math.round((t - Date.now()) / 86400000);
+  var lib = new Date(t).toLocaleDateString('fr-FR');
+  if (j < 0)   return '<span class="cf-item-exp cf-exp-out">Expiré le ' + lib + '</span>';
+  if (j < 120) return '<span class="cf-item-exp cf-exp-soon">Expire le ' + lib + '</span>';
+  return '<span class="cf-item-exp cf-exp-ok">Valide jusqu\'au ' + lib + '</span>';
+}
+function cfRender() {
+  var list = document.getElementById('cf-list');
+  var filters = document.getElementById('cf-filters');
+  if (!list) return;
+  cfAll().then(function(docs){
+    docs.sort(function(a,b){ return b.ajout - a.ajout; });
+    var cats = ['Tous'].concat(CF_CATS.filter(function(c){
+      return docs.some(function(d){ return d.categorie === c; });
+    }));
+    var total = docs.reduce(function(s,d){ return s + (d.taille||0); }, 0);
+    window.__cfCats = cats;
+    filters.innerHTML = cats.map(function(c, i){
+      return '<button class="cf-chip' + (c === cfFilter ? ' active' : '') +
+             '" onclick="cfSetFilter(__cfCats[' + i + '])">' + cfEsc(c) + '</button>';
+    }).join('') + '<span class="cf-stats">' + docs.length + ' document' + (docs.length > 1 ? 's' : '') +
+      ' · ' + cfOctets(total) + '</span>';
+
+    var vus = docs.filter(function(d){ return cfFilter === 'Tous' || d.categorie === cfFilter; });
+    if (!vus.length) {
+      list.innerHTML = '<div class="cf-empty">' + (docs.length
+        ? 'Aucun document dans cette catégorie.'
+        : 'Votre coffre-fort est vide. Ajoutez votre première pièce ci-dessus.') + '</div>';
+      return;
+    }
+    list.innerHTML = vus.map(function(d){
+      return '<div class="cf-item">' +
+        '<span class="cf-item-icon">' + (CF_ICONS[d.categorie] || '📄') + '</span>' +
+        '<div class="cf-item-main">' +
+          '<div class="cf-item-name">' + cfEsc(d.nom) + '</div>' +
+          '<div class="cf-item-meta"><span class="cf-item-cat">' + cfEsc(d.categorie) + '</span>' +
+            cfOctets(d.taille) + ' · ajouté le ' + new Date(d.ajout).toLocaleDateString('fr-FR') +
+            cfExpBadge(d) + '</div>' +
+        '</div>' +
+        '<div class="cf-item-actions">' +
+          '<button class="cf-ico-btn" title="Ouvrir" onclick="cfView(' + d.id + ')">👁</button>' +
+          '<button class="cf-ico-btn" title="Télécharger" onclick="cfDownload(' + d.id + ')">⬇</button>' +
+          '<button class="cf-ico-btn" title="Renommer" onclick="cfRename(' + d.id + ')">✏️</button>' +
+          '<button class="cf-ico-btn" title="Supprimer" onclick="cfDelete(' + d.id + ')">🗑</button>' +
+        '</div></div>';
+    }).join('');
+  }).catch(function(){
+    list.innerHTML = '<div class="cf-empty">Le coffre-fort nécessite un navigateur récent et ne fonctionne pas en navigation privée sur certains appareils.</div>';
+  });
+}
+function cfSetFilter(c) { cfFilter = c; cfRender(); }
+
+/* glisser-déposer */
+(function(){
+  function init(){
+    var z = document.getElementById('cf-drop');
+    if (!z) return;
+    ['dragenter','dragover'].forEach(function(e){
+      z.addEventListener(e, function(ev){ ev.preventDefault(); z.classList.add('over'); });
+    });
+    ['dragleave','drop'].forEach(function(e){
+      z.addEventListener(e, function(ev){ ev.preventDefault(); z.classList.remove('over'); });
+    });
+    z.addEventListener('drop', function(ev){
+      var f = ev.dataTransfer && ev.dataTransfer.files;
+      if (f && f.length) { document.getElementById('cf-file').files = f; cfPick(document.getElementById('cf-file')); }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
 </script>
 </body>
 </html>
