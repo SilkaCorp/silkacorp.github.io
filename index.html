@@ -7956,6 +7956,10 @@ function silkaAuthToast(text){
 }
 function silkaAuthFr(msg){
   msg = (msg||'').toLowerCase();
+  if(msg.indexOf('email not confirmed')>-1)
+    return 'Votre adresse n\'a pas encore été confirmée. Ouvrez l\'e-mail reçu à l\'inscription.';
+  if(msg.indexOf('invalid login credentials')>-1)
+    return 'E-mail ou mot de passe incorrect.';
   if(msg.indexOf('not authorized')>-1 || msg.indexOf('address not authorized')>-1)
     return 'L\'envoi d\'e-mails n\'est pas encore ouvert à toutes les adresses. Écrivez-nous et nous vous connectons manuellement.';
   if(msg.indexOf('already')>-1 && msg.indexOf('regist')>-1) return 'Cet e-mail est déjà utilisé.';
@@ -8026,15 +8030,49 @@ function silkaFinishSupabaseLogin(sbUser){
   var name = meta.full_name || (sbUser && sbUser.email ? sbUser.email.split('@')[0] : 'Mon compte');
   var user = { name: name, email: sbUser ? sbUser.email : '' };
   localStorage.setItem('silka_user', JSON.stringify(user));
-  var btn = document.querySelector('#auth-login .auth-submit'); if(btn){ btn.disabled = false; btn.textContent='Recevoir un lien de connexion →'; }
+  var btn = document.querySelector('#auth-login .auth-submit'); if(btn){ btn.disabled = false; btn.textContent='Se connecter →'; }
   showConnected(user); updateNavAfterLogin(name);
 }
 function silkaAuthInitUI(){
   if(!silkaAuthEnabled()) return;
-  var pwd = document.getElementById('login-pwd');
-  if(pwd){ var g = pwd.closest('.auth-group'); if(g) g.style.display='none'; }
-  document.querySelectorAll('#auth-login p').forEach(function(p){ if(p.id!=='login-error' && /Démo/.test(p.textContent)) p.style.display='none'; });
-  var lbtn = document.querySelector('#auth-login .auth-submit'); if(lbtn) lbtn.textContent='Recevoir un lien de connexion →';
+  document.querySelectorAll('#auth-login p').forEach(function(p){
+    if(p.id!=='login-error' && /Démo/.test(p.textContent)) p.style.display='none';
+  });
+  var lbtn = document.querySelector('#auth-login .auth-submit');
+  if(lbtn) lbtn.textContent='Se connecter →';
+  var zone = document.getElementById('auth-login');
+  if(zone && !document.getElementById('silka-lien-secours')){
+    var a = document.createElement('a');
+    a.id='silka-lien-secours';
+    a.href='javascript:void(0)';
+    a.textContent='Mot de passe oublié ? Recevoir un lien par e-mail';
+    a.style.cssText='display:block;text-align:center;margin-top:.7rem;font-size:.78rem;color:var(--light);text-decoration:underline';
+    a.onclick=function(){ silkaLoginOtp(); };
+    zone.appendChild(a);
+  }
+}
+function silkaLoginPassword(){
+  var email = document.getElementById('login-email').value.trim();
+  var pwd = document.getElementById('login-pwd').value;
+  var err = document.getElementById('login-error');
+  if(!email || !pwd){
+    err.textContent='E-mail et mot de passe requis.'; err.classList.add('show'); return;
+  }
+  err.classList.remove('show');
+  var btn = document.querySelector('#auth-login .auth-submit');
+  if(btn){ btn.disabled=true; btn.textContent='Connexion\u2026'; }
+  silkaGetClient().then(function(sb){
+    return sb.auth.signInWithPassword({ email: email, password: pwd });
+  }).then(function(res){
+    if(btn){ btn.disabled=false; btn.textContent='Se connecter \u2192'; }
+    if(res.error){ err.textContent = silkaAuthFr(res.error.message); err.classList.add('show'); return; }
+    var u = res.data && res.data.user;
+    if(u) silkaFinishSupabaseLogin(u);
+  }).catch(function(){
+    if(btn){ btn.disabled=false; btn.textContent='Se connecter \u2192'; }
+    err.textContent='Connexion au service impossible. R\u00e9essayez.';
+    err.classList.add('show');
+  });
 }
 function silkaAuthRestore(){
   if(!silkaAuthEnabled()) return;
@@ -8154,7 +8192,7 @@ function switchAuthTab(tab, btn) {
   document.getElementById('auth-register').style.display = tab==='register'?'block':'none';
 }
 function doLogin() {
-  if (silkaAuthEnabled()) { silkaLoginOtp(); return; }
+  if (silkaAuthEnabled()) { silkaLoginPassword(); return; }
   var email = document.getElementById('login-email').value.trim();
   var pwd = document.getElementById('login-pwd').value;
   var err = document.getElementById('login-error');
