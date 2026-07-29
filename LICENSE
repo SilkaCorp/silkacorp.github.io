@@ -1,0 +1,111 @@
+SILKA — CONDITIONS D'UTILISATION DU CODE ET DES CONTENUS
+========================================================
+
+Copyright © 2024-2026 Corentin Perrut. Tous droits réservés.
+
+Ce dépôt est public afin de permettre l'hébergement du service sur
+GitHub Pages. Sa consultation publique n'emporte AUCUNE licence
+d'utilisation, de reproduction ou de réutilisation.
+
+
+1. CE QUI EST PROTÉGÉ
+---------------------
+
+a) Le code source
+   L'application (index.html, sw.js, manifest.json, les outils du
+   dossier tools/ et l'ensemble des pages du dossier demarches/)
+   constitue une œuvre de l'esprit protégée par le droit d'auteur
+   (articles L111-1 et suivants du Code de la propriété
+   intellectuelle), et par les dispositions propres aux logiciels
+   (articles L112-2, 13° et L122-6 du même code).
+
+b) Les contenus éditoriaux
+   Les fiches de démarches administratives, leurs textes explicatifs,
+   leurs mises en garde, leurs conseils, la structuration en étapes
+   ainsi que les réponses de l'assistant conversationnel sont des
+   créations originales protégées par le droit d'auteur. Le fait
+   qu'elles décrivent des règles de droit public — lesquelles ne
+   sont pas appropriables — ne rend pas leur rédaction, leur
+   sélection ni leur agencement libres de droits.
+
+c) La base de données
+   L'ensemble des fiches constitue une base de données au sens de
+   l'article L112-3 du Code de la propriété intellectuelle. Sa
+   constitution, sa vérification et sa mise à jour ont représenté un
+   investissement substantiel. À ce titre, son producteur bénéficie
+   du droit prévu aux articles L341-1 et suivants du même code, qui
+   permet d'interdire l'extraction ou la réutilisation de tout ou
+   partie qualitativement ou quantitativement substantielle de son
+   contenu, ainsi que l'extraction ou la réutilisation répétée et
+   systématique de parties non substantielles.
+
+d) Les signes distinctifs
+   La dénomination « Silka », le logo, la charte graphique et
+   l'identité visuelle du service sont la propriété de leur titulaire
+   et ne peuvent être utilisés sans autorisation écrite préalable.
+
+
+2. CE QUI EST INTERDIT SANS AUTORISATION ÉCRITE
+-----------------------------------------------
+
+- Reproduire, copier ou héberger tout ou partie de ce dépôt sur un
+  autre domaine ou service, y compris sous une autre marque.
+- Extraire, moissonner ou réutiliser les fiches de démarches, que ce
+  soit manuellement ou par un procédé automatisé.
+- Constituer une base de données dérivée à partir de ces contenus.
+- Utiliser ces contenus pour l'entraînement, l'affinage ou
+  l'évaluation de modèles d'intelligence artificielle.
+- Créer une œuvre dérivée, adapter ou traduire ces contenus.
+- Exploiter commercialement ces contenus, sous quelque forme que ce
+  soit.
+
+Le fork du dépôt via l'interface GitHub, techniquement possible du
+fait de son caractère public, ne vaut pas autorisation au sens des
+présentes.
+
+
+3. CE QUI RESTE LIBRE
+---------------------
+
+- Consulter le service sur silkacorp.fr et utiliser ses outils
+  gratuits, conformément aux conditions générales d'utilisation.
+- Citer une fiche de manière courte, dans le respect du droit de
+  citation (article L122-5, 3° a du Code de la propriété
+  intellectuelle), avec mention claire de la source et lien vers
+  la page d'origine.
+- Établir un lien hypertexte vers le service.
+- Signaler une erreur ou proposer une correction, par les moyens
+  indiqués sur le site.
+
+Les formulaires Cerfa, textes de loi, montants et références
+réglementaires cités relèvent du domaine public ou de la diffusion
+publique des données administratives : ils ne sont pas couverts par
+les présentes. Seules le sont leur rédaction, leur sélection et leur
+organisation au sein de Silka.
+
+
+4. DEMANDES D'AUTORISATION
+--------------------------
+
+Toute demande de réutilisation, y compris à des fins pédagogiques,
+associatives ou de service public, est examinée avec bienveillance.
+Silka a pour objet de rendre les droits accessibles, non d'en
+restreindre la diffusion.
+
+Écrire à : contact@silkacorp.fr
+
+
+5. ABSENCE DE GARANTIE
+----------------------
+
+Le service est fourni en l'état. Malgré le soin apporté à la
+vérification des informations auprès des sources officielles, aucune
+garantie n'est donnée quant à leur exactitude ou leur actualité. Les
+informations diffusées ne constituent ni un conseil juridique, ni un
+conseil fiscal, ni un avis officiel de l'administration. Le titulaire
+ne saurait être tenu responsable des conséquences d'une décision
+prise sur leur seul fondement.
+
+
+---
+Version du 29 juillet 2026 · silkacorp.fr · contact@silkacorp.fr
