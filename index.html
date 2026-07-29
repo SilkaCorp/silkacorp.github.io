@@ -1134,9 +1134,9 @@ footer{
  <li><a href="javascript:void(0)" onclick="showPage('contact')">Contact</a></li>
  </ul>
  <div class="nav-cta-group">
- <button class="btn-nav-login" onclick="silkaGoAuth('register')">Créer mon compte</button>
+ <button class="btn-nav-login" id="nav-btn-register" onclick="silkaGoAuth('register')">Créer mon compte</button>
  <button class="btn-nav-login silka-install-btn" onclick="silkaInstall()" style="display:none;background:var(--sage-dark);color:#fff;border-color:var(--sage-dark)">⬇ Installer l'app</button>
- <button class="btn-nav-cta" onclick="silkaGoAuth('login')">Se connecter</button>
+ <button class="btn-nav-cta" id="nav-btn-login" onclick="silkaGoAuth('login')">Se connecter</button>
  </div>
  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
  <span></span><span></span><span></span>
@@ -1151,9 +1151,9 @@ footer{
  <a href="javascript:void(0)" onclick="showPage('demo');closeMenu()">Guide</a>
  <a href="javascript:void(0)" onclick="showPage('contact');closeMenu()">Contact</a>
  <div class="mobile-menu-divider"></div>
- <button class="btn-mobile-login" onclick="silkaGoAuth('register');closeMenu()" style="background:var(--sage-d);color:#fff;border-color:var(--sage-d);font-weight:600">Créer mon compte gratuit</button>
+ <button class="btn-mobile-login" id="mnav-btn-register" onclick="silkaGoAuth('register');closeMenu()" style="background:var(--sage-d);color:#fff;border-color:var(--sage-d);font-weight:600">Créer mon compte gratuit</button>
  <button class="btn-mobile-login silka-install-btn" onclick="silkaInstall();closeMenu()" style="display:none;background:var(--sage-dark);color:#fff;border-color:var(--sage-dark);font-weight:600">⬇ Installer l'application</button>
- <button class="btn-mobile-cta" onclick="silkaGoAuth('login');closeMenu()">Se connecter</button>
+ <button class="btn-mobile-cta" id="mnav-btn-login" onclick="silkaGoAuth('login');closeMenu()">Se connecter</button>
 </div>
 
 <!-- ════════════════════════════════════════════
@@ -7291,6 +7291,7 @@ function showConnected(user) {
 function doLogout() {
  if (silkaAuthEnabled() && __sbClient) { try { __sbClient.auth.signOut(); } catch(e){} }
  localStorage.removeItem('silka_user');
+ silkaMajNavCompte();
  document.getElementById('compte-guest').style.display='block';
  document.getElementById('compte-connected').classList.remove('show');
  document.getElementById('login-email').value='';
@@ -7298,7 +7299,8 @@ function doLogout() {
 }
 window.addEventListener('load',function(){
  var u = localStorage.getItem('silka_user');
- if(u) { var user = JSON.parse(u); showConnected(user); updateNavAfterLogin(user.name); }
+ if(u) { try { var user = JSON.parse(u); showConnected(user); } catch(e){} }
+ silkaMajNavCompte();
 });
 
 // ── CHATBOT ────────────────────────────────────────────────────
@@ -9064,10 +9066,38 @@ var activeDemarches = {};
 
 function silkaGetStore(key){ try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch(e){ return {}; } }
 function silkaSetStore(key, obj){ try { localStorage.setItem(key, JSON.stringify(obj)); } catch(e){} }
-function silkaSaveDemarcheState(slug, status){ var s = silkaGetStore('silka_demarches'); if(status){ s[slug] = status; } else { delete s[slug]; } silkaSetStore('silka_demarches', s); }
+/* Historique des démarches : { slug: {s:'started'|'done', t:début, d:fin, titre:'…'} }
+   L'ancien format (une simple chaîne) reste lu correctement. */
+function silkaTitreFiche(slug){
+  var f = document.getElementById('fiche-' + slug);
+  var t = f && f.querySelector('.fiche-full-title');
+  return t ? t.textContent.trim() : slug;
+}
+function silkaSaveDemarcheState(slug, status){
+  var s = silkaGetStore('silka_demarches');
+  if (!status) { delete s[slug]; silkaSetStore('silka_demarches', s); return; }
+  var e = s[slug];
+  if (typeof e === 'string' || !e) e = { s: e || status, t: Date.now() };
+  e.s = status;
+  if (status === 'started' && !e.t) e.t = Date.now();
+  if (status === 'done') e.d = Date.now();
+  if (!e.titre || e.titre === slug) e.titre = silkaTitreFiche(slug);
+  s[slug] = e;
+  silkaSetStore('silka_demarches', s);
+}
+function silkaEtatDemarche(slug){
+  var e = silkaGetStore('silka_demarches')[slug];
+  if (!e) return null;
+  return (typeof e === 'string') ? e : e.s;
+}
+function silkaOublierDemarche(slug){
+  if (!confirm('Retirer cette démarche de votre historique ?')) return;
+  silkaSaveDemarcheState(slug, null);
+  if (typeof silkaRenderDashboard === 'function') silkaRenderDashboard();
+}
 function silkaSaveChecklistState(slug){ var box = document.getElementById('tool-checklist-' + slug); if(!box) return; var items = box.querySelectorAll('.checklist-item'); var checked = []; items.forEach(function(it, idx){ if(it.classList.contains('done')) checked.push(idx); }); var s = silkaGetStore('silka_checklists'); if(checked.length){ s[slug] = checked; } else { delete s[slug]; } silkaSetStore('silka_checklists', s); }
 function silkaRestoreFicheState(slug){
- var st = silkaGetStore('silka_demarches')[slug];
+ var st = silkaEtatDemarche(slug);
  if(st){
  var prog = document.getElementById('prog-' + slug);
  var btn = document.getElementById('btn-start-' + slug);
@@ -9259,16 +9289,35 @@ function obStartTour(){ var m=document.getElementById('onboarding-modal'); if(m)
 function obSkipTour(){ var m=document.getElementById('onboarding-modal'); if(m) m.style.display='none'; showPage('demarches'); }
 
 // ── MISE À JOUR NAV APRÈS CONNEXION / PREMIUM ───────────────
-function updateNavAfterLogin(userName) {
- var label = userName ? ('👤 ' + userName.split(' ')[0]) : '👤 Profil';
- // Sélectionner tous les boutons "Se connecter" (par classe ou texte)
- var selectors = '.nav-login-btn, .btn-nav-login, [onclick*="showPage(\'compte\')"]';
- document.querySelectorAll(selectors).forEach(function(b) {
- if (b.textContent && (b.textContent.indexOf('connecter') !== -1 || b.textContent.indexOf('Profil') !== -1 || b.classList.contains('btn-nav-login'))) {
- b.textContent = label;
- }
- });
+function silkaUtilisateur(){
+  try { return JSON.parse(localStorage.getItem('silka_user') || 'null'); } catch(e){ return null; }
 }
+/* Met la navigation au bon état selon que l'on est connecté ou non. */
+function silkaMajNavCompte(){
+  var u = silkaUtilisateur();
+  var connecte = !!(u && (u.email || u.name));
+  var prenom = connecte ? String(u.name || 'Mon compte').split(' ')[0] : '';
+
+  ['nav-btn-register','mnav-btn-register'].forEach(function(id){
+    var b = document.getElementById(id);
+    if (b) b.style.display = connecte ? 'none' : '';
+  });
+
+  [['nav-btn-login', false], ['mnav-btn-login', true]].forEach(function(x){
+    var b = document.getElementById(x[0]);
+    if (!b) return;
+    if (connecte) {
+      b.textContent = '\uD83D\uDC64 ' + prenom;
+      b.setAttribute('title', 'Mon compte');
+      b.onclick = function(){ showPage('compte'); if (x[1]) closeMenu(); };
+    } else {
+      b.textContent = 'Se connecter';
+      b.removeAttribute('title');
+      b.onclick = function(){ silkaGoAuth('login'); if (x[1]) closeMenu(); };
+    }
+  });
+}
+function updateNavAfterLogin(userName) { silkaMajNavCompte(); }
 function updateNavAfterPremium() { applyPremiumState(); }
 
 // ── INIT AU CHARGEMENT ───────────────────────────────────────
@@ -26427,30 +26476,51 @@ window.addEventListener('DOMContentLoaded', function() {
  'contestation-amende':'contestation-amende-rediger'
  };
 
- function silkaRenderDashboard(){
- var w = getWallet();
- var hist = (w && w.history) ? w.history : [];
+   function silkaRenderDashboard(){
+    /* Source de vérité : localStorage 'silka_demarches' (et non l'ancien portefeuille). */
+    var store = silkaGetStore('silka_demarches');
+    var hist = [];
+    for (var slug in store) {
+      if (!Object.prototype.hasOwnProperty.call(store, slug)) continue;
+      var e = store[slug];
+      if (typeof e === 'string') e = { s: e };
+      hist.push({
+        slug: slug,
+        status: (e.s === 'done') ? 'done' : 'active',
+        titre: e.titre || silkaTitreFiche(slug),
+        t: e.t || null,
+        d: e.d || null
+      });
+    }
+    hist.sort(function(a, b){ return (b.d || b.t || 0) - (a.d || a.t || 0); });
 
- // ── Démarches en cours ──
- var active = hist.filter(function(h){ return h.status === 'active'; });
- var elActive = document.getElementById('dash-active');
- if(elActive){
- if(active.length === 0){
- elActive.innerHTML = '<div class="dash-empty"><span class="dash-empty-icon">⏳</span>Aucune démarche en cours.<br><a onclick="showPage(\'demarches\')">Parcourir les démarches →</a></div>';
- } else {
- elActive.innerHTML = active.map(function(h){
- var titre = h.titre || h.slug;
- return '<div class="dash-card" onclick="showFiche(\'' + h.slug + '\')">' +
- '<div class="dash-card-title">' + silkaEscapeHtml(titre) + '</div>' +
- '<div class="dash-card-meta"><span class="dash-card-badge dash-badge-active">En cours</span></div>' +
- '<div class="dash-card-actions">' +
- '<button class="dash-card-btn dash-card-btn-main" onclick="event.stopPropagation();showFiche(\'' + h.slug + '\')">Reprendre</button>' +
- '</div></div>';
- }).join('');
- }
- }
+    function carte(x, termine){
+      var quand = termine
+        ? (x.d ? 'terminée ' + silkaTimeAgo(new Date(x.d)) : '')
+        : (x.t ? 'démarrée ' + silkaTimeAgo(new Date(x.t)) : '');
+      return '<div class="dash-card" onclick="showFiche(\'' + x.slug + '\')">' +
+        '<div class="dash-card-title">' + silkaEscapeHtml(x.titre) + '</div>' +
+        '<div class="dash-card-meta"><span class="dash-card-badge ' +
+          (termine ? 'dash-badge-done">Terminée' : 'dash-badge-active">En cours') + '</span>' +
+          (quand ? '<span>' + quand + '</span>' : '') + '</div>' +
+        '<div class="dash-card-actions">' +
+          '<button class="dash-card-btn dash-card-btn-main" onclick="event.stopPropagation();showFiche(\'' +
+            x.slug + '\')">' + (termine ? 'Revoir la fiche' : 'Reprendre') + '</button>' +
+          '<button class="dash-card-btn dash-card-btn-sec" onclick="event.stopPropagation();silkaOublierDemarche(\'' +
+            x.slug + '\')">Retirer</button>' +
+        '</div></div>';
+    }
 
- // ── Brouillons de documents ──
+    // ── Démarches en cours ──
+    var active = hist.filter(function(x){ return x.status === 'active'; });
+    var elActive = document.getElementById('dash-active');
+    if(elActive){
+      elActive.innerHTML = active.length
+        ? active.map(function(x){ return carte(x, false); }).join('')
+        : '<div class="dash-empty"><span class="dash-empty-icon">\uD83D\uDCC2</span>Aucune démarche en cours.<br><a onclick="showPage(\'demarches\')">Parcourir les démarches</a></div>';
+    }
+
+// ── Brouillons de documents ──
  var elDrafts = document.getElementById('dash-drafts');
  if(elDrafts){
  var drafts = [];
@@ -26483,21 +26553,13 @@ window.addEventListener('DOMContentLoaded', function() {
  }
 
  // ── Démarches terminées ──
- var done = hist.filter(function(h){ return h.status === 'done'; });
- var elDone = document.getElementById('dash-done');
- if(elDone){
- if(done.length === 0){
- elDone.innerHTML = '<div class="dash-empty"><span class="dash-empty-icon">✓</span>Aucune démarche terminée pour le moment.</div>';
- } else {
- elDone.innerHTML = done.map(function(h){
- var titre = h.titre || h.slug;
- return '<div class="dash-card" onclick="showFiche(\'' + h.slug + '\')">' +
- '<div class="dash-card-title">' + silkaEscapeHtml(titre) + '</div>' +
- '<div class="dash-card-meta"><span class="dash-card-badge dash-badge-done">Terminée</span></div>' +
- '</div>';
- }).join('');
- }
- }
+ var done = hist.filter(function(x){ return x.status === 'done'; });
+    var elDone = document.getElementById('dash-done');
+    if(elDone){
+      elDone.innerHTML = done.length
+        ? done.map(function(x){ return carte(x, true); }).join('')
+        : '<div class="dash-empty"><span class="dash-empty-icon">\u2705</span>Aucune démarche terminée pour le moment.</div>';
+    }
  }
 
  function silkaDeleteDraftFromDash(gen){
