@@ -839,6 +839,8 @@ footer{
 
 /* ── CGU / CONFIDENTIALITÉ ───────────────────────────────────── */
 .legal-page { max-width: 720px; margin: 0 auto; padding: 3rem clamp(1.25rem,5vw,4rem); }
+.legal-page h2 { font-family: var(--sans); font-size: 1.02rem; font-weight: 700; color: var(--sage-dark); margin: 0 0 .5rem; }
+.legal-page p { font-size: .9rem; line-height: 1.7; color: var(--mid); margin: 0 0 .7rem; }
 .legal-page h1 { font-family: var(--serif); font-size: clamp(1.5rem,4vw,2rem); color: var(--dark); margin-bottom: .5rem; }
 .legal-date { font-size: .78rem; color: var(--light); margin-bottom: 2rem; }
 .legal-section { margin-bottom: 1.75rem; }
@@ -1278,27 +1280,35 @@ footer{
 
 <!-- ===== PAGE : CGV ===== -->
 <div class="page" id="page-transparence-ia">
- <div class="legal-wrap">
- <div class="section-eyebrow">Informations</div>
- <h1>Comment l'intelligence artificielle est utilisée sur Silka</h1>
- <p class="legal-updated">Dernière mise à jour : juillet 2026</p>
- <div class="legal-content">
- <p>Silka est écrit et tenu à jour par une seule personne. Pour suivre plus de 380 fiches de démarches, je m'aide d'un assistant IA, Claude, développé par Anthropic.</p>
+ <div class="legal-page">
+  <h1>Comment l'intelligence artificielle est utilisée sur Silka</h1>
+  <div class="legal-date">Dernière mise à jour : juillet 2026</div>
 
- <h2>Ce que fait l'IA</h2>
- <p>Elle m'aide à rédiger des premières versions de fiches, à reformuler des passages trop administratifs, à comparer les fiches entre elles pour repérer les contradictions, et à retrouver les montants qui ont changé après une réforme. Elle sert aussi à écrire et corriger le code du site.</p>
+  <div class="legal-section">
+   <p>Silka est écrit et tenu à jour par une seule personne. Pour suivre plus de 380 fiches de démarches, je m'aide d'un assistant IA, Claude, développé par Anthropic.</p>
+  </div>
 
- <h2>Ce qu'elle ne fait pas</h2>
- <p>Elle ne publie rien toute seule. Aucune fiche ne part en ligne sans que je l'aie relue. Les montants, les seuils, les délais et les références de formulaires viennent des sources officielles citées en bas de chaque fiche, pas de la mémoire d'un modèle.</p>
- <p>Elle ne voit pas vos données. Vos brouillons, les documents de votre coffre-fort et vos réponses aux simulateurs restent dans votre navigateur. Rien n'est envoyé à un modèle d'IA, ni à moi.</p>
+  <div class="legal-section">
+   <h2>Ce que fait l'IA</h2>
+   <p>Elle m'aide à rédiger des premières versions de fiches, à reformuler des passages trop administratifs, à comparer les fiches entre elles pour repérer les contradictions, et à retrouver les montants qui ont changé après une réforme. Elle sert aussi à écrire et corriger le code du site.</p>
+  </div>
 
- <h2>Ce que ça implique pour vous</h2>
- <p>Une erreur peut passer. Une réforme peut sortir entre deux relectures. Si un montant vous paraît faux ou si une démarche a changé, vérifiez sur le site officiel indiqué dans la fiche, puis <a href="javascript:void(0)" onclick="showPage('contact')" style="color:var(--sage-d);text-decoration:underline">écrivez-moi</a>. Je corrige vite.</p>
- <p>Silka reste un site d'information. Il ne remplace ni l'administration, ni un avocat, ni un expert-comptable, ni un travailleur social.</p>
+  <div class="legal-section">
+   <h2>Ce qu'elle ne fait pas</h2>
+   <p>Elle ne publie rien toute seule. Aucune fiche ne part en ligne sans que je l'aie relue. Les montants, les seuils, les délais et les références de formulaires viennent des sources officielles citées en bas de chaque fiche, pas de la mémoire d'un modèle.</p>
+   <p>Elle ne voit pas vos données. Vos brouillons, les documents de votre coffre-fort et vos réponses aux simulateurs restent dans votre navigateur. Rien n'est envoyé à un modèle d'IA, ni à moi.</p>
+  </div>
 
- <h2>Pourquoi cette page existe</h2>
- <p>Le règlement européen sur l'intelligence artificielle demande aux sites qui publient du contenu produit ou assisté par IA de le dire clairement. Je préfère le dire ici, en entier, plutôt que dans une ligne perdue au milieu des mentions légales.</p>
- </div>
+  <div class="legal-section">
+   <h2>Ce que ça implique pour vous</h2>
+   <p>Une erreur peut passer. Une réforme peut sortir entre deux relectures. Si un montant vous paraît faux ou si une démarche a changé, vérifiez sur le site officiel indiqué dans la fiche, puis <a href="javascript:void(0)" onclick="showPage('contact')" style="color:var(--sage-d);text-decoration:underline">écrivez-moi</a>. Je corrige vite.</p>
+   <p>Silka reste un site d'information. Il ne remplace ni l'administration, ni un avocat, ni un expert-comptable, ni un travailleur social.</p>
+  </div>
+
+  <div class="legal-section">
+   <h2>Pourquoi cette page existe</h2>
+   <p>Le règlement européen sur l'intelligence artificielle demande aux sites qui publient du contenu produit ou assisté par IA de le dire clairement. Je préfère le dire ici, en entier, plutôt que dans une ligne perdue au milieu des mentions légales.</p>
+  </div>
  </div>
 </div>
 
@@ -10398,7 +10408,7 @@ window.addEventListener('DOMContentLoaded', function() {
 <div class="page" id="page-cgu">
  <div class="legal-page">
  <h1>Conditions Générales d'Utilisation</h1>
- <div class="legal-date">Dernière mise à jour : mai 2026</div>
+ <div class="legal-date">Dernière mise à jour : juillet 2026</div>
 
  <div class="legal-section">
  <h2>1. Présentation du service</h2>
