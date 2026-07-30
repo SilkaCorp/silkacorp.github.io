@@ -6861,17 +6861,7 @@ function filterSegment(seg) {
 }
 
 // ── DÉMO TABS ─────────────────────────────────────────────────
-function switchTab(tab, btn) {
- document.querySelectorAll('.demo-tab').forEach(function(t){ t.classList.remove('active'); });
- btn.classList.add('active');
- var g = document.getElementById('tab-gratuit');
- var p = document.getElementById('tab-payant');
- if(g) g.style.display = tab==='gratuit'?'block':'none';
- if(p) {
- /* onglet payant libre, contenu gratuit */
- if(p) p.style.display = tab==='payant'?'block':'none';
- }
-}
+
 
 // ── FICHE TABS ────────────────────────────────────────────────
 /* Onglets supprimés : chaque fiche affiche directement ses étapes détaillées. */
@@ -9047,22 +9037,7 @@ function addMessageWithAction(text, slug) {
 }
 
 // ── MENU HAMBURGER MOBILE ─────────────────────────────────────
-function toggleMobileMenu() {
- var btn = document.getElementById('hamburger-btn');
- var menu = document.getElementById('nav-mobile-menu');
- btn.classList.toggle('open');
- menu.classList.toggle('open');
-}
-// Fermer le menu au clic sur un lien
-document.addEventListener('DOMContentLoaded', function() {
- var mobileLinks = document.querySelectorAll('#nav-mobile-menu a');
- mobileLinks.forEach(function(link) {
- link.addEventListener('click', function() {
- document.getElementById('hamburger-btn').classList.remove('open');
- document.getElementById('nav-mobile-menu').classList.remove('open');
- });
- });
-});
+
 
 // ── (ancien système de crédits, supprimé, tout est gratuit) ──
 function getWallet() { return {credits:0, history:[]}; }
