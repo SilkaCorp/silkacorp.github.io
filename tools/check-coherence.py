@@ -217,7 +217,7 @@ else:
 
 
 # --------------------------------------------------- 7. principe Premium
-titre('7. Premium ne verrouille jamais un droit')
+titre('7. Gratuite integrale, aucun verrou payant')
 
 # Fonctions qui donnent acces au contenu et aux demarches : elles doivent
 # rester exemptes de tout test d'abonnement. Si un verrou y reapparait,
@@ -230,14 +230,14 @@ DROITS_LIBRES = {
 MARQUEURS_PREMIUM = ['checkPremium', 'premium-gate', 'premium-blur',
                      'activatePremium', 'silka_premium', 'openMdpModal']
 
-# Fonctionnalites de confort annoncees comme payantes : chacune doit
-# correspondre a un verrou reellement present dans le code. Si le verrou
-# disparait, la page tarifaire vend quelque chose de gratuit.
-VERROUS_ATTENDUS = {
-    u'Coffre-fort': 'compte-card-lock',
-    u'Dossier unique': 'compte-card-lock',
-    u'Mod\u00e8les de courriers': 'premium-gate-overlay',
-}
+# Silka n'a plus aucune offre payante : tout le service est gratuit.
+# Ce controle verifie donc l'inverse de ce qu'il verifiait avant : plus
+# aucun verrou d'abonnement ne doit exister, et aucune page ne doit
+# annoncer un contenu comme payant.
+VERROUS_INTERDITS = ['premium-gate-overlay', 'premium-gate', 'premium-blur',
+                     'silka_premium', 'gpt-paywall', 'paywall']
+ANNONCES_INTERDITES = ['page-gratuit-premium', 'Passer Premium',
+                       'Debloquer Premium', 'Version Premium']
 
 
 def corps_fonction(nom, source):
@@ -274,15 +274,23 @@ for fonction, libelle in sorted(DROITS_LIBRES.items()):
         print('  OK   %-30s libre' % libelle)
 
 print('')
-for promesse, marqueur in sorted(VERROUS_ATTENDUS.items()):
-    if S.count(marqueur) == 0:
-        anomalies.append(
-            u'"%s" est annonce comme Premium mais le verrou "%s" a disparu du code'
-            % (promesse, marqueur))
-        print('  NON  %-30s verrou "%s" absent' % (promesse, marqueur))
-    else:
-        print('  OK   %-30s %d verrou(s) "%s"'
-              % (promesse, S.count(marqueur), marqueur))
+trouves = [m for m in VERROUS_INTERDITS if m in S]
+if trouves:
+    anomalies.append(
+        u'un verrou d\'abonnement est reapparu dans le code : %s'
+        % ', '.join(trouves))
+    print('  NON  %-30s %s' % (u'aucun verrou payant', ', '.join(trouves)))
+else:
+    print('  OK   %-30s aucun verrou payant dans le code' % u'gratuite integrale')
+
+annonces = [a for a in ANNONCES_INTERDITES if a in S]
+if annonces:
+    anomalies.append(
+        u'une offre payante est annoncee alors que le service est gratuit : %s'
+        % ', '.join(annonces))
+    print('  NON  %-30s %s' % (u'aucune offre annoncee', ', '.join(annonces)))
+else:
+    print('  OK   %-30s aucune offre payante annoncee' % u'discours commercial')
 
 # Rappel de la page tarifaire, pour relecture humaine
 debut_gp = S.find('id="page-gratuit-premium"')
