@@ -7588,8 +7588,8 @@ var botKnowledge = [
  { keys:['procuration','procuration vote','voter place','absent election','mandant vote'],
  resp:"Procuration de vote :\n→ 100% en ligne sur maprocuration.gouv.fr (via FranceConnect)\n→ Le mandataire valide ensuite en mairie avec sa CNI\n→ Possible jusqu'à la veille du scrutin (préférable 3+ jours avant)\n→ Depuis 2022 : le mandataire peut être dans n'importe quelle commune",
  fiche:'procuration-vote'},
- { keys:['listes électorales','s\'inscrire voter','inscription vote','s inscrire voter'],
- resp:"S'inscrire sur les listes électorales :\n→ En ligne sur service-public.gouv.fr (2 minutes)\n→ Avant le 31 décembre pour voter dès mars de l'année suivante\n→ Après déménagement : réinscription obligatoire dans la nouvelle commune\n→ Vérifiez votre inscription sur service-public.gouv.fr",
+ { keys:['vote','listes électorales','voter','election','elections','droit de vote','carte electeur','bureau de vote','s\\'inscrire voter','inscription vote','s inscrire voter','se reinscrire voter'],
+ resp:"S'inscrire sur les listes électorales :\n→ En ligne sur service-public.gouv.fr (2 minutes)\n→ Possible toute l'année · au plus tard le 6e vendredi avant le scrutin\n→ Après déménagement : réinscription obligatoire dans la nouvelle commune\n→ Vérifiez votre inscription sur service-public.gouv.fr",
  fiche:'inscription-listes-electorales'},
  { keys:['reconnaître enfant','reconnaissance prénatale','filiation enfant'],
  resp:"Reconnaître un enfant :\n→ Prénatale recommandée : en mairie avant la naissance, garantit l'autorité parentale conjointe automatiquement\n→ À la naissance : lors de la déclaration en mairie\n→ Postnatale : en mairie ou chez un notaire, à tout moment\n→ Faite après 1 an : l'autorité parentale ne devient conjointe que par décision du juge",
@@ -8035,8 +8035,8 @@ var botKnowledge = [
  { keys:["procuration vote", "voter a ma place", "voter par procuration", "ne pas aller voter"],
  resp:"Pour établir une procuration de vote :\\n→ Sur maprocuration.gouv.fr (100% en ligne via FranceConnect)\\n→ Le mandataire valide en mairie avec sa pièce d\'identité\\n→ Valable pour n\'importe quelle commune depuis 2022\\n→ À faire au moins 3 jours avant le scrutin",
  fiche:'procuration-vote' },
- { keys:["inscrire voter", "inscription electorale", "listes electorales", "voter premiere fois"],
- resp:"Pour s\'inscrire sur les listes électorales :\\n→ En ligne sur service-public.gouv.fr (FranceConnect)\\n→ Ou en mairie avec pièce d\'identité + justificatif de domicile\\n→ Avant le 31 décembre pour voter l\'année suivante\\n→ Vérifier votre inscription sur service-public.gouv.fr",
+ { keys:["inscrire voter", "inscription electorale", "listes electorales", "voter premiere fois", "vote", "voter", "election", "droit de vote"],
+ resp:"Pour s\'inscrire sur les listes électorales :\\n→ En ligne sur service-public.gouv.fr (FranceConnect)\\n→ Ou en mairie avec pièce d\'identité + justificatif de domicile\\n→ Demande possible toute l\'année · date limite le 6e vendredi avant le scrutin\\n→ Vérifier votre inscription sur service-public.gouv.fr",
  fiche:'inscription-listes-electorales' },
  { keys:["reconnaitre enfant", "reconnaissance enfant", "reconnaissance paternite", "reconnaitre bebe"],
  resp:"Pour reconnaître un enfant :\\n→ En mairie, avant la naissance (recommandé) ou après\\n→ Le père présente sa pièce d\'identité\\n→ Reconnaissance prénatale = autorité parentale conjointe automatiquement\\n→ Acte établi immédiatement",
@@ -8980,7 +8980,7 @@ function findBotResponse(text) {
  try {
  var allLinks = document.querySelectorAll('.demarche-link');
  var bestLink = null, bestLinkScore = 0;
- var words = lower.split(/\s+/).filter(function(w){ return w.length > 3; });
+ var words = lower.split(/\s+/).filter(function(w){ return w.length > 2; });
  if (words.length > 0) {
  for (var k = 0; k < allLinks.length; k++) {
  var link = allLinks[k];
@@ -8992,7 +8992,7 @@ function findBotResponse(text) {
  }
  if (s > bestLinkScore) { bestLinkScore = s; bestLink = link; }
  }
- if (bestLink && bestLinkScore > 6) {
+ if (bestLink && bestLinkScore >= 4) {
  var oc = bestLink.getAttribute('onclick') || '';
  var sm = oc.match(/showFiche\(['"]([^'"]+)['"]\)/);
  if (sm) return {
